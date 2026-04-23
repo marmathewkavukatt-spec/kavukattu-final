@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { secureDb } from "./db-security";
 
 type GlobalWithPrisma = typeof globalThis & {
   prisma?: PrismaClient;
@@ -19,8 +18,12 @@ if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = db;
 }
 
-// Export secure database wrapper for enhanced security
-export { secureDb };
+// Lazy re-export of secureDb to avoid triggering SecureDatabase instantiation
+// (and its PrismaClient + query logging) on every import of db.ts
+export function getSecureDb() {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return require("./db-security").secureDb;
+}
 
 // No longer needed - Prisma maintains persistent connections automatically
 // Keeping for backward compatibility but it's a no-op

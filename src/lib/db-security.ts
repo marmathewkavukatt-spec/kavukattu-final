@@ -412,8 +412,18 @@ class SecureDatabase {
   }
 }
 
-// Export singleton instance
-export const secureDb = new SecureDatabase();
+// Persist singleton on globalThis so it survives Next.js hot-module reloads
+// and Hostinger worker restarts without creating extra PrismaClient instances.
+declare global {
+  // eslint-disable-next-line no-var
+  var __kavukattuSecureDbInstance: SecureDatabase | undefined;
+}
+
+if (!globalThis.__kavukattuSecureDbInstance) {
+  globalThis.__kavukattuSecureDbInstance = new SecureDatabase();
+}
+
+export const secureDb: SecureDatabase = globalThis.__kavukattuSecureDbInstance;
 
 // Export the Prisma client for direct access when needed (use carefully)
 export { PrismaClient } from '@prisma/client';

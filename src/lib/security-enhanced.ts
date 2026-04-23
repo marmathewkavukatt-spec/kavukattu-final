@@ -186,7 +186,16 @@ interface EnhancedRateLimit {
   lastViolation?: number;
 }
 
-const enhancedRateLimitStore = new Map<string, EnhancedRateLimit>();
+declare global {
+  // eslint-disable-next-line no-var
+  var __kavukattuEnhancedRateLimitStore: Map<string, EnhancedRateLimit> | undefined;
+}
+
+// Persist on globalThis to survive Next.js hot-module reloads
+const enhancedRateLimitStore: Map<string, EnhancedRateLimit> =
+  globalThis.__kavukattuEnhancedRateLimitStore ??
+  new Map<string, EnhancedRateLimit>();
+globalThis.__kavukattuEnhancedRateLimitStore = enhancedRateLimitStore;
 
 export function enhancedRateLimit(ip: string, maxRequests: number = 100, windowMs: number = 60000): boolean {
   const now = Date.now();
