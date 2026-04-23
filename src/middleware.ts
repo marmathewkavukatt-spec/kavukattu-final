@@ -1,50 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { productionSecurity } from './lib/security-production';
-import os from 'os';
-
-// Track if server info has been logged
-let serverInfoLogged = false;
-
-// Log server IP information on first request
-function logServerInfo() {
-  if (serverInfoLogged) return;
-  serverInfoLogged = true;
-
-  const interfaces = os.networkInterfaces();
-  const addresses: string[] = [];
-
-  for (const name of Object.keys(interfaces)) {
-    const iface = interfaces[name];
-    if (iface) {
-      for (const addr of iface) {
-        if (addr.family === 'IPv4' && !addr.internal) {
-          addresses.push(`${name}: ${addr.address}`);
-        }
-      }
-    }
-  }
-
-  console.log('\n' + '='.repeat(60));
-  console.log('🌐 SERVER IP INFORMATION');
-  console.log('='.repeat(60));
-  console.log(`📍 Hostname: ${os.hostname()}`);
-  console.log(`📍 Platform: ${os.platform()}`);
-  
-  if (addresses.length > 0) {
-    console.log('📍 Network Interfaces:');
-    addresses.forEach(addr => console.log(`   ${addr}`));
-  } else {
-    console.log('📍 No external network interfaces detected');
-  }
-  
-  console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`📍 Security: ${process.env.ENABLE_ADVANCED_SECURITY === 'true' ? 'Full' : 'Optimized'}`);
-  console.log('='.repeat(60) + '\n');
-}
 
 export async function middleware(request: NextRequest) {
-  // Log server info on first request
-  logServerInfo();
   
   try {
     const hostname =

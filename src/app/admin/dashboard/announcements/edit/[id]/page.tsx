@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, use } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import BackButton from "@/components/BackButton";
@@ -26,10 +26,9 @@ const CATEGORIES = [
   { value: "special-prayers", label: "Special Prayers / Gatherings" },
 ];
 
-export default function EditAnnouncementPage({ params }: { params: Promise<{ id: string }> }) {
+export default function EditAnnouncementPage({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const resolvedParams = use(params);
-  const id = resolvedParams.id;
+  const id = params.id;
   
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({ 

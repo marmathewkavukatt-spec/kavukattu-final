@@ -16,7 +16,10 @@ export class ProductionSecurity {
 
   constructor() {
     // Start automatic cleanup every 5 minutes
-    this.startAutomaticCleanup();
+    // Only run in Node.js runtime (not Edge), and unref so it doesn't keep the process alive
+    if (typeof setInterval !== "undefined") {
+      this.startAutomaticCleanup();
+    }
   }
 
   static getInstance(): ProductionSecurity {
@@ -32,6 +35,13 @@ export class ProductionSecurity {
     this.cleanupInterval = setInterval(() => {
       this.performCleanup();
     }, 5 * 60 * 1000);
+
+    // unref() so this timer doesn't prevent the Node.js process from exiting cleanly.
+    // This also prevents Hostinger's process manager from seeing a "stuck" process
+    // and restarting it, which was causing the crash-restart loop.
+    if (this.cleanupInterval && typeof (this.cleanupInterval as NodeJS.Timeout).unref === "function") {
+      (this.cleanupInterval as NodeJS.Timeout).unref();
+    }
   }
 
   private performCleanup() {
@@ -484,6 +494,14 @@ export class ProductionSecurity {
     // COEP breaks many common third-party assets unless they opt-in with CORP/CORS.
     // Enable only when explicitly required (e.g. for SharedArrayBuffer use-cases).
     const enableCoep = !isRelaxed && process.env.ENABLE_COEP === "true";
+
+    // Only apply no-store cache headers to auth/admin API routes.
+    // Public pages should be cacheable to reduce server load.
+    const path = request?.nextUrl?.pathname ?? "";
+    const isAuthOrAdminApi =
+      path.startsWith("/api/auth") ||
+      path.startsWith("/api/admin") ||
+      path.startsWith("/admin");
     
     return {
       // Prevent clickjacking
@@ -517,10 +535,12 @@ export class ProductionSecurity {
         'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload'
       } : {}),
       
-      // Cache control for sensitive routes
-      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-      'Pragma': 'no-cache',
-      'Expires': '0',
+      // Only disable caching for auth/admin routes — public pages can be cached
+      ...(isAuthOrAdminApi ? {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      } : {}),
       
       // Remove server information
       'Server': '',
