@@ -1,0 +1,220 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+enum ArchiveCategory {
+  PASTORAL_LETTERS
+  CIRCULARS
+  OTHERS
+}
+
+model Admin {
+  id           String   @id @default(cuid()) @db.VarChar(32)
+  email        String   @unique @db.VarChar(254)
+  passwordHash String   @db.VarChar(255)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("admin")
+}
+
+model Announcement {
+  id          String   @id @default(cuid()) @db.VarChar(32)
+  title       String   @db.VarChar(180)
+  subtitle    String?  @db.VarChar(300)
+  description String?  @db.Text
+  content     String   @db.Text
+  category    String   @db.VarChar(50)
+  coverImage  String?  @db.VarChar(2048)
+  fileUrl     String?  @db.VarChar(2048)
+  date        DateTime @default(now())
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([active, date])
+  @@index([date])
+  @@index([category])
+  @@index([active, category, date])
+  @@map("announcement")
+}
+
+model Gallery {
+  id        String   @id @default(cuid()) @db.VarChar(32)
+  image     String   @db.VarChar(2048)
+  caption   String?  @db.VarChar(300)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+  @@map("gallery")
+}
+
+model GalleryCategory {
+  id         String        @id @default(cuid()) @db.VarChar(32)
+  title      String        @db.VarChar(180)
+  coverImage String        @db.VarChar(2048)
+  order      Int           @default(0)
+  active     Boolean       @default(true)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  items      GalleryItem[]
+
+  @@index([order])
+  @@index([active])
+  @@index([active, order])
+  @@map("gallerycategory")
+}
+
+model GalleryItem {
+  id         String         @id @default(cuid()) @db.VarChar(32)
+  categoryId String         @db.VarChar(32)
+  category   GalleryCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  image      String         @db.VarChar(2048)
+  title      String?        @db.VarChar(180)
+  order      Int            @default(0)
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@index([categoryId, order])
+  @@map("galleryitem")
+}
+
+model Resource {
+  id          String   @id @default(cuid()) @db.VarChar(32)
+  title       String   @db.VarChar(180)
+  description String   @db.Text
+  fileUrl     String?  @db.VarChar(2048)
+  linkUrl     String?  @db.VarChar(2048)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([order])
+  @@map("resource")
+}
+
+model ArchiveDocument {
+  id          String          @id @default(cuid()) @db.VarChar(32)
+  category    ArchiveCategory
+  title       String?         @db.VarChar(180)
+  subtitle    String?         @db.VarChar(300)
+  description String?         @db.Text
+  fileUrl     String          @db.VarChar(2048)
+  fileName    String?         @db.VarChar(255)
+  fileType    String?         @db.VarChar(120)
+  fileSize    Int?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([category, createdAt])
+  @@index([category, updatedAt])
+  @@map("archivedocument")
+}
+
+model Slider {
+  id        String   @id @default(cuid()) @db.VarChar(32)
+  image     String   @db.VarChar(2048)
+  title     String?  @db.VarChar(180)
+  subtitle  String?  @db.VarChar(300)
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active, order])
+  @@map("slider")
+}
+
+model Testimony {
+  id          String   @id @default(cuid()) @db.VarChar(32)
+  authorName  String   @db.VarChar(120)
+  content     String   @db.Text
+  authorImage String?  @db.VarChar(2048)
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([active, order])
+  @@map("testimony")
+}
+
+model Timing {
+  id          String   @id @default(cuid()) @db.VarChar(32)
+  title       String   @db.VarChar(180)
+  description String?  @db.Text
+  schedule    String   @db.Text
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([order])
+  @@map("timing")
+}
+
+model VisitInfo {
+  id              String   @id @default(cuid()) @db.VarChar(32)
+  mapEmbedUrl     String?  @db.Text
+  address         String?  @db.Text
+  directions      String?  @db.Text
+  nearbyLandmarks String?  @db.Text
+  travelGuidance  String?  @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([updatedAt])
+  @@map("visitinfo")
+}
+
+model TimelineEvent {
+  id          String   @id @default(cuid()) @db.VarChar(32)
+  year        Int
+  title       String   @db.VarChar(180)
+  description String?  @db.VarChar(500)
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([active, order])
+  @@index([year])
+  @@map("timelineevent")
+}
+
+model Contribution {
+  id          String   @id @default(cuid()) @db.VarChar(32)
+  type        String   @db.VarChar(50) // Testimonials, Prayer Requests, Intentions
+  name        String   @db.VarChar(120)
+  address     String?  @db.VarChar(500)
+  description String   @db.Text
+  status      String   @default("pending") @db.VarChar(20) // pending, approved, rejected
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([type, status, createdAt])
+  @@index([status])
+  @@index([createdAt])
+  @@map("contribution")
+}
+
+model Experience {
+  id          String   @id @default(cuid()) @db.VarChar(32)
+  authorName  String   @db.VarChar(120)
+  content     String   @db.Text
+  authorImage String?  @db.VarChar(2048)
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([active, order])
+  @@map("experience")
+}

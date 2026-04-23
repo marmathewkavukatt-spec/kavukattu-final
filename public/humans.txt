@@ -1,0 +1,47 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Developer: Web Development Team
+    Contact: webmaster [at] yourdomain.com
+    Location: Kerala, India
+
+    Content Manager: Mar Mathew Kavukatt Foundation
+    Contact: info [at] yourdomain.com
+    Location: Palai, Kerala, India
+
+# THANKS
+
+    Mar Mathew Kavukatt Foundation
+    Syro-Malabar Catholic Church
+    Archdiocese of Changanacherry
+    All contributors and supporters
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3, JavaScript
+    Next.js 14
+    React 18
+    TypeScript
+    Tailwind CSS
+    Prisma ORM
+    MySQL Database
+    Cloudinary (Image Management)
+    EmailJS (Contact Forms)
+    
+    Fonts: Cormorant Garamond, DM Sans, Manjari
+    
+    Security: Production-grade security implementation
+    SEO: Comprehensive search engine optimization
+    Performance: Optimized for speed and accessibility
+    
+    Hosting: [Your hosting provider]
+    CDN: [Your CDN provider]
+    
+# SITE
+
+    Last update: 2026/04/21
+    Language: English / Malayalam
+    Doctype: HTML5
+    IDE: Visual Studio Code

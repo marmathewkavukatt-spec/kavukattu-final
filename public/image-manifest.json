@@ -1,0 +1,386 @@
+{
+  "1.jpg": {
+    "width": 1290,
+    "height": 860,
+    "format": "jpeg",
+    "size": 93040,
+    "aspectRatio": 1.5,
+    "lastModified": "2026-04-15T09:47:55.103Z"
+  },
+  "1776354901297-e26c67df-1ae6-4d71-9be5-719d708429a1-55138f52.webp": {
+    "width": 1536,
+    "height": 1024,
+    "format": "webp",
+    "size": 60524,
+    "aspectRatio": 1.5,
+    "lastModified": "2026-04-16T15:55:01.303Z"
+  },
+  "1776355055972-d497cc48-6956-49cb-acb2-410bb1942f18-47763c97.webp": {
+    "width": 1023,
+    "height": 1537,
+    "format": "webp",
+    "size": 118894,
+    "aspectRatio": 0.6655823031880286,
+    "lastModified": "2026-04-16T15:57:35.975Z"
+  },
+  "1776355936489-7d4a1129-ef9b-4545-8cad-0e01f5d13de4-ac7d76b2.webp": {
+    "width": 1088,
+    "height": 1445,
+    "format": "webp",
+    "size": 220368,
+    "aspectRatio": 0.7529411764705882,
+    "lastModified": "2026-04-16T16:12:16.494Z"
+  },
+  "1776355984680-7d4a1129-ef9b-4545-8cad-0e01f5d13de4-7d6876dc.webp": {
+    "width": 1088,
+    "height": 1445,
+    "format": "webp",
+    "size": 220368,
+    "aspectRatio": 0.7529411764705882,
+    "lastModified": "2026-04-16T16:13:04.682Z"
+  },
+  "1776358718051-7d4a1129-ef9b-4545-8cad-0e01f5d13de4-d6b8f1e7.webp": {
+    "width": 1088,
+    "height": 1445,
+    "format": "webp",
+    "size": 220368,
+    "aspectRatio": 0.7529411764705882,
+    "lastModified": "2026-04-16T16:58:38.063Z"
+  },
+  "1776663504526-OBCN3698-26707737.webp": {
+    "width": 1920,
+    "height": 1280,
+    "format": "webp",
+    "size": 152056,
+    "aspectRatio": 1.5,
+    "lastModified": "2026-04-20T05:38:24.533Z"
+  },
+  "1776663507711-MMK 19.12-0a344e70.webp": {
+    "width": 1866,
+    "height": 1272,
+    "format": "webp",
+    "size": 228256,
+    "aspectRatio": 1.4669811320754718,
+    "lastModified": "2026-04-20T05:38:27.701Z"
+  },
+  "1776663508083-MMK 12.587-186bb1a2.webp": {
+    "width": 1092,
+    "height": 840,
+    "format": "webp",
+    "size": 62296,
+    "aspectRatio": 1.3,
+    "lastModified": "2026-04-20T05:38:28.086Z"
+  },
+  "1776663508295-002b-8f738762.webp": {
+    "width": 744,
+    "height": 458,
+    "format": "webp",
+    "size": 31402,
+    "aspectRatio": 1.6244541484716157,
+    "lastModified": "2026-04-20T05:38:28.294Z"
+  },
+  "1776663509207-03-5df9f451.webp": {
+    "width": 1920,
+    "height": 1436,
+    "format": "webp",
+    "size": 247492,
+    "aspectRatio": 1.3370473537604457,
+    "lastModified": "2026-04-20T05:38:29.206Z"
+  },
+  "1776663510517-01-d713c189.webp": {
+    "width": 1436,
+    "height": 1920,
+    "format": "webp",
+    "size": 123932,
+    "aspectRatio": 0.7479166666666667,
+    "lastModified": "2026-04-20T05:38:30.518Z"
+  },
+  "1776663510816-003a-03bb88fc.webp": {
+    "width": 802,
+    "height": 534,
+    "format": "webp",
+    "size": 86850,
+    "aspectRatio": 1.5018726591760299,
+    "lastModified": "2026-04-20T05:38:30.818Z"
+  },
+  "1776663512686-OBCN3685-c438231d.webp": {
+    "width": 1920,
+    "height": 1280,
+    "format": "webp",
+    "size": 239620,
+    "aspectRatio": 1.5,
+    "lastModified": "2026-04-20T05:38:32.691Z"
+  },
+  "1776675157892-013-733541f1.webp": {
+    "width": 1453,
+    "height": 988,
+    "format": "webp",
+    "size": 177966,
+    "aspectRatio": 1.4706477732793521,
+    "lastModified": "2026-04-20T08:52:37.895Z"
+  },
+  "1776675158106-016-caf8c581.webp": {
+    "width": 1066,
+    "height": 598,
+    "format": "webp",
+    "size": 57170,
+    "aspectRatio": 1.7826086956521738,
+    "lastModified": "2026-04-20T08:52:38.107Z"
+  },
+  "1776675158284-011a-a172db43.webp": {
+    "width": 794,
+    "height": 948,
+    "format": "webp",
+    "size": 152730,
+    "aspectRatio": 0.8375527426160337,
+    "lastModified": "2026-04-20T08:52:38.287Z"
+  },
+  "1776675158853-MMK 01.96-e6644780.webp": {
+    "width": 1519,
+    "height": 1920,
+    "format": "webp",
+    "size": 73788,
+    "aspectRatio": 0.7911458333333333,
+    "lastModified": "2026-04-20T08:52:38.855Z"
+  },
+  "1776675159179-MMK 12.42-e198d103.webp": {
+    "width": 1763,
+    "height": 1156,
+    "format": "webp",
+    "size": 129264,
+    "aspectRatio": 1.5250865051903115,
+    "lastModified": "2026-04-20T08:52:39.175Z"
+  },
+  "1776675159380-TMP5-6b40f909.webp": {
+    "width": 993,
+    "height": 1320,
+    "format": "webp",
+    "size": 78744,
+    "aspectRatio": 0.7522727272727273,
+    "lastModified": "2026-04-20T08:52:39.381Z"
+  },
+  "1776675159491-TMP21-ee82bc07.webp": {
+    "width": 839,
+    "height": 569,
+    "format": "webp",
+    "size": 52860,
+    "aspectRatio": 1.4745166959578206,
+    "lastModified": "2026-04-20T08:52:39.494Z"
+  },
+  "1776675159663-TMP24-68671580.webp": {
+    "width": 812,
+    "height": 1079,
+    "format": "webp",
+    "size": 93550,
+    "aspectRatio": 0.752548656163114,
+    "lastModified": "2026-04-20T08:52:39.666Z"
+  },
+  "1776675159831-TMP35-4a24229f.webp": {
+    "width": 1145,
+    "height": 847,
+    "format": "webp",
+    "size": 106398,
+    "aspectRatio": 1.3518299881936247,
+    "lastModified": "2026-04-20T08:52:39.831Z"
+  },
+  "1776676272689-8414a718-a122-43d7-99b0-479f20acf32d-3ac3d239.webp": {
+    "width": 1024,
+    "height": 683,
+    "format": "webp",
+    "size": 62234,
+    "aspectRatio": 1.499267935578331,
+    "lastModified": "2026-04-20T09:11:12.680Z"
+  },
+  "1776677395496-TMP24-4b264ba9.webp": {
+    "width": 812,
+    "height": 1079,
+    "format": "webp",
+    "size": 93550,
+    "aspectRatio": 0.752548656163114,
+    "lastModified": "2026-04-20T09:29:55.491Z"
+  },
+  "1776833853521-TMP21-b26e80fa.webp": {
+    "width": 839,
+    "height": 569,
+    "format": "webp",
+    "size": 52860,
+    "aspectRatio": 1.4745166959578206,
+    "lastModified": "2026-04-22T04:57:33.515Z"
+  },
+  "1776833854331-OBCN3846-98eaf19e.webp": {
+    "width": 1291,
+    "height": 1920,
+    "format": "webp",
+    "size": 75776,
+    "aspectRatio": 0.6723958333333333,
+    "lastModified": "2026-04-22T04:57:34.331Z"
+  },
+  "1776833854685-TMP5-541279da.webp": {
+    "width": 993,
+    "height": 1320,
+    "format": "webp",
+    "size": 78744,
+    "aspectRatio": 0.7522727272727273,
+    "lastModified": "2026-04-22T04:57:34.682Z"
+  },
+  "1776833854877-019-1c74053e.webp": {
+    "width": 906,
+    "height": 524,
+    "format": "webp",
+    "size": 42708,
+    "aspectRatio": 1.7290076335877862,
+    "lastModified": "2026-04-22T04:57:34.881Z"
+  },
+  "1776833855106-016-67891db5.webp": {
+    "width": 1066,
+    "height": 598,
+    "format": "webp",
+    "size": 57170,
+    "aspectRatio": 1.7826086956521738,
+    "lastModified": "2026-04-22T04:57:35.104Z"
+  },
+  "1776833855355-015-2a71a1b2.webp": {
+    "width": 1558,
+    "height": 1024,
+    "format": "webp",
+    "size": 77794,
+    "aspectRatio": 1.521484375,
+    "lastModified": "2026-04-22T04:57:35.352Z"
+  },
+  "1776833855638-013-6c3ef66c.webp": {
+    "width": 1453,
+    "height": 988,
+    "format": "webp",
+    "size": 177966,
+    "aspectRatio": 1.4706477732793521,
+    "lastModified": "2026-04-22T04:57:35.640Z"
+  },
+  "1776837773018-MMK-11-05-1ec65e0e.webp": {
+    "width": 1659,
+    "height": 1101,
+    "format": "webp",
+    "size": 92938,
+    "aspectRatio": 1.5068119891008174,
+    "lastModified": "2026-04-22T06:02:53.023Z"
+  },
+  "1776837773396-MMK-11-10-716ced4b.webp": {
+    "width": 1430,
+    "height": 1072,
+    "format": "webp",
+    "size": 119058,
+    "aspectRatio": 1.333955223880597,
+    "lastModified": "2026-04-22T06:02:53.400Z"
+  },
+  "1776837773763-MMK-11-08-3cc0f0e6.webp": {
+    "width": 1568,
+    "height": 1096,
+    "format": "webp",
+    "size": 93438,
+    "aspectRatio": 1.4306569343065694,
+    "lastModified": "2026-04-22T06:02:53.765Z"
+  },
+  "1776837774507-MMK-3-64-35c4520d.webp": {
+    "width": 1920,
+    "height": 1301,
+    "format": "webp",
+    "size": 133842,
+    "aspectRatio": 1.4757878554957724,
+    "lastModified": "2026-04-22T06:02:54.503Z"
+  },
+  "1776837774900-MMK-2-27-bb2425e1.webp": {
+    "width": 1626,
+    "height": 1086,
+    "format": "webp",
+    "size": 74452,
+    "aspectRatio": 1.4972375690607735,
+    "lastModified": "2026-04-22T06:02:54.905Z"
+  },
+  "1776837775147-MMK-2-29-edb54bca.webp": {
+    "width": 780,
+    "height": 1098,
+    "format": "webp",
+    "size": 78288,
+    "aspectRatio": 0.7103825136612022,
+    "lastModified": "2026-04-22T06:02:55.145Z"
+  },
+  "1776837775606-MMK-2-02-fcab28df.webp": {
+    "width": 1722,
+    "height": 1252,
+    "format": "webp",
+    "size": 134478,
+    "aspectRatio": 1.3753993610223643,
+    "lastModified": "2026-04-22T06:02:55.603Z"
+  },
+  "2.jpg": {
+    "width": 1079,
+    "height": 675,
+    "format": "jpeg",
+    "size": 24104,
+    "aspectRatio": 1.5985185185185184,
+    "lastModified": "2026-04-15T09:48:05.364Z"
+  },
+  "3.jpg": {
+    "width": 2048,
+    "height": 1366,
+    "format": "jpeg",
+    "size": 128924,
+    "aspectRatio": 1.499267935578331,
+    "lastModified": "2026-04-15T09:48:12.270Z"
+  },
+  "ABOUT SECTION IMAGE.png": {
+    "width": 1024,
+    "height": 1536,
+    "format": "png",
+    "size": 2514121,
+    "aspectRatio": 0.6666666666666666,
+    "lastModified": "2026-04-22T06:25:47.841Z"
+  },
+  "ABOUT SECTION IMAGE.webp": {
+    "width": 1024,
+    "height": 1536,
+    "format": "webp",
+    "size": 114580,
+    "aspectRatio": 0.6666666666666666,
+    "lastModified": "2026-04-22T06:25:47.828Z"
+  },
+  "Caritate Servire.jpg": {
+    "width": 2048,
+    "height": 1359,
+    "format": "jpeg",
+    "size": 132688,
+    "aspectRatio": 1.506990434142752,
+    "lastModified": "2026-04-15T12:44:07.063Z"
+  },
+  "hero.jpg": {
+    "width": 450,
+    "height": 461,
+    "format": "jpeg",
+    "size": 50381,
+    "aspectRatio": 0.9761388286334056,
+    "lastModified": "2026-04-15T12:45:45.635Z"
+  },
+  "Living Inspiration.jpg": {
+    "width": 1200,
+    "height": 600,
+    "format": "jpeg",
+    "size": 23225,
+    "aspectRatio": 2,
+    "lastModified": "2026-04-15T12:45:06.139Z"
+  },
+  "logo.jpg": {
+    "width": 2305,
+    "height": 1262,
+    "format": "jpeg",
+    "size": 362438,
+    "aspectRatio": 1.8264659270998416,
+    "lastModified": "2026-02-21T18:30:18.000Z"
+  },
+  "Pastoral Vision.jpg": {
+    "width": 768,
+    "height": 432,
+    "format": "jpeg",
+    "size": 47229,
+    "aspectRatio": 1.7777777777777777,
+    "lastModified": "2026-04-15T12:44:29.575Z"
+  }
+}

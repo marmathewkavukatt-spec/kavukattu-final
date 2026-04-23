@@ -1,0 +1,58 @@
+{
+  "name": "Mar Mathew Kavukatt - Official Website",
+  "short_name": "Mar Mathew Kavukatt",
+  "description": "Official website of Mar Mathew Kavukatt - First Archbishop of Changanacherry, Servant of God",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#8B1538",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["religion", "education", "lifestyle"],
+  "icons": [
+    {
+      "src": "/uploads/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/uploads/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/uploads/logo.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "History",
+      "short_name": "History",
+      "description": "Learn about Mar Mathew Kavukatt's life and legacy",
+      "url": "/about",
+      "icons": [{ "src": "/uploads/logo.jpg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Gallery",
+      "short_name": "Gallery",
+      "description": "View photos and memories",
+      "url": "/gallery",
+      "icons": [{ "src": "/uploads/logo.jpg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Announcements",
+      "short_name": "News",
+      "description": "Latest announcements and news",
+      "url": "/announcements",
+      "icons": [{ "src": "/uploads/logo.jpg", "sizes": "96x96" }]
+    }
+  ]
+}

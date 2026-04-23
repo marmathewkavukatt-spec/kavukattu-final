@@ -1,0 +1,53 @@
+# Robots.txt for Mar Mathew Kavukatt Website
+
+User-agent: *
+Allow: /
+
+# Allow all major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+# Disallow admin and API routes
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /temp/
+Disallow: /logs/
+Disallow: /backups/
+
+# Allow specific API routes that might be useful for SEO
+Allow: /api/sitemap
+Allow: /api/rss
+
+# Crawl delay (be respectful)
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://yourdomain.com/sitemap.xml
+Sitemap: https://yourdomain.com/sitemap-images.xml
+
+# Host directive (update with your actual domain)
+# Host: https://yourdomain.com
+
+# Note: Replace 'yourdomain.com' with your actual domain name before deployment

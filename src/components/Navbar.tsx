@@ -1,0 +1,527 @@
+﻿"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown, Instagram, Youtube } from "lucide-react";
+import { useLang } from "@/context/LangContext";
+import ContributionModal from "./ContributionModal";
+import AutoTranslate from "@/components/AutoTranslate";
+import { useAutoTranslate } from "@/components/AutoTranslate";
+
+// Custom WhatsApp icon since lucide doesn't have one
+function WhatsAppIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  );
+}
+
+const socialLinks = [
+  { href: "https://whatsapp.com/channel/0029VaFkYYa9sBIB1ALIPj3X", label: "WhatsApp", Icon: WhatsAppIcon },
+  { href: "https://instagram.com", label: "Instagram", Icon: Instagram },
+  { href: "https://youtu.be/p9J0unIRmzI?si=trnWyFq7qgqu8mVs", label: "YouTube", Icon: Youtube },
+];
+
+function LangToggle({ lang, setLang }: { lang: string, setLang: (lang: "en" | "ml") => void }) {
+  return (
+    <button
+      onClick={() => setLang(lang === "en" ? "ml" : "en")}
+      className="rounded-md border border-stone-200 px-3 py-1.5 text-xs font-semibold text-stone-600 transition hover:bg-stone-100 hover:text-accent"
+      title={lang === "en" ? "Switch to Malayalam" : "Switch to English"}
+    >
+      {lang === "en" ? "മലയാളം" : "English"}
+    </button>
+  );
+}
+
+export default function Navbar() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [contributionModalOpen, setContributionModalOpen] = useState(false);
+  const [mediaOpenDesktop, setMediaOpenDesktop] = useState(false);
+  const [archivesOpenDesktop, setArchivesOpenDesktop] = useState(false);
+  const [mediaOpenMobile, setMediaOpenMobile] = useState(false);
+  const [archivesOpenMobile, setArchivesOpenMobile] = useState(false);
+  const { lang, setLang } = useLang();
+
+  // Real-time translations for navigation
+  const siteTitle = useAutoTranslate("MAR MATHEW KAVUKATT");
+  const homeText = useAutoTranslate("Home");
+  const historyText = useAutoTranslate("History");
+  const spiritualLegacyText = useAutoTranslate("Spiritual Legacy");
+  const mediaText = useAutoTranslate("Media");
+  const resourcesText = useAutoTranslate("Syriac Studies");
+  const archivesDocumentsText = useAutoTranslate("Archives & Documents");
+  const experiencesText = useAutoTranslate("Experiences");
+  const galleryText = useAutoTranslate("Gallery");
+  const visitText = useAutoTranslate("Visit");
+  const publicInterventionsText = useAutoTranslate("Public Interventions");
+  const contactsText = useAutoTranslate("Contact us");
+  const menuText = useAutoTranslate("Menu");
+  const openMenuText = useAutoTranslate("Open Menu");
+  const closeMenuText = useAutoTranslate("Close Menu");
+  const followUsText = useAutoTranslate("Follow Us");
+  const pastoralLettersText = useAutoTranslate("Pastoral Letters");
+  const circularsText = useAutoTranslate("Circulars");
+  const othersText = useAutoTranslate("Others");
+  const allDocumentsText = useAutoTranslate("All Documents");
+
+  const navLinksBeforeMedia = [
+    { href: "/", label: homeText },
+    { href: "/about", label: historyText },
+    { href: "/spiritual-legacy", label: spiritualLegacyText },
+  ];
+
+  const navLinksAfterMedia = [
+    { href: "/experiences", label: experiencesText },
+    { href: "/gallery", label: galleryText },
+    { href: "/visit", label: visitText },
+  ];
+
+  const desktopLinksAfterMedia = navLinksAfterMedia;
+  const isAdmin = pathname.startsWith("/admin");
+  const isMediaActive = pathname.startsWith("/resources") || pathname.startsWith("/archives");
+
+  useEffect(() => {
+    [...navLinksBeforeMedia, ...navLinksAfterMedia, { href: "/resources", label: resourcesText }, { href: "/archives", label: archivesDocumentsText }]
+      .forEach((link) => router.prefetch(link.href));
+  }, [router, navLinksBeforeMedia, navLinksAfterMedia, resourcesText, archivesDocumentsText]);
+
+  if (isAdmin) return null;
+
+  return (
+    <>
+      <header className="sticky top-0 z-50 w-full border-b border-stone-200/80 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
+        {/* First Line: Logo, Name, Social Media, Language Toggle */}
+        <div className="border-b border-stone-100">
+          <div className="mx-auto flex max-w-screen-2xl items-center justify-between gap-2 px-2 py-2 sm:px-4 sm:py-2.5 lg:px-8">
+            <Link href="/" className="flex items-center gap-2 shrink min-w-0 overflow-hidden" prefetch={true}>
+              <div className="relative h-10 w-10 shrink-0 sm:h-12 sm:w-12 lg:h-14 lg:w-14">
+                <Image
+                  src="/uploads/logo.jpg"
+                  alt="Church Logo"
+                  fill
+                  sizes="(max-width: 640px) 40px, (max-width: 1024px) 48px, 56px"
+                  className="rounded-full object-contain"
+                  priority
+                  unoptimized
+                />
+              </div>
+              {/* Two-line title for mobile, single line for larger screens */}
+              <div className="flex flex-col sm:block">
+                <span className="text-sm font-serif font-bold text-accent leading-tight uppercase sm:text-base lg:text-lg xl:text-xl 2xl:text-2xl">
+                  {siteTitle}
+                </span>
+              </div>
+            </Link>
+
+            {/* Social Media & Language Toggle */}
+            <div className="flex items-center gap-1 shrink-0">
+              <div className="hidden items-center gap-1 md:flex">
+                {socialLinks.map(({ href, label, Icon }) => (
+                  <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
+                    className="rounded-md p-2 sm:p-2.5 text-stone-600 transition-colors hover:bg-stone-100 hover:text-accent">
+                    <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
+                  </a>
+                ))}
+              </div>
+              {/* Language toggle for tablet */}
+              <div className="hidden sm:block lg:hidden">
+                <LangToggle lang={lang} setLang={setLang} />
+              </div>
+              {/* Language toggle for mobile - show before menu button */}
+              <div className="block sm:hidden">
+                <LangToggle lang={lang} setLang={setLang} />
+              </div>
+              {/* Mobile menu button */}
+              <button type="button"
+                className="flex items-center justify-center rounded-lg p-2.5 text-white bg-accent hover:bg-accent/90 lg:hidden shadow-md"
+                onClick={() => setOpen(true)} aria-expanded={open} aria-label={openMenuText}>
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              {/* Language toggle for desktop */}
+              <div className="hidden lg:block">
+                <LangToggle lang={lang} setLang={setLang} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Second Line: Navigation Links */}
+        <nav className="mx-auto hidden max-w-screen-2xl flex-wrap items-center justify-center gap-x-0.5 gap-y-1 px-4 py-2 sm:px-6 lg:flex lg:px-8">
+            {navLinksBeforeMedia.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                prefetch={true}
+                className={`rounded-md px-2.5 py-1.5 text-sm font-semibold whitespace-nowrap transition-colors lg:px-3 lg:py-2 lg:text-base ${
+                  pathname === link.href
+                    ? "bg-accent/10 text-accent"
+                    : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+
+            {/* Media dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setMediaOpenDesktop(true)}
+              onMouseLeave={() => {
+                setMediaOpenDesktop(false);
+                setArchivesOpenDesktop(false);
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => setMediaOpenDesktop((v) => !v)}
+                aria-haspopup="menu"
+                aria-expanded={mediaOpenDesktop}
+                className={`inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-sm font-semibold whitespace-nowrap transition-colors lg:px-3 lg:py-2 lg:text-base ${
+                  isMediaActive
+                    ? "bg-accent/10 text-accent"
+                    : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
+                }`}
+              >
+                {mediaText}
+                <ChevronDown className={`h-3.5 w-3.5 lg:h-4 lg:w-4 transition-transform ${mediaOpenDesktop ? "rotate-180" : ""}`} />
+              </button>
+
+              <AnimatePresence>
+                {mediaOpenDesktop && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute left-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-xl border border-stone-200 bg-white shadow-xl"
+                    role="menu"
+                  >
+                    <div className="p-2">
+                      <Link
+                        href="/resources"
+                        prefetch={true}
+                        onClick={() => setMediaOpenDesktop(false)}
+                        className={`block rounded-lg px-3 py-2 text-base font-semibold transition-colors ${
+                          pathname.startsWith("/resources")
+                            ? "bg-accent/10 text-accent"
+                            : "text-stone-700 hover:bg-stone-50"
+                        }`}
+                        role="menuitem"
+                      >
+                        {resourcesText}
+                      </Link>
+
+                      <div
+                        onMouseEnter={() => setArchivesOpenDesktop(true)}
+                        onMouseLeave={() => setArchivesOpenDesktop(false)}
+                      >
+                        <Link
+                          href="/archives"
+                          prefetch={true}
+                          onClick={() => {
+                            setMediaOpenDesktop(false);
+                            setArchivesOpenDesktop(false);
+                          }}
+                          onFocus={() => setArchivesOpenDesktop(true)}
+                          className={`flex items-center justify-between rounded-lg px-3 py-2 text-base font-semibold transition-colors ${
+                            pathname.startsWith("/archives")
+                              ? "bg-accent/10 text-accent"
+                              : "text-stone-700 hover:bg-stone-50"
+                          }`}
+                          role="menuitem"
+                        >
+                          <span>{archivesDocumentsText}</span>
+                          <ChevronDown
+                            className={`h-4 w-4 transition-transform ${archivesOpenDesktop ? "rotate-180" : ""}`}
+                          />
+                        </Link>
+
+                        <AnimatePresence>
+                          {archivesOpenDesktop && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.12 }}
+                              className="mt-1 space-y-1 overflow-hidden rounded-lg border border-stone-100 bg-stone-50/40 p-1"
+                            >
+                              <Link
+                                href="/archives?category=pastoral-letters"
+                                prefetch={true}
+                                onClick={() => {
+                                  setMediaOpenDesktop(false);
+                                  setArchivesOpenDesktop(false);
+                                }}
+                                className="block rounded-md px-3 py-2 text-base text-stone-700 hover:bg-white hover:text-stone-900"
+                                role="menuitem"
+                              >
+                                {pastoralLettersText}
+                              </Link>
+                              <Link
+                                href="/archives?category=circulars"
+                                prefetch={true}
+                                onClick={() => {
+                                  setMediaOpenDesktop(false);
+                                  setArchivesOpenDesktop(false);
+                                }}
+                                className="block rounded-md px-3 py-2 text-base text-stone-700 hover:bg-white hover:text-stone-900"
+                                role="menuitem"
+                              >
+                                {circularsText}
+                              </Link>
+                              <Link
+                                href="/archives?category=others"
+                                prefetch={true}
+                                onClick={() => {
+                                  setMediaOpenDesktop(false);
+                                  setArchivesOpenDesktop(false);
+                                }}
+                                className="block rounded-md px-3 py-2 text-base text-stone-700 hover:bg-white hover:text-stone-900"
+                                role="menuitem"
+                              >
+                                {othersText}
+                              </Link>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {desktopLinksAfterMedia.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                prefetch={true}
+                className={`rounded-md px-2.5 py-1.5 text-sm font-semibold whitespace-nowrap transition-colors lg:px-3 lg:py-2 lg:text-base ${
+                  pathname === link.href
+                    ? "bg-accent/10 text-accent"
+                    : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <button
+              onClick={() => setContributionModalOpen(true)}
+              className="rounded-md px-2.5 py-1.5 text-sm font-semibold whitespace-nowrap transition-colors text-stone-700 hover:bg-stone-100 hover:text-stone-900 lg:px-3 lg:py-2 lg:text-base"
+            >
+              {publicInterventionsText}
+            </button>
+            <Link
+              href="/contacts"
+              prefetch={true}
+              className={`rounded-md px-2.5 py-1.5 text-sm font-semibold whitespace-nowrap transition-colors lg:px-3 lg:py-2 lg:text-base ${
+                pathname === "/contacts"
+                  ? "bg-accent/10 text-accent"
+                  : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
+              }`}
+            >
+              {contactsText}
+            </Link>
+          </nav>
+      </header>
+
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-50 bg-black/50 lg:hidden"
+              onClick={() => setOpen(false)} />
+            <motion.div initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="fixed right-0 top-0 z-50 h-full w-72 max-w-[85vw] bg-white shadow-2xl lg:hidden">
+              <div className="flex h-full flex-col">
+                <div className="flex items-center justify-between border-b border-stone-200 px-4 py-4">
+                  <span className="font-serif text-lg font-bold text-accent">{menuText}</span>
+                  <button type="button" onClick={() => setOpen(false)}
+                    className="rounded-md p-2 text-stone-600 hover:bg-stone-100" aria-label={closeMenuText}>
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+                <nav className="flex-1 overflow-y-auto px-4 py-4">
+                  <div className="space-y-1">
+                    {navLinksBeforeMedia.map((link) => (
+                      <Link key={link.href} href={link.href} prefetch={true} onClick={() => setOpen(false)}
+                        className={`block rounded-md px-3 py-3 text-base font-medium transition-colors ${
+                          pathname === link.href ? "bg-accent/10 text-accent" : "text-stone-700 hover:bg-stone-100"
+                        }`}>
+                        {link.label}
+                      </Link>
+                    ))}
+
+                    {/* Media - mobile */}
+                    <button
+                      type="button"
+                      onClick={() => setMediaOpenMobile((v) => !v)}
+                      className={`w-full flex items-center justify-between rounded-md px-3 py-3 text-base font-medium transition-colors ${
+                        isMediaActive ? "bg-accent/10 text-accent" : "text-stone-700 hover:bg-stone-100"
+                      }`}
+                    >
+                      <span>{mediaText}</span>
+                      <ChevronDown className={`h-4 w-4 transition-transform ${mediaOpenMobile ? "rotate-180" : ""}`} />
+                    </button>
+
+                    {mediaOpenMobile && (
+                      <div className="ml-3 mt-1 space-y-1 border-l-2 border-stone-200 pl-3">
+                        <Link
+                          href="/resources"
+                          prefetch={true}
+                          onClick={() => {
+                            setOpen(false);
+                            setMediaOpenMobile(false);
+                            setArchivesOpenMobile(false);
+                          }}
+                          className={`block rounded-md px-3 py-2 text-base transition-colors ${
+                            pathname.startsWith("/resources")
+                              ? "bg-accent/10 text-accent font-medium"
+                              : "text-stone-600 hover:bg-stone-100 hover:text-stone-900"
+                          }`}
+                        >
+                          {resourcesText}
+                        </Link>
+
+                        <button
+                          type="button"
+                          onClick={() => setArchivesOpenMobile((v) => !v)}
+                          className={`w-full flex items-center justify-between rounded-md px-3 py-2 text-base transition-colors ${
+                            pathname.startsWith("/archives")
+                              ? "bg-accent/10 text-accent font-medium"
+                              : "text-stone-600 hover:bg-stone-100 hover:text-stone-900"
+                          }`}
+                        >
+                          <span>{archivesDocumentsText}</span>
+                          <ChevronDown className={`h-4 w-4 transition-transform ${archivesOpenMobile ? "rotate-180" : ""}`} />
+                        </button>
+
+                        {archivesOpenMobile && (
+                          <div className="ml-3 mt-1 space-y-1 border-l-2 border-stone-200 pl-3">
+                            <Link
+                              href="/archives"
+                              prefetch={true}
+                              onClick={() => {
+                                setOpen(false);
+                                setMediaOpenMobile(false);
+                                setArchivesOpenMobile(false);
+                              }}
+                              className="block rounded-md px-3 py-2 text-base font-semibold text-stone-700 hover:bg-stone-100 hover:text-stone-900"
+                            >
+                              {allDocumentsText}
+                            </Link>
+                            <Link
+                              href="/archives?category=pastoral-letters"
+                              prefetch={true}
+                              onClick={() => {
+                                setOpen(false);
+                                setMediaOpenMobile(false);
+                                setArchivesOpenMobile(false);
+                              }}
+                              className="block rounded-md px-3 py-2 text-base text-stone-600 hover:bg-stone-100 hover:text-stone-900"
+                            >
+                              {pastoralLettersText}
+                            </Link>
+                            <Link
+                              href="/archives?category=circulars"
+                              prefetch={true}
+                              onClick={() => {
+                                setOpen(false);
+                                setMediaOpenMobile(false);
+                                setArchivesOpenMobile(false);
+                              }}
+                              className="block rounded-md px-3 py-2 text-base text-stone-600 hover:bg-stone-100 hover:text-stone-900"
+                            >
+                              {circularsText}
+                            </Link>
+                            <Link
+                              href="/archives?category=others"
+                              prefetch={true}
+                              onClick={() => {
+                                setOpen(false);
+                                setMediaOpenMobile(false);
+                                setArchivesOpenMobile(false);
+                              }}
+                              className="block rounded-md px-3 py-2 text-base text-stone-600 hover:bg-stone-100 hover:text-stone-900"
+                            >
+                              {othersText}
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {navLinksAfterMedia.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        prefetch={true}
+                        onClick={() => setOpen(false)}
+                        className={`block rounded-md px-3 py-3 text-base font-medium transition-colors ${
+                          pathname === link.href ? "bg-accent/10 text-accent" : "text-stone-700 hover:bg-stone-100"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                    <button
+                      onClick={() => {
+                        setOpen(false);
+                        setContributionModalOpen(true);
+                      }}
+                      className="w-full text-left block rounded-md px-3 py-3 text-base font-medium transition-colors text-stone-700 hover:bg-stone-100"
+                    >
+                      {publicInterventionsText}
+                    </button>
+                    <Link
+                      href="/contacts"
+                      prefetch={true}
+                      onClick={() => setOpen(false)}
+                      className={`block rounded-md px-3 py-3 text-base font-medium transition-colors ${
+                        pathname === "/contacts" ? "bg-accent/10 text-accent" : "text-stone-700 hover:bg-stone-100"
+                      }`}
+                    >
+                      {contactsText}
+                    </Link>
+                  </div>
+                  <div className="mt-6 border-t border-stone-200 pt-4">
+                    <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wide text-stone-500">
+                      {followUsText}
+                    </p>
+                    <div className="flex items-center gap-2 px-3">
+                      {socialLinks.map(({ href, label, Icon }) => (
+                        <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
+                          className="rounded-md p-2.5 text-stone-600 transition-colors hover:bg-stone-100 hover:text-accent">
+                          <Icon className="h-6 w-6" />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </nav>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Contribution Modal */}
+      <ContributionModal 
+        isOpen={contributionModalOpen} 
+        onClose={() => setContributionModalOpen(false)} 
+      />
+    </>
+  );
+}

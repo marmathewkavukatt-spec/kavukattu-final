@@ -1,0 +1,224 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Church-inspired minimal palette */
+  --background: #fdfcfa; /* Ivory / Off-white */
+  --foreground: #4a4a4a; /* Soft grey text */
+  --accent: #8b1538; /* Deep maroon / burgundy */
+  --accent-light: #a8244a;
+  --accent-dark: #6b0f2a;
+  --gold: #d4af37; /* Gold accents */
+  --gold-light: #e5c76b;
+  --gold-dark: #b8941f;
+  --grey: #6b7280; /* Soft grey for text */
+  --grey-light: #9ca3af;
+  --grey-dark: #4a4a4a;
+  
+  /* Semantic color mappings */
+  --card-bg: #ffffff;
+  --border-color: rgba(139, 21, 56, 0.1); /* Maroon with opacity */
+  --shadow-color: rgba(139, 21, 56, 0.08);
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  /* Default body font. Malayalam glyphs fall back to --font-ml automatically. */
+  font-family: var(--font-sans), var(--font-ml), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Prefer Malayalam font stack when Malayalam is selected */
+html[data-lang="ml"] body,
+html:lang(ml) body {
+  font-family: var(--font-ml), var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+@layer components {
+  /* Shared typography utilities (matches Home "History" section) */
+  .site-page-title {
+    @apply font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-stone-900;
+  }
+
+  .site-page-subtitle {
+    @apply text-base md:text-lg leading-relaxed text-stone-600 max-w-3xl mx-auto;
+  }
+
+  .site-section-title {
+    @apply font-serif text-2xl md:text-3xl font-bold text-stone-900;
+  }
+
+  .site-body-text {
+    @apply text-base md:text-lg leading-relaxed text-stone-600;
+  }
+}
+
+/* Professional Typography Scale - Consistent across all pages */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif), var(--font-ml), Georgia, Garamond, serif;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--accent);
+  margin-bottom: 0.5em;
+}
+
+html[data-lang="ml"] h1,
+html[data-lang="ml"] h2,
+html[data-lang="ml"] h3,
+html[data-lang="ml"] h4,
+html[data-lang="ml"] h5,
+html[data-lang="ml"] h6,
+html:lang(ml) h1,
+html:lang(ml) h2,
+html:lang(ml) h3,
+html:lang(ml) h4,
+html:lang(ml) h5,
+html:lang(ml) h6 {
+  font-family: var(--font-ml), var(--font-serif), Georgia, Garamond, serif;
+}
+
+/* Page Titles - Main headings */
+h1 { 
+  font-size: 2.25rem; /* 36px */
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Section Titles */
+h2 { 
+  font-size: 1.875rem; /* 30px */
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* Subsection Titles */
+h3 { 
+  font-size: 1.5rem; /* 24px */
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Card/Component Titles */
+h4 { 
+  font-size: 1.25rem; /* 20px */
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+h5 { 
+  font-size: 1.125rem; /* 18px */
+  font-weight: 600;
+}
+
+h6 { 
+  font-size: 1rem; /* 16px */
+  font-weight: 600;
+}
+
+/* Responsive Typography */
+@media (min-width: 640px) {
+  h1 { font-size: 2.5rem; } /* 40px */
+  h2 { font-size: 2rem; } /* 32px */
+  h3 { font-size: 1.625rem; } /* 26px */
+}
+
+@media (min-width: 1024px) {
+  h1 { font-size: 3rem; } /* 48px */
+  h2 { font-size: 2.25rem; } /* 36px */
+  h3 { font-size: 1.75rem; } /* 28px */
+}
+
+/* Body Text */
+p {
+  margin-bottom: 1em;
+}
+
+/* Text Size Utilities */
+.text-body {
+  font-size: 1rem; /* 16px */
+  line-height: 1.6;
+}
+
+.text-body-lg {
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.6;
+}
+
+.text-body-sm {
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.5;
+}
+
+/* Ensure buttons and inputs use sans-serif */
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Specific overrides for headings that should always be serif */
+.font-serif {
+  font-family: var(--font-serif), var(--font-ml), Georgia, Garamond, serif !important;
+}
+
+/* Specific overrides for body text that should always be sans-serif */
+.font-sans {
+  font-family: var(--font-sans), var(--font-ml), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Preloader */
+#preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #faf9f7;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+#preloader.hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#preloader img {
+  width: clamp(120px, 18vw, 240px);
+  height: clamp(120px, 18vw, 240px);
+  border-radius: 50%;
+  object-fit: contain;
+  animation: preloader-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes preloader-pulse {
+  0%, 100% { transform: scale(1);    opacity: 1; }
+  50%       { transform: scale(0.93); opacity: 0.85; }
+}

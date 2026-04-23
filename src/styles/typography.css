@@ -1,0 +1,37 @@
+/* Typography Consistency Guide for All Sections */
+
+/* Section Titles - Main headings for each section */
+.site-section-title {
+  @apply font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-stone-900;
+}
+
+/* Section Subtitles - Descriptive text under section titles */
+.site-section-subtitle {
+  @apply text-base md:text-lg text-stone-600 max-w-3xl mx-auto;
+}
+
+/* Card Titles - Titles within cards or items */
+.site-card-title {
+  @apply font-serif text-xl md:text-2xl font-bold text-stone-900;
+}
+
+/* Body Text - Regular paragraph text */
+.site-body-text {
+  @apply text-base leading-relaxed text-stone-700;
+}
+
+/* Small Text - Captions, labels, metadata */
+.site-small-text {
+  @apply text-sm text-stone-600;
+}
+
+/* Button Text */
+.site-button-text {
+  @apply text-sm font-semibold;
+}
+
+/* Smooth scroll behavior with offset for fixed navbar */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
