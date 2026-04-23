@@ -14,13 +14,17 @@ export const db =
     log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
     datasources: {
       db: {
-        url: process.env.DATABASE_URL + 
-          // Connection pool settings for 300+ concurrent users
-          "?connection_limit=20" +           // Max 20 connections (shared hosting limit)
-          "&pool_timeout=30" +                // 30s timeout for getting connection
-          "&connect_timeout=10" +             // 10s timeout for initial connection
-          "&socket_timeout=10" +              // 10s timeout for socket operations
-          "&sslaccept=accept_invalid_certs"   // Accept SSL certs (shared hosting)
+        url: (() => {
+          const baseUrl = process.env.DATABASE_URL || '';
+          const separator = baseUrl.includes('?') ? '&' : '?';
+          // MySQL connection pool settings for 300+ concurrent users
+          return baseUrl + 
+            separator +
+            "connection_limit=15" +              // Max 15 connections (conservative for shared hosting)
+            "&pool_timeout=20" +                 // 20s timeout for getting connection
+            "&connect_timeout=10" +              // 10s timeout for initial connection
+            "&socket_timeout=30";                // 30s timeout for socket operations
+        })()
       }
     }
   });

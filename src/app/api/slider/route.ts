@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db, connectDB } from "@/lib/db";
+import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/api-auth";
 import { revalidatePath } from "next/cache";
 import { withUnderscoreId, withUnderscoreIds } from "@/lib/prisma-helpers";
@@ -11,13 +11,34 @@ import {
   toNumber,
   toOptionalString,
 } from "@/lib/requestValidation";
+import { cachedQuery, invalidateApiCache } from "@/lib/api-optimizer";
 
 export async function GET() {
-  try {    const items = await db.slider.findMany({
-      where: { active: true },
-      orderBy: { order: "asc" },
+  try {
+    const items = await cachedQuery(
+      'slider:active',
+      async () => {
+        return await db.slider.findMany({
+          where: { active: true },
+          orderBy: { order: "asc" },
+          select: {
+            id: true,
+            image: true,
+            title: true,
+            subtitle: true,
+            order: true,
+            active: true,
+          }
+        });
+      },
+      300 // Cache for 5 minutes
+    );
+    
+    return NextResponse.json(withUnderscoreIds(items), {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+      }
     });
-    return NextResponse.json(withUnderscoreIds(items));
   } catch (e) {
     console.error(e);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
@@ -37,6 +58,10 @@ export async function POST(req: NextRequest) {
         active: toBoolean(payload.active, true),
       },
     });
+    
+    // Invalidate cache
+    invalidateApiCache('/slider');
+    
     revalidatePath('/');
     return NextResponse.json(withUnderscoreId(item));
   } catch (error) {

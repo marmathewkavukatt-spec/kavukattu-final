@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { db, connectDB } from "@/lib/db";
+import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/api-auth";
 import { withUnderscoreId, withUnderscoreIds } from "@/lib/prisma-helpers";
 import {
@@ -11,13 +11,34 @@ import {
   toNumber,
   toRequiredString,
 } from "@/lib/requestValidation";
+import { cachedQuery, invalidateApiCache } from "@/lib/api-optimizer";
 
 export async function GET() {
-  try {    const items = await db.testimony.findMany({
-      where: { active: true },
-      orderBy: { order: "asc" },
+  try {
+    const items = await cachedQuery(
+      'testimonies:active',
+      async () => {
+        return await db.testimony.findMany({
+          where: { active: true },
+          orderBy: { order: "asc" },
+          select: {
+            id: true,
+            authorName: true,
+            content: true,
+            authorImage: true,
+            order: true,
+            active: true,
+          }
+        });
+      },
+      600 // Cache for 10 minutes
+    );
+    
+    return NextResponse.json(withUnderscoreIds(items), {
+      headers: {
+        'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=1200',
+      }
     });
-    return NextResponse.json(withUnderscoreIds(items));
   } catch (e) {
     console.error(e);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
@@ -37,6 +58,10 @@ export async function POST(req: NextRequest) {
         active: toBoolean(payload.active, true),
       },
     });
+    
+    // Invalidate cache
+    invalidateApiCache('/testimonies');
+    
     revalidatePath("/experiences");
     revalidatePath("/testimony");
     return NextResponse.json(withUnderscoreId(item));

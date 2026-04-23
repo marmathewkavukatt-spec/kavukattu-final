@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { db, connectDB } from "@/lib/db";
+import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/api-auth";
 import { getSession } from "@/lib/auth";
 import { withUnderscoreId, withUnderscoreIds } from "@/lib/prisma-helpers";
@@ -12,18 +12,40 @@ import {
   toNumber,
   toRequiredString,
 } from "@/lib/requestValidation";
+import { cachedQuery, invalidateApiCache } from "@/lib/api-optimizer";
 
 // GET endpoint - returns all categories for admin, active only for public
 export async function GET() {
   try {
-    await connectDB();
     const session = await getSession();
-    const where = session ? undefined : { active: true };
-    const categories = await db.galleryCategory.findMany({
-      where,
-      orderBy: { order: "asc" },
+    const cacheKey = session ? 'gallery-categories:all' : 'gallery-categories:active';
+    
+    const categories = await cachedQuery(
+      cacheKey,
+      async () => {
+        const where = session ? undefined : { active: true };
+        return await db.galleryCategory.findMany({
+          where,
+          orderBy: { order: "asc" },
+          select: {
+            id: true,
+            title: true,
+            coverImage: true,
+            order: true,
+            active: true,
+          }
+        });
+      },
+      300 // Cache for 5 minutes
+    );
+    
+    return NextResponse.json(withUnderscoreIds(categories), {
+      headers: {
+        'Cache-Control': session 
+          ? 'private, max-age=300' 
+          : 'public, s-maxage=300, stale-while-revalidate=600',
+      }
     });
-    return NextResponse.json(withUnderscoreIds(categories));
   } catch (e) {
     console.error(e);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
@@ -35,7 +57,6 @@ export async function POST(req: NextRequest) {
   const auth = await requireAdmin();
   if (auth) return auth;
   try {
-    await connectDB();
     const payload = await getSafeJsonBody(req);
     const category = await db.galleryCategory.create({
       data: {
@@ -45,6 +66,10 @@ export async function POST(req: NextRequest) {
         active: toBoolean(payload.active, true),
       },
     });
+    
+    // Invalidate cache
+    invalidateApiCache('/gallery');
+    
     revalidatePath('/gallery');
     revalidatePath('/');
     return NextResponse.json(withUnderscoreId(category));

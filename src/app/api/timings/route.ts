@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { db, connectDB } from "@/lib/db";
+import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/api-auth";
 import { withUnderscoreId, withUnderscoreIds } from "@/lib/prisma-helpers";
 import {
@@ -10,10 +10,32 @@ import {
   toOptionalString,
   toRequiredString,
 } from "@/lib/requestValidation";
+import { cachedQuery, invalidateApiCache } from "@/lib/api-optimizer";
 
 export async function GET() {
-  try {    const items = await db.timing.findMany({ orderBy: { order: "asc" } });
-    return NextResponse.json(withUnderscoreIds(items));
+  try {
+    const items = await cachedQuery(
+      'timings:all',
+      async () => {
+        return await db.timing.findMany({ 
+          orderBy: { order: "asc" },
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            schedule: true,
+            order: true,
+          }
+        });
+      },
+      600 // Cache for 10 minutes
+    );
+    
+    return NextResponse.json(withUnderscoreIds(items), {
+      headers: {
+        'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=1200',
+      }
+    });
   } catch (e) {
     console.error(e);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
@@ -34,6 +56,10 @@ export async function POST(req: NextRequest) {
         order: toNumber(payload.order, "order", { min: 0, max: 9999, defaultValue: 0 }),
       },
     });
+    
+    // Invalidate cache
+    invalidateApiCache('/timings');
+    
     revalidatePath("/visit");
     revalidatePath("/timings");
     return NextResponse.json(withUnderscoreId(item));
