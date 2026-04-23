@@ -11,8 +11,9 @@ import {
   toOptionalString,
   toRequiredString,
 } from "@/lib/requestValidation";
+import { cachedQuery, invalidateApiCache } from "@/lib/api-optimizer";
 
-// OPTIMIZED: Added pagination and select specific fields
+// OPTIMIZED: Added caching and pagination
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -21,42 +22,58 @@ export async function GET(req: NextRequest) {
     const category = searchParams.get("category");
     const skip = (page - 1) * limit;
 
-    // Build where clause
-    const where: any = { active: true };
-    if (category) {
-      where.category = category;
-    }
+    // Build cache key
+    const cacheKey = `announcements:${page}:${limit}:${category || 'all'}`;
 
-    // Parallel queries for better performance
-    const [items, total] = await Promise.all([
-      db.announcement.findMany({
-        where,
-        orderBy: { date: "desc" },
-        skip,
-        take: limit,
-        select: {
-          id: true,
-          title: true,
-          subtitle: true,
-          description: true,
-          category: true,
-          coverImage: true,
-          date: true,
-          active: true,
-          createdAt: true,
-          updatedAt: true,
+    // Use cached query
+    const result = await cachedQuery(
+      cacheKey,
+      async () => {
+        // Build where clause
+        const where: any = { active: true };
+        if (category) {
+          where.category = category;
         }
-      }),
-      db.announcement.count({ where })
-    ]);
 
-    return NextResponse.json({
-      announcements: withUnderscoreIds(items),
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit),
+        // Parallel queries for better performance
+        const [items, total] = await Promise.all([
+          db.announcement.findMany({
+            where,
+            orderBy: { date: "desc" },
+            skip,
+            take: limit,
+            select: {
+              id: true,
+              title: true,
+              subtitle: true,
+              description: true,
+              category: true,
+              coverImage: true,
+              date: true,
+              active: true,
+              createdAt: true,
+              updatedAt: true,
+            }
+          }),
+          db.announcement.count({ where })
+        ]);
+
+        return {
+          announcements: withUnderscoreIds(items),
+          pagination: {
+            page,
+            limit,
+            total,
+            totalPages: Math.ceil(total / limit),
+          }
+        };
+      },
+      300 // Cache for 5 minutes
+    );
+
+    return NextResponse.json(result, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
       }
     });
   } catch (e) {
@@ -104,6 +121,10 @@ export async function POST(req: NextRequest) {
         updatedAt: true,
       }
     });
+    
+    // Invalidate cache
+    invalidateApiCache('/announcements');
+    
     revalidatePath('/announcements');
     revalidatePath('/');
     revalidatePath(`/announcements/${item.id}`);

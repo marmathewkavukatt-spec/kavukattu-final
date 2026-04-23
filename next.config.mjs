@@ -19,7 +19,6 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 31536000, // 1 year cache for better performance
     dangerouslyAllowSVG: false,
-    // Attachment can prevent some browsers from rendering images inline.
     contentDispositionType: 'inline',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     loader: 'default',
@@ -51,11 +50,21 @@ const nextConfig = {
     ];
   },
 
-  // Prevent browsers from caching HTML pages so stale chunk references never cause errors
+  // OPTIMIZED: Aggressive caching for static assets, CDN-friendly headers
   async headers() {
     return [
       {
-        // Match all HTML pages (not static assets)
+        // API routes - short cache with stale-while-revalidate
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, s-maxage=60, stale-while-revalidate=300',
+          },
+        ],
+      },
+      {
+        // HTML pages - no cache to prevent stale content
         source: '/:path*',
         headers: [
           {
@@ -65,8 +74,18 @@ const nextConfig = {
         ],
       },
       {
-        // Allow long-term caching for Next.js static assets (they have content hashes)
+        // Next.js static assets - immutable with long cache
         source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // Public uploads - long cache
+        source: '/uploads/:path*',
         headers: [
           {
             key: 'Cache-Control',
@@ -78,38 +97,69 @@ const nextConfig = {
   },
 
   experimental: {
-    optimizePackageImports: ['framer-motion'],
-    // PDFKit loads built-in font metric files (e.g. Helvetica.afm) from its package data directory.
-    // When bundled into Next server chunks, those assets can be missing, causing ENOENT at runtime.
-    // Keep pdfkit as a server external so it can access its packaged data files.
+    optimizePackageImports: ['framer-motion', 'lucide-react'],
     serverComponentsExternalPackages: ["pdfkit"],
+    // PERFORMANCE: Enable optimizations
+    optimizeCss: true,
+    scrollRestoration: true,
   },
 
-  // Webpack configuration for additional security
-  webpack: (config, { isServer }) => {
+  // Webpack configuration for additional security and performance
+  webpack: (config, { isServer, dev }) => {
     // Security-related webpack configurations
     if (isServer) {
-      // Server-side security configurations
       config.externals = config.externals || [];
       config.externals.push('bcryptjs');
     }
 
-    // Remove source maps in production for security
-    if (process.env.NODE_ENV === 'production') {
+    // Remove source maps in production for security and performance
+    if (!dev) {
       config.devtool = false;
+    }
+
+    // PERFORMANCE: Optimize bundle size
+    if (!dev) {
+      config.optimization = {
+        ...config.optimization,
+        moduleIds: 'deterministic',
+        runtimeChunk: 'single',
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            default: false,
+            vendors: false,
+            // Vendor chunk for node_modules
+            vendor: {
+              name: 'vendor',
+              chunks: 'all',
+              test: /node_modules/,
+              priority: 20
+            },
+            // Common chunk for shared code
+            common: {
+              name: 'common',
+              minChunks: 2,
+              chunks: 'all',
+              priority: 10,
+              reuseExistingChunk: true,
+              enforce: true
+            }
+          }
+        }
+      };
     }
 
     return config;
   },
 
   // Output configuration
-  // `output: 'standalone'` breaks `next start` and requires `node .next/standalone/server.js`
-  // plus copying `public/` and `.next/static/` into the standalone folder.
-  // Keep the default dev/prod workflow working unless explicitly enabled.
   output: process.env.NEXT_STANDALONE === 'true' ? 'standalone' : undefined,
   
   // Disable x-powered-by header
-  generateEtags: false,
+  generateEtags: true, // Enable ETags for better caching
+  
+  // PERFORMANCE: Production optimizations
+  productionBrowserSourceMaps: false, // Disable source maps in production
 };
 
 export default nextConfig;

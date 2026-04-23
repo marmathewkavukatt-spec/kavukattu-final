@@ -22,7 +22,9 @@
     "seo:audit": "node scripts/seo-audit.js",
     "seo:check": "node scripts/seo-audit.js",
     "server:info": "node scripts/show-server-info.js",
-    "build:production": "npm run seo:audit && npm run security:audit && npm run optimize:gallery && npm run build"
+    "build:production": "npm run seo:audit && npm run security:audit && npm run optimize:gallery && npm run build",
+    "perf:analyze": "node scripts/apply-performance-optimizations.js",
+    "perf:test": "echo 'Run: autocannon -c 100 -d 30 https://marmathewkavukatt.org'"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
