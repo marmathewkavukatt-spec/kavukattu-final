@@ -107,11 +107,16 @@ export async function POST(req: NextRequest) {
         finalExtension = getCompressedExtension(compressed.format);
         contentType = `image/${compressed.format}`;
         
-        console.log(
-          `Image compressed: ${file.name} (${(file.size / 1024).toFixed(2)}KB → ${(compressed.size / 1024).toFixed(2)}KB)`
-        );
+        // Silent in production - only log if debugging
+        if (process.env.LOG_LEVEL === 'debug') {
+          console.log(
+            `Image compressed: ${file.name} (${(file.size / 1024).toFixed(2)}KB → ${(compressed.size / 1024).toFixed(2)}KB)`
+          );
+        }
       } catch (error) {
-        console.error("Image compression failed, using original:", error);
+        if (process.env.LOG_LEVEL === 'debug') {
+          console.error("Image compression failed, using original:", error);
+        }
         // Continue with original buffer if compression fails
       }
     }
@@ -150,7 +155,9 @@ export async function POST(req: NextRequest) {
       compressed: shouldCompressImage(file.type, safeName),
     });
   } catch (error) {
-    console.error("Upload error:", error);
+    if (process.env.LOG_LEVEL === 'debug') {
+      console.error("Upload error:", error);
+    }
 
     const message =
       error instanceof Error && error.message.trim()
@@ -195,7 +202,9 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: "File not found." }, { status: 404 });
     }
 
-    console.error("Upload delete error:", error);
+    if (process.env.LOG_LEVEL === 'debug') {
+      console.error("Upload delete error:", error);
+    }
     return NextResponse.json({ error: "Failed to remove file" }, { status: 500 });
   }
 }

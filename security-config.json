@@ -150,7 +150,7 @@
     "backupEncryption": true,
     "automaticUpdates": false,
     "automaticMemoryCleanup": true,
-    "cleanupIntervalMinutes": 5
+    "cleanupIntervalMinutes": 30
   },
   "compliance": {
     "gdprCompliant": true,

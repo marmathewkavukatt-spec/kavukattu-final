@@ -70,17 +70,19 @@ function cleanupExpiredEntries() {
     }
   });
 
-  // Log cleanup stats only if significant cleanup happened
-  if (requestCleaned > 10 || loginCleaned > 5) {
+  // Log cleanup stats only if significant cleanup happened and debugging
+  if (process.env.LOG_LEVEL === 'debug' && (requestCleaned > 10 || loginCleaned > 5)) {
     console.log(`[Rate Limit] Cleaned up ${requestCleaned} request entries and ${loginCleaned} login entries`);
   }
 
-  // Warn if stores are growing too large
-  if (requestStore.size > 10000) {
-    console.warn(`[Rate Limit] Request store size: ${requestStore.size} - consider reducing rate limit window`);
-  }
-  if (loginAttemptStore.size > 1000) {
-    console.warn(`[Rate Limit] Login attempt store size: ${loginAttemptStore.size}`);
+  // Warn if stores are growing too large (only in debug mode)
+  if (process.env.LOG_LEVEL === 'debug') {
+    if (requestStore.size > 10000) {
+      console.warn(`[Rate Limit] Request store size: ${requestStore.size} - consider reducing rate limit window`);
+    }
+    if (loginAttemptStore.size > 1000) {
+      console.warn(`[Rate Limit] Login attempt store size: ${loginAttemptStore.size}`);
+    }
   }
 }
 

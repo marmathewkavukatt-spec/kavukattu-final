@@ -31,10 +31,10 @@ export class ProductionSecurity {
 
   // Automatic cleanup to prevent memory leaks
   private startAutomaticCleanup() {
-    // Run cleanup every 5 minutes
+    // Run cleanup every 30 minutes (reduced from 5 to minimize resource usage with 200+ concurrent users)
     this.cleanupInterval = setInterval(() => {
       this.performCleanup();
-    }, 5 * 60 * 1000);
+    }, 30 * 60 * 1000);
 
     // unref() so this timer doesn't prevent the Node.js process from exiting cleanly.
     // This also prevents Hostinger's process manager from seeing a "stuck" process
@@ -74,13 +74,8 @@ export class ProductionSecurity {
       this.securityEvents = this.securityEvents.slice(-500);
     }
     
-    console.log('[SECURITY] Cleanup completed:', {
-      csrfTokens: this.csrfTokens.size,
-      rateLimitViolations: this.rateLimitViolations.size,
-      securityEvents: this.securityEvents.length,
-      blacklistedIPs: this.blacklistedIPs.size,
-      cacheEntries: this.securityCheckCache.size
-    });
+    // Silent cleanup in production - no logging to avoid blocking event loop
+    // Only log critical issues if needed for debugging
   }
 
   // Cleanup on shutdown
@@ -89,8 +84,6 @@ export class ProductionSecurity {
       clearInterval(this.cleanupInterval);
     }
   }
-
-  // Advanced SQL Injection Prevention
   sanitizeSQLInput(input: any): any {
     if (typeof input === 'string') {
       return input
@@ -612,8 +605,10 @@ export class ProductionSecurity {
       this.securityEvents.shift();
     }
     
-    // Log critical events to console
-    if (['IP_BLACKLISTED', 'ATTACK_DETECTED', 'BREACH_ATTEMPT', 'BOT_BLOCKED', 'RATE_LIMIT_EXCEEDED', 'SUSPICIOUS_URL', 'CSRF_INVALID_ORIGIN'].includes(eventType)) {
+    // PRODUCTION: Only log critical security events to avoid blocking event loop
+    // In production, security events are stored in memory for admin dashboard
+    // Only log to console if explicitly debugging (LOG_LEVEL=debug)
+    if (process.env.LOG_LEVEL === 'debug' && ['IP_BLACKLISTED', 'ATTACK_DETECTED', 'BREACH_ATTEMPT', 'BOT_BLOCKED', 'RATE_LIMIT_EXCEEDED', 'SUSPICIOUS_URL', 'CSRF_INVALID_ORIGIN'].includes(eventType)) {
       console.warn(`[SECURITY] ${eventType}:`, {
         ip: event.ip,
         path: event.path,
@@ -673,13 +668,19 @@ export class ProductionSecurity {
   // Manual IP management
   blacklistIP(ip: string, reason: string) {
     this.blacklistedIPs.add(ip);
-    console.log(`[SECURITY] IP ${ip} blacklisted: ${reason}`);
+    // Silent in production - only log if debugging
+    if (process.env.LOG_LEVEL === 'debug') {
+      console.log(`[SECURITY] IP ${ip} blacklisted: ${reason}`);
+    }
   }
 
   unblacklistIP(ip: string) {
     this.blacklistedIPs.delete(ip);
     this.rateLimitViolations.delete(ip);
-    console.log(`[SECURITY] IP ${ip} removed from blacklist`);
+    // Silent in production
+    if (process.env.LOG_LEVEL === 'debug') {
+      console.log(`[SECURITY] IP ${ip} removed from blacklist`);
+    }
   }
 
   getBlacklistedIPs(): string[] {

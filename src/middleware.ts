@@ -96,12 +96,13 @@ export async function middleware(request: NextRequest) {
     return response;
 
   } catch (error) {
-    // Log security middleware error
-    productionSecurity.logSecurityEvent(request, 'MIDDLEWARE_ERROR', { 
-      error: error instanceof Error ? error.message : 'Unknown error'
-    });
-
-    console.error('Security middleware error:', error);
+    // Log security middleware error only if debugging
+    if (process.env.LOG_LEVEL === 'debug') {
+      productionSecurity.logSecurityEvent(request, 'MIDDLEWARE_ERROR', { 
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+      console.error('Security middleware error:', error);
+    }
     
     return new NextResponse('Internal Server Error', { 
       status: 500,

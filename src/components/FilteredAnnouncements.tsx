@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import type { PublicAnnouncementCard } from "@/lib/site-data";
 import { useTranslate } from "@/hooks/useTranslate";
 import { useLang } from "@/context/LangContext";
@@ -131,6 +132,7 @@ function AnnouncementCard({
 }
 export default function FilteredAnnouncements({ items }: { items: PublicAnnouncementCard[] }) {
   const { lang } = useLang();
+  const [activeCategory, setActiveCategory] = useState<string>("all");
 
   const categoryLabelMap: Record<string, string> = {
     "upcoming-events": "Upcoming Events",
@@ -138,8 +140,48 @@ export default function FilteredAnnouncements({ items }: { items: PublicAnnounce
     "special-prayers": "Special Prayers",
   };
 
+  // Get unique categories from items
+  const uniqueCategories = Array.from(new Set(items.map(item => item.category)));
+  
+  // Filter items based on active category
+  const filteredItems = activeCategory === "all" 
+    ? items 
+    : items.filter(item => item.category === activeCategory);
+
   return (
     <div>
+      {/* Category Filter Tabs */}
+      <div className="mb-8 flex flex-wrap gap-2">
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setActiveCategory("all")}
+          className={`px-4 py-2 rounded-full font-semibold transition-all duration-300 ${
+            activeCategory === "all"
+              ? "bg-accent text-white shadow-md"
+              : "bg-stone-200 text-stone-700 hover:bg-stone-300"
+          }`}
+        >
+          All Announcements
+        </motion.button>
+        
+        {uniqueCategories.map((category) => (
+          <motion.button
+            key={category}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setActiveCategory(category)}
+            className={`px-4 py-2 rounded-full font-semibold transition-all duration-300 ${
+              activeCategory === category
+                ? "bg-accent text-white shadow-md"
+                : "bg-stone-200 text-stone-700 hover:bg-stone-300"
+            }`}
+          >
+            {categoryLabelMap[category] || category}
+          </motion.button>
+        ))}
+      </div>
+
       {/* Announcements Grid */}
       <motion.ul 
         initial={{ opacity: 0, y: 20 }}
@@ -147,7 +189,7 @@ export default function FilteredAnnouncements({ items }: { items: PublicAnnounce
         transition={{ duration: 0.3 }}
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
-        {items.map((item) => (
+        {filteredItems.map((item) => (
           <AnnouncementCard 
             key={item._id} 
             item={item}
@@ -156,6 +198,15 @@ export default function FilteredAnnouncements({ items }: { items: PublicAnnounce
           />
         ))}
       </motion.ul>
+
+      {/* Empty State */}
+      {filteredItems.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-stone-600 text-lg">
+            No announcements found in this category.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
