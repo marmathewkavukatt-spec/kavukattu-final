@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Optimization Script: Add select statements to remaining routes
+ * Optimization Scripts: Add select statements to remaining routes
  * This ensures all queries only fetch needed fields
  */
 
