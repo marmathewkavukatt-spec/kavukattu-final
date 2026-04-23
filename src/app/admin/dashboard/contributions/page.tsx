@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FileDown, Trash2, Eye, X } from "lucide-react";
 import { CONTRIBUTION_TYPES, isContributionType } from "@/lib/contributions";
@@ -23,7 +23,7 @@ interface Pagination {
 
 const PAGE_SIZE = 50;
 
-export default function ContributionsPage() {
+function ContributionsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -192,7 +192,7 @@ export default function ContributionsPage() {
         await fetch(`/api/contributions/${selectedIds[i]}`, { method: "DELETE" });
         setDeleteProgress({ current: i + 1, total: selectedIds.length });
       }
-      
+
       fetchContributions();
       setSelectedIds([]);
       setDeleteProgress(null);
@@ -238,39 +238,40 @@ export default function ContributionsPage() {
   const endIndex = total === 0 ? 0 : Math.min(page * limit, total);
 
   return (
-    <div className="p-6">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="p-4 sm:p-6">
+      {/* Header */}
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-stone-900 mb-2">Public Interventions</h1>
-          <p className="text-stone-600">Manage testimonials, prayer requests, and intentions</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 mb-1">Public Interventions</h1>
+          <p className="text-sm text-stone-600">Manage testimonials, prayer requests, and intentions</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={handleDownloadPdf}
             disabled={pdfDownloading}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-stone-300 text-stone-700 rounded-lg hover:bg-stone-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-3 py-2 text-sm bg-white border border-stone-300 text-stone-700 rounded-lg hover:bg-stone-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             title="Download PDF report"
           >
-            <FileDown className="h-4 w-4" />
-            {pdfDownloading ? "Preparing PDF..." : "Download PDF"}
+            <FileDown className="h-4 w-4 shrink-0" />
+            <span>{pdfDownloading ? "Preparing..." : "Download PDF"}</span>
           </button>
           {selectedIds.length > 0 && (
             <button
               onClick={handleBulkDelete}
               disabled={deleteProgress !== null}
-              className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-3 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Trash2 className="h-4 w-4" />
-              Delete Selected ({selectedIds.length})
+              <Trash2 className="h-4 w-4 shrink-0" />
+              <span>Delete ({selectedIds.length})</span>
             </button>
           )}
           <button
             onClick={fetchContributions}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 bg-stone-600 text-white rounded-lg hover:bg-stone-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-3 py-2 text-sm bg-stone-600 text-white rounded-lg hover:bg-stone-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             title="Refresh data"
           >
-            <svg className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className={`h-4 w-4 shrink-0 ${loading ? "animate-spin" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
             Refresh
@@ -283,20 +284,18 @@ export default function ContributionsPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
             <h3 className="font-serif text-xl font-bold text-stone-900 mb-4">Deleting Contributions</h3>
-            
             <div className="mb-4">
               <div className="flex justify-between text-sm text-stone-600 mb-2">
                 <span>Progress</span>
                 <span>{deleteProgress.current} of {deleteProgress.total}</span>
               </div>
               <div className="w-full bg-stone-200 rounded-full h-3 overflow-hidden">
-                <div 
+                <div
                   className="bg-red-600 h-full transition-all duration-300 ease-out"
                   style={{ width: `${(deleteProgress.current / deleteProgress.total) * 100}%` }}
                 />
               </div>
             </div>
-
             <div className="flex items-center justify-center gap-2 text-stone-600">
               <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
@@ -310,7 +309,7 @@ export default function ContributionsPage() {
 
       {/* Filters */}
       <div className="mb-6 bg-white rounded-lg shadow-sm border border-stone-200 p-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
           <div>
             <label className="block text-xs font-semibold text-stone-600 uppercase tracking-wider mb-2">
               Category
@@ -327,9 +326,7 @@ export default function ContributionsPage() {
             >
               <option value="All">All</option>
               {CONTRIBUTION_TYPES.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
+                <option key={type} value={type}>{type}</option>
               ))}
             </select>
           </div>
@@ -394,11 +391,12 @@ export default function ContributionsPage() {
           <div className="p-8 text-center text-stone-600">No contributions found</div>
         ) : (
           <>
-            <div className="overflow-x-auto">
+            {/* Desktop table */}
+            <div className="hidden sm:block overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-stone-50 border-b border-stone-200">
                   <tr>
-                    <th className="px-6 py-3 text-left">
+                    <th className="px-4 py-3 text-left w-10">
                       <input
                         type="checkbox"
                         checked={selectedIds.length === contributions.length && contributions.length > 0}
@@ -406,27 +404,17 @@ export default function ContributionsPage() {
                         className="w-4 h-4 text-accent focus:ring-accent rounded"
                       />
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-stone-600 uppercase tracking-wider">
-                      Type
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-stone-600 uppercase tracking-wider">
-                      Name
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-stone-600 uppercase tracking-wider">
-                      Description
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-stone-600 uppercase tracking-wider">
-                      Date
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-semibold text-stone-600 uppercase tracking-wider">
-                      Actions
-                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-stone-600 uppercase tracking-wider">Type</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-stone-600 uppercase tracking-wider">Name</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-stone-600 uppercase tracking-wider">Description</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-stone-600 uppercase tracking-wider">Date</th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold text-stone-600 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-stone-200">
                   {contributions.map((contribution) => (
                     <tr key={contribution.id} className="hover:bg-stone-50">
-                      <td className="px-6 py-4">
+                      <td className="px-4 py-4">
                         <input
                           type="checkbox"
                           checked={selectedIds.includes(contribution.id)}
@@ -434,21 +422,21 @@ export default function ContributionsPage() {
                           className="w-4 h-4 text-accent focus:ring-accent rounded"
                         />
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${getTypeColor(contribution.type)}`}>
                           {contribution.type}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-stone-900">
+                      <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-stone-900">
                         {contribution.name}
                       </td>
-                      <td className="px-6 py-4 text-sm text-stone-600 max-w-xs truncate">
+                      <td className="px-4 py-4 text-sm text-stone-600 max-w-xs truncate">
                         {contribution.description}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-stone-600">
+                      <td className="px-4 py-4 whitespace-nowrap text-sm text-stone-600">
                         {new Date(contribution.createdAt).toLocaleDateString()}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => setSelectedContribution(contribution)}
@@ -472,13 +460,70 @@ export default function ContributionsPage() {
               </table>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between px-6 py-4 border-t border-stone-200 bg-white">
-              <div className="text-sm text-stone-600">
-                Showing <span className="font-medium text-stone-900">{startIndex}</span> to{" "}
+            {/* Mobile card list */}
+            <div className="sm:hidden divide-y divide-stone-200">
+              {/* Select all row */}
+              <div className="px-4 py-3 bg-stone-50 flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={selectedIds.length === contributions.length && contributions.length > 0}
+                  onChange={toggleSelectAll}
+                  className="w-4 h-4 text-accent focus:ring-accent rounded"
+                />
+                <span className="text-xs font-semibold text-stone-600 uppercase tracking-wider">
+                  Select All ({contributions.length})
+                </span>
+              </div>
+              {contributions.map((contribution) => (
+                <div key={contribution.id} className="px-4 py-4 flex gap-3">
+                  <div className="pt-1">
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.includes(contribution.id)}
+                      onChange={() => toggleSelect(contribution.id)}
+                      className="w-4 h-4 text-accent focus:ring-accent rounded"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                      <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${getTypeColor(contribution.type)}`}>
+                        {contribution.type}
+                      </span>
+                      <span className="text-xs text-stone-500 shrink-0">
+                        {new Date(contribution.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p className="text-sm font-semibold text-stone-900 truncate">{contribution.name}</p>
+                    <p className="text-sm text-stone-600 mt-0.5 line-clamp-2">{contribution.description}</p>
+                  </div>
+                  <div className="flex flex-col gap-1 shrink-0">
+                    <button
+                      onClick={() => setSelectedContribution(contribution)}
+                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      title="View"
+                    >
+                      <Eye className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(contribution.id)}
+                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Delete"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between px-4 py-4 border-t border-stone-200 bg-white">
+              <div className="text-sm text-stone-600 text-center sm:text-left">
+                Showing <span className="font-medium text-stone-900">{startIndex}</span>–
                 <span className="font-medium text-stone-900">{endIndex}</span> of{" "}
                 <span className="font-medium text-stone-900">{total}</span>
               </div>
-              <div className="flex items-center gap-2 justify-end">
+              <div className="flex items-center gap-2 justify-center sm:justify-end">
                 <button
                   onClick={() => {
                     setSelectedIds([]);
@@ -513,11 +558,11 @@ export default function ContributionsPage() {
 
       {/* View Modal */}
       {selectedContribution && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-stone-200 px-6 py-4 rounded-t-2xl">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50">
+          <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-stone-200 px-4 sm:px-6 py-4 rounded-t-2xl">
               <div className="flex items-center justify-between">
-                <h2 className="font-serif text-2xl font-bold text-stone-900">
+                <h2 className="font-serif text-xl sm:text-2xl font-bold text-stone-900">
                   Contribution Details
                 </h2>
                 <button
@@ -529,7 +574,7 @@ export default function ContributionsPage() {
               </div>
             </div>
 
-            <div className="p-6 space-y-4">
+            <div className="p-4 sm:p-6 space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-stone-700 mb-1">Type</label>
                 <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${getTypeColor(selectedContribution.type)}`}>
@@ -578,5 +623,13 @@ export default function ContributionsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function ContributionsPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-stone-600">Loading...</div>}>
+      <ContributionsContent />
+    </Suspense>
   );
 }
