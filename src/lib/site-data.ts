@@ -1,6 +1,7 @@
-import { db, connectDB } from "@/lib/db";
+import { db } from "@/lib/db";
 import { getAbsoluteSiteUrl } from "@/lib/site-url";
 import { withUnderscoreId, withUnderscoreIds } from "@/lib/prisma-helpers";
+import { cachedQuery } from "@/lib/api-optimizer";
 
 function nullToUndefined<T>(value: T | null | undefined): T | undefined {
   return value ?? undefined;
@@ -100,22 +101,28 @@ export interface PublicTiming {
 }
 
 export async function getPublicSlides(): Promise<PublicSlide[]> {
-  try {    const items = await db.slider.findMany({
-      where: { active: true },
-      orderBy: { order: "asc" },
-      select: { id: true, image: true, title: true, subtitle: true, order: true },
-    });
-    return items.map((item) => ({
-      _id: item.id,
-      image: item.image,
-      title: nullToUndefined(item.title),
-      subtitle: nullToUndefined(item.subtitle),
-      order: item.order,
-    }));
-  } catch {
-    // console.error("[site-data] Failed to load slides:", error);
-    return [];
-  }
+  return cachedQuery(
+    'site-data:slides',
+    async () => {
+      try {
+        const items = await db.slider.findMany({
+          where: { active: true },
+          orderBy: { order: "asc" },
+          select: { id: true, image: true, title: true, subtitle: true, order: true },
+        });
+        return items.map((item) => ({
+          _id: item.id,
+          image: item.image,
+          title: nullToUndefined(item.title),
+          subtitle: nullToUndefined(item.subtitle),
+          order: item.order,
+        }));
+      } catch {
+        return [];
+      }
+    },
+    300 // 5 minutes cache
+  );
 }
 
 export async function getPublicResources(): Promise<PublicResource[]> {
@@ -239,33 +246,39 @@ export async function getPublicArchiveDocumentById(id: string): Promise<PublicAr
 }
 
 export async function getPublicAnnouncementCards(): Promise<PublicAnnouncementCard[]> {
-  try {
-    const items = await db.announcement.findMany({
-      where: { active: true },
-      orderBy: { date: "desc" },
-      select: {
-        id: true,
-        title: true,
-        subtitle: true,
-        description: true,
-        category: true,
-        coverImage: true,
-        date: true,
-      },
-    });
+  return cachedQuery(
+    'site-data:announcement-cards',
+    async () => {
+      try {
+        const items = await db.announcement.findMany({
+          where: { active: true },
+          orderBy: { date: "desc" },
+          select: {
+            id: true,
+            title: true,
+            subtitle: true,
+            description: true,
+            category: true,
+            coverImage: true,
+            date: true,
+          },
+        });
 
-    return items.map((item) => ({
-      _id: item.id,
-      title: item.title,
-      subtitle: nullToUndefined(item.subtitle),
-      description: nullToUndefined(item.description),
-      category: item.category,
-      coverImage: nullToUndefined(item.coverImage),
-      date: item.date.toISOString(),
-    }));
-  } catch {
-    return [];
-  }
+        return items.map((item) => ({
+          _id: item.id,
+          title: item.title,
+          subtitle: nullToUndefined(item.subtitle),
+          description: nullToUndefined(item.description),
+          category: item.category,
+          coverImage: nullToUndefined(item.coverImage),
+          date: item.date.toISOString(),
+        }));
+      } catch {
+        return [];
+      }
+    },
+    300 // 5 minutes cache
+  );
 }
 
 export async function getPublicAnnouncements(): Promise<PublicAnnouncement[]> {
@@ -309,22 +322,28 @@ export async function getPublicGallery(): Promise<PublicGalleryItem[]> {
 }
 
 export async function getPublicGalleryCategories(): Promise<PublicGalleryCategory[]> {
-  try {    const items = await db.galleryCategory.findMany({
-      where: { active: true },
-      orderBy: { order: "asc" },
-      select: { id: true, title: true, coverImage: true, order: true, active: true },
-    });
-    return items.map((item) => ({
-      _id: item.id,
-      title: item.title,
-      coverImage: item.coverImage,
-      order: item.order,
-      active: item.active,
-    }));
-  } catch {
-    // console.error("[site-data] Failed to load gallery categories:", error);
-    return [];
-  }
+  return cachedQuery(
+    'site-data:gallery-categories',
+    async () => {
+      try {
+        const items = await db.galleryCategory.findMany({
+          where: { active: true },
+          orderBy: { order: "asc" },
+          select: { id: true, title: true, coverImage: true, order: true, active: true },
+        });
+        return items.map((item) => ({
+          _id: item.id,
+          title: item.title,
+          coverImage: item.coverImage,
+          order: item.order,
+          active: item.active,
+        }));
+      } catch {
+        return [];
+      }
+    },
+    300 // 5 minutes cache
+  );
 }
 
 export async function getPublicGalleryCategoryWithItems(categoryId: string): Promise<{ category: PublicGalleryCategory | null; items: PublicGalleryCategoryItem[] }> {
