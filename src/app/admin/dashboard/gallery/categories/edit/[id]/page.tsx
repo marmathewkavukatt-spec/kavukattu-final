@@ -15,7 +15,7 @@ interface Category {
   active: boolean;
 }
 
-export default function EditCategoryPage({ params }: { params: Promise<{ id: string }> }) {
+export default function EditCategoryPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [id, setId] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -27,10 +27,9 @@ export default function EditCategoryPage({ params }: { params: Promise<{ id: str
   const coverImageInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    params.then(p => {
-      setId(p.id);
-      loadCategory(p.id);
-    });
+    setId(params.id);
+    loadCategory(params.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function loadCategory(categoryId: string) {

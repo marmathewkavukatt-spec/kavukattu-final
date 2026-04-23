@@ -18,7 +18,7 @@ interface Resource {
   order: number;
 }
 
-export default function EditResourcePage({ params }: { params: Promise<{ id: string }> }) {
+export default function EditResourcePage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [resourceId, setResourceId] = useState<string>("");
   const [form, setForm] = useState({ title: "", description: "", fileUrl: "", linkUrl: "", order: 0 });
@@ -30,13 +30,10 @@ export default function EditResourcePage({ params }: { params: Promise<{ id: str
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    async function loadParams() {
-      const p = await params;
-      setResourceId(p.id);
-      loadResource(p.id);
-    }
-    loadParams();
-  }, [params]);
+    setResourceId(params.id);
+    loadResource(params.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function loadResource(id: string) {
     setLoading(true);

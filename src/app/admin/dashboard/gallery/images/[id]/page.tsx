@@ -41,7 +41,7 @@ function toBrowserSafeSrc(src: string) {
   return encodeURI(src);
 }
 
-export default function ManageCategoryImagesPage({ params }: { params: Promise<{ id: string }> }) {
+export default function ManageCategoryImagesPage({ params }: { params: { id: string } }) {
   const [categoryId, setCategoryId] = useState<string>("");
   const [category, setCategory] = useState<Category | null>(null);
   const [items, setItems] = useState<GalleryItem[]>([]);
@@ -63,13 +63,10 @@ export default function ManageCategoryImagesPage({ params }: { params: Promise<{
   const [deleteProgress, setDeleteProgress] = useState<{ deleted: number; total: number } | null>(null);
 
   useEffect(() => {
-    async function loadParams() {
-      const p = await params;
-      setCategoryId(p.id);
-      loadCategoryData(p.id);
-    }
-    loadParams();
-  }, [params]);
+    setCategoryId(params.id);
+    loadCategoryData(params.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function loadCategoryData(id: string) {
     setLoading(true);

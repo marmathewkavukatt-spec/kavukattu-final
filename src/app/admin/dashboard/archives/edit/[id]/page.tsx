@@ -31,7 +31,7 @@ interface ArchiveDocument {
   fileSize?: number | null;
 }
 
-export default function EditArchiveDocumentPage({ params }: { params: Promise<{ id: string }> }) {
+export default function EditArchiveDocumentPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [docId, setDocId] = useState("");
   const [form, setForm] = useState<{
@@ -61,13 +61,10 @@ export default function EditArchiveDocumentPage({ params }: { params: Promise<{ 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    async function loadParams() {
-      const p = await params;
-      setDocId(p.id);
-      await loadDoc(p.id);
-    }
-    loadParams();
-  }, [params]);
+    setDocId(params.id);
+    loadDoc(params.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function loadDoc(id: string) {
     setLoading(true);
