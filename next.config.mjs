@@ -54,27 +54,7 @@ const nextConfig = {
   async headers() {
     return [
       {
-        // API routes - short cache with stale-while-revalidate
-        source: '/api/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, s-maxage=60, stale-while-revalidate=300',
-          },
-        ],
-      },
-      {
-        // HTML pages - no cache to prevent stale content
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'no-cache, no-store, must-revalidate',
-          },
-        ],
-      },
-      {
-        // Next.js static assets - immutable with long cache
+        // Next.js static assets - immutable with long cache (must be first)
         source: '/_next/static/:path*',
         headers: [
           {
@@ -93,15 +73,22 @@ const nextConfig = {
           },
         ],
       },
+      {
+        // API routes - short cache with stale-while-revalidate
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, s-maxage=60, stale-while-revalidate=300',
+          },
+        ],
+      },
     ];
   },
 
   experimental: {
     optimizePackageImports: ['framer-motion', 'lucide-react'],
     serverComponentsExternalPackages: ["pdfkit"],
-    // PERFORMANCE: Enable optimizations
-    optimizeCss: true,
-    scrollRestoration: true,
   },
 
   // Webpack configuration for additional security and performance
@@ -115,38 +102,6 @@ const nextConfig = {
     // Remove source maps in production for security and performance
     if (!dev) {
       config.devtool = false;
-    }
-
-    // PERFORMANCE: Optimize bundle size
-    if (!dev) {
-      config.optimization = {
-        ...config.optimization,
-        moduleIds: 'deterministic',
-        runtimeChunk: 'single',
-        splitChunks: {
-          chunks: 'all',
-          cacheGroups: {
-            default: false,
-            vendors: false,
-            // Vendor chunk for node_modules
-            vendor: {
-              name: 'vendor',
-              chunks: 'all',
-              test: /node_modules/,
-              priority: 20
-            },
-            // Common chunk for shared code
-            common: {
-              name: 'common',
-              minChunks: 2,
-              chunks: 'all',
-              priority: 10,
-              reuseExistingChunk: true,
-              enforce: true
-            }
-          }
-        }
-      };
     }
 
     return config;
