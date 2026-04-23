@@ -42,6 +42,11 @@ if (!globalThis.__kavukattuCleanupInterval) {
   globalThis.__kavukattuCleanupInterval = setInterval(() => {
     cleanupExpiredEntries();
   }, 5 * 60 * 1000); // 5 minutes
+
+  // unref() so this timer doesn't prevent the Node.js process from exiting cleanly
+  if (globalThis.__kavukattuCleanupInterval && typeof globalThis.__kavukattuCleanupInterval.unref === 'function') {
+    globalThis.__kavukattuCleanupInterval.unref();
+  }
 }
 
 function cleanupExpiredEntries() {

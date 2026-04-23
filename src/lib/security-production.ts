@@ -701,5 +701,16 @@ interface SecurityEvent {
   details?: any;
 }
 
-// Export singleton instance
-export const productionSecurity = ProductionSecurity.getInstance();
+// Use globalThis to persist the singleton across Next.js hot-module reloads.
+// Without this, every module reload (e.g. on Hostinger worker restart) creates a new
+// instance with a new setInterval, causing multiple cleanup timers and CPU spikes.
+declare global {
+  // eslint-disable-next-line no-var
+  var __productionSecurityInstance: ProductionSecurity | undefined;
+}
+
+if (!globalThis.__productionSecurityInstance) {
+  globalThis.__productionSecurityInstance = ProductionSecurity.getInstance();
+}
+
+export const productionSecurity: ProductionSecurity = globalThis.__productionSecurityInstance;

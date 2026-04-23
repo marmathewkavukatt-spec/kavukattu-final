@@ -17,6 +17,12 @@ class SimpleCache {
     this.cleanupInterval = setInterval(() => {
       this.cleanup();
     }, 5 * 60 * 1000);
+
+    // unref() so this timer doesn't prevent the Node.js process from exiting cleanly,
+    // which avoids Hostinger's process manager seeing a "stuck" process and restarting it.
+    if (this.cleanupInterval && typeof (this.cleanupInterval as NodeJS.Timeout).unref === 'function') {
+      (this.cleanupInterval as NodeJS.Timeout).unref();
+    }
   }
 
   /**
@@ -105,8 +111,17 @@ class SimpleCache {
   }
 }
 
-// Singleton instance
-export const cache = new SimpleCache();
+declare global {
+  // eslint-disable-next-line no-var
+  var __kavukattuCacheInstance: SimpleCache | undefined;
+}
+
+// Singleton instance — persisted on globalThis to survive Next.js hot-module reloads
+// and prevent multiple setInterval timers from being created on Hostinger worker restarts.
+if (!globalThis.__kavukattuCacheInstance) {
+  globalThis.__kavukattuCacheInstance = new SimpleCache();
+}
+export const cache: SimpleCache = globalThis.__kavukattuCacheInstance;
 
 /**
  * Cache wrapper for async functions
