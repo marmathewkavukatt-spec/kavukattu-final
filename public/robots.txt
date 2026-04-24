@@ -44,10 +44,4 @@ Allow: /api/rss
 Crawl-delay: 1
 
 # Sitemap location
-Sitemap: https://yourdomain.com/sitemap.xml
-Sitemap: https://yourdomain.com/sitemap-images.xml
-
-# Host directive (update with your actual domain)
-# Host: https://yourdomain.com
-
-# Note: Replace 'yourdomain.com' with your actual domain name before deployment
+Sitemap: https://marmathewkavukatt.org/sitemap.xml
