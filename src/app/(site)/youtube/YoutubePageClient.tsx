@@ -1,7 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { ArrowLeft, ExternalLink, Youtube } from "lucide-react";
+import { ExternalLink, Youtube } from "lucide-react";
 
 function getYouTubeEmbedUrl(rawUrl: string): string | null {
   try {
@@ -30,39 +29,17 @@ function getYouTubeEmbedUrl(rawUrl: string): string | null {
   }
 }
 
-const youtubeItems = [
-  {
-    label: "Channel",
-    url: "https://youtu.be/PwhzdAe9Jbg",
-  },
-  {
-    label: "Video 1",
-    url: "https://youtu.be/p9J0unIRmzI?si=trnWyFq7qgqu8mVs",
-  },
-  {
-    label: "Video 2",
-    url: "https://youtu.be/hBiV6q7Pw1w?si=f6ToB9u0LBatc5__&sfnsn=wiwspwa",
-  },
+const youtubeVideos = [
+  "https://youtu.be/PwhzdAe9Jbg",
+  "https://youtu.be/p9J0unIRmzI?si=trnWyFq7qgqu8mVs",
+  "https://youtu.be/hBiV6q7Pw1w?si=f6ToB9u0LBatc5__&sfnsn=wiwspwa",
 ] as const;
 
 export default function YoutubePageClient() {
-  const router = useRouter();
-
   return (
-    <div className="min-h-screen bg-stone-50">
-      <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-4">
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="inline-flex items-center gap-2 rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm font-semibold text-stone-700 shadow-sm transition hover:bg-stone-50"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </button>
-        </div>
-
-        <div className="mt-8 flex items-center gap-3">
+    <div className="bg-stone-50 py-10">
+      <div className="mx-auto w-full max-w-screen-2xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-red-600 text-white shadow-sm ring-1 ring-stone-200">
             <Youtube className="h-6 w-6" />
           </div>
@@ -72,32 +49,19 @@ export default function YoutubePageClient() {
           </div>
         </div>
 
-        <div className="mt-8 grid gap-6">
-          {youtubeItems.map((item) => {
-            const embedUrl = getYouTubeEmbedUrl(item.url);
+        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {youtubeVideos.map((url) => {
+            const embedUrl = getYouTubeEmbedUrl(url);
 
             return (
-              <div key={item.label} className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <h2 className="font-serif text-xl font-bold text-stone-900">{item.label}</h2>
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm font-semibold text-stone-700 transition hover:bg-stone-50"
-                  >
-                    Open on YouTube
-                    <ExternalLink className="h-4 w-4" />
-                  </a>
-                </div>
-
-                <div className="mt-4 overflow-hidden rounded-xl border border-stone-200 bg-stone-100">
+              <div key={url} className="rounded-2xl border border-stone-200 bg-white p-4 shadow-sm">
+                <div className="overflow-hidden rounded-xl border border-stone-200 bg-stone-100">
                   <div className="aspect-video w-full">
                     {embedUrl ? (
                       <iframe
                         className="h-full w-full"
                         src={embedUrl}
-                        title={item.label}
+                        title="YouTube video"
                         loading="lazy"
                         referrerPolicy="strict-origin-when-cross-origin"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -109,6 +73,18 @@ export default function YoutubePageClient() {
                       </div>
                     )}
                   </div>
+                </div>
+
+                <div className="mt-3 flex justify-end">
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm font-semibold text-stone-700 transition hover:bg-stone-50"
+                  >
+                    Open on YouTube
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
                 </div>
               </div>
             );

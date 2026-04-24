@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { LangProvider } from "@/context/LangContext";
+import BackToHomeButton from "@/components/BackToHomeButton";
 
 export default function SiteLayout({
   children,
@@ -11,7 +12,10 @@ export default function SiteLayout({
     <LangProvider>
       <div className="flex min-h-screen flex-col">
         <Navbar />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          <BackToHomeButton />
+          {children}
+        </main>
         <Footer />
       </div>
     </LangProvider>
