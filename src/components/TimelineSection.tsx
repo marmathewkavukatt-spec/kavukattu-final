@@ -42,7 +42,7 @@ const timelineEvents: TimelineEvent[] = [
       en: "Ordained as a priest, embarking on a sacred journey of spiritual leadership",
       ml: "ആത്മീയ നേതൃത്വത്തിന്റെ വിശുദ്ധ യാത്ര ആരംഭിച്ച് പുരോഹിതനായി നിയമിക്കപ്പെട്ടു"
     },
-    image: "/uploads/life journey/ordination image.png"
+    image: "/uploads/life journey/ordination.png"
   },
   {
     year: "1950",
@@ -54,7 +54,7 @@ const timelineEvents: TimelineEvent[] = [
       en: "Elevated to Bishop, serving the Church with wisdom and devotion in Rome",
       ml: "ജ്ഞാനത്തോടും ഭക്തിയോടും കൂടി റോമിൽ സഭയെ സേവിച്ച് ബിഷപ്പായി ഉയർത്തപ്പെട്ടു"
     },
-    image: "/uploads/life journey/consecration in rome.png"
+    image: "/uploads/life journey/consecration.png"
   },
   {
     year: "1956",
