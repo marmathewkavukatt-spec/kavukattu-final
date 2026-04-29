@@ -167,7 +167,6 @@ export const t = {
     "Submitting...": "Submitting...",
     "Sending...": "Sending...",
     "Submit": "Submit",
-    "Submit": "Submit",
     "Close": "Close",
     // Form Validation Messages
     "Name is required": "Name is required",
@@ -463,7 +462,6 @@ export const t = {
     "Cancel": "റദ്ദാക്കുക",
     "Submitting...": "സമർപ്പിക്കുന്നു...",
     "Sending...": "അയയ്ക്കുന്നു...",
-    "Submit": "സമർപ്പിക്കുക",
     "Submit": "സമർപ്പിക്കുക",
     "Close": "അടയ്ക്കുക",
     // Form Validation Messages

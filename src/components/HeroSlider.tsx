@@ -45,7 +45,6 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
     current?.title ?? null,
     current?.subtitle ?? null,
   ]);
-  const goToSlideText = useAutoTranslate("Go to slide");
 
   const showOverlay = Boolean(title || subtitle);
 
@@ -286,25 +285,6 @@ export default function HeroSlider({ slides }: { slides: Slide[] }) {
         </motion.div>
       </AnimatePresence>
 
-      {slides.length > 1 && (
-        <>
-          <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/25 px-3 py-2 shadow-lg backdrop-blur-sm opacity-80 transition-opacity focus-within:opacity-100 md:opacity-0 md:group-hover:opacity-100">
-            {slides.map((_, i) => (
-              <button
-                key={slides[i]._id}
-                type="button"
-                onClick={() => goToSlide(i)}
-                className={`h-2.5 w-2.5 rounded-full transition-all ${
-                  i === index
-                    ? "scale-125 bg-white"
-                    : "bg-white/50 hover:bg-white/80"
-                }`}
-                aria-label={`${goToSlideText} ${i + 1}`}
-              />
-            ))}
-          </div>
-        </>
-      )}
     </section>
   );
 }
