@@ -144,7 +144,7 @@ export const t = {
     // Public Interventions Modal
     "Public Interventions": "Public Interventions",
     "Share your testimonials, prayer requests, or intentions with our faith community": "Share your testimonials, prayer requests, or intentions with our faith community",
-    "Choose Contribution Type": "Choose Contribution Type",
+    "Choose Intervention Type": "Choose Intervention Type",
     "Testimonials": "Testimonials",
     "Share your faith journey": "Share your faith journey",
     "Prayer Requests": "Prayer Requests",
@@ -166,7 +166,7 @@ export const t = {
     "Cancel": "Cancel",
     "Submitting...": "Submitting...",
     "Sending...": "Sending...",
-    "Submit Contribution": "Submit Contribution",
+    "Submit": "Submit",
     "Submit": "Submit",
     "Close": "Close",
     // Form Validation Messages
@@ -441,7 +441,7 @@ export const t = {
     // Public Interventions Modal
     "Public Interventions": "പൊതു ഇടപെടലുകൾ",
     "Share your testimonials, prayer requests, or intentions with our faith community": "ഞങ്ങളുടെ വിശ്വാസ സമൂഹവുമായി നിങ്ങളുടെ സാക്ഷ്യങ്ങൾ, പ്രാർത്ഥനാ അഭ്യർത്ഥനകൾ, അല്ലെങ്കിൽ ഉദ്ദേശ്യങ്ങൾ പങ്കിടുക",
-    "Choose Contribution Type": "സംഭാവന തരം തിരഞ്ഞെടുക്കുക",
+    "Choose Intervention Type": "ഇടപെടൽ തരം തിരഞ്ഞെടുക്കുക",
     "Testimonials": "സാക്ഷ്യങ്ങൾ",
     "Share your faith journey": "നിങ്ങളുടെ വിശ്വാസ യാത്ര പങ്കിടുക",
     "Prayer Requests": "പ്രാർത്ഥനാ അഭ്യർത്ഥനകൾ",
@@ -463,7 +463,7 @@ export const t = {
     "Cancel": "റദ്ദാക്കുക",
     "Submitting...": "സമർപ്പിക്കുന്നു...",
     "Sending...": "അയയ്ക്കുന്നു...",
-    "Submit Contribution": "സംഭാവന സമർപ്പിക്കുക",
+    "Submit": "സമർപ്പിക്കുക",
     "Submit": "സമർപ്പിക്കുക",
     "Close": "അടയ്ക്കുക",
     // Form Validation Messages

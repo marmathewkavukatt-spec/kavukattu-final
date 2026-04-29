@@ -352,13 +352,13 @@ function PastoralVisionSection() {
 
             <motion.div 
               variants={fadeInUp}
-              className="bg-gradient-to-br from-stone-500/10 to-stone-500/5 border-l-4 border-stone-500 rounded-r-xl p-8 hover:shadow-lg transition-all duration-300"
+              className="bg-gradient-to-br from-accent-dark/10 to-accent-dark/5 border-l-4 border-accent-dark rounded-r-xl p-8 hover:shadow-lg transition-all duration-300"
             >
-              <div className="w-10 h-10 rounded-full bg-stone-500 flex items-center justify-center mb-6">
+              <div className="w-10 h-10 rounded-full bg-accent-dark flex items-center justify-center mb-6">
                 <span className="font-serif text-white font-bold text-sm">III</span>
               </div>
               <p className="text-lg leading-relaxed text-stone-700">
-                {aChurchOfText} <span className="font-bold text-stone-700">{responsibilityText}</span>{whereFaithLeadsText}
+                {aChurchOfText} <span className="font-bold text-accent-dark">{responsibilityText}</span>{whereFaithLeadsText}
               </p>
             </motion.div>
           </div>
@@ -483,9 +483,9 @@ function HeartForPoorSection() {
               variants={fadeInUp}
               whileHover={{ scale: 1.05, y: -5 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="bg-stone-500/10 border border-stone-500/30 rounded-xl p-6 hover:bg-stone-500/20 hover:border-stone-500/50 hover:shadow-xl transition-all duration-300"
+              className="bg-accent-dark/10 border border-accent-dark/30 rounded-xl p-6 hover:bg-accent-dark/20 hover:border-accent-dark/50 hover:shadow-xl transition-all duration-300"
             >
-              <div className="w-8 h-1 bg-stone-400 mb-4"></div>
+              <div className="w-8 h-1 bg-accent-dark mb-4"></div>
               <h4 className="font-serif text-lg font-bold text-white mb-2">{actionTitle}</h4>
               <p className="text-stone-300 text-sm leading-relaxed">{actionDescription}</p>
             </motion.div>

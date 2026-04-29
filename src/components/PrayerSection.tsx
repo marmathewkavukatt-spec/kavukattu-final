@@ -88,8 +88,8 @@ export default function PrayerSection() {
             <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10 relative overflow-hidden border border-stone-200">
               <div className="relative z-10 flex flex-col">
 
-                  {/* Prayer Text - Scrollable */}
-                  <div className="max-h-[65vh] overflow-y-auto pr-2 custom-scrollbar">
+                  {/* Prayer Text */}
+                  <div>
                     <div
                       className="space-y-4 font-ml text-stone-900 leading-relaxed text-sm sm:text-base"
                       lang="ml"
@@ -164,22 +164,6 @@ export default function PrayerSection() {
         </div>
       </div>
 
-      <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: #f1f1f1;
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #d6d3d1;
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #a8a29e;
-        }
-      `}</style>
     </section>
   );
 }
