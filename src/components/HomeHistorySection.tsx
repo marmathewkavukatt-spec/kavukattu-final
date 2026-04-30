@@ -71,7 +71,7 @@ export default function HomeHistorySection() {
         <div className="mt-10 relative z-20">
           {/* Image Container - Float on desktop, full width on mobile */}
           <div className="md:float-left md:mr-8 md:mb-6 mb-6 w-full md:w-96 relative z-30">
-            <div className="overflow-hidden rounded-xl bg-white shadow-2xl ring-2 ring-white/20 p-4">
+            <div className="overflow-hidden rounded-xl border border-stone-400 bg-white p-4 shadow-2xl">
               <img
                 src={priestImageSrc}
                 alt={priestName}

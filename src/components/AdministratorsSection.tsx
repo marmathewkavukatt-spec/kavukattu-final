@@ -146,15 +146,12 @@ export default function AdministratorsSection() {
           transition={{ duration: 0.6 }}
           className="mt-12 flex justify-center"
         >
-          <div className="relative w-full max-w-5xl overflow-hidden rounded-3xl bg-white/95 backdrop-blur-sm shadow-2xl border-2 border-accent/10">
-            {/* Decorative accent bar */}
-            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-accent via-accent/80 to-accent"></div>
-            
+          <div className="relative w-full max-w-5xl overflow-hidden rounded-3xl bg-white/95 backdrop-blur-sm shadow-[0_24px_60px_rgba(15,23,42,0.12)]">
             <div className="flex flex-col items-center gap-8 p-8 sm:p-12 md:flex-row md:items-center">
-              {/* Image with decorative frame */}
+              {/* Image with soft glow */}
               <div className="relative shrink-0">
                 <div className="absolute -inset-4 bg-gradient-to-br from-accent/20 to-accent/5 rounded-2xl blur-xl"></div>
-                <div className="relative h-72 w-72 md:h-80 md:w-80 overflow-hidden rounded-2xl bg-stone-200 ring-4 ring-white shadow-xl">
+                <div className="relative h-72 w-72 md:h-80 md:w-80 overflow-hidden rounded-2xl bg-stone-200 shadow-xl">
                   <Image
                     src={mainAdmin.image}
                     alt={getTranslatedName(mainAdmin.name)}
@@ -199,19 +196,16 @@ export default function AdministratorsSection() {
           variants={staggerContainer}
           className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
         >
-          {otherAdmins.map((admin, index) => (
+          {otherAdmins.map((admin) => (
             <motion.div
               key={admin.id}
               variants={fadeInUp}
-              className="group relative flex flex-col items-center overflow-hidden rounded-2xl bg-white/95 backdrop-blur-sm p-6 pb-8 text-center shadow-lg hover:shadow-2xl transition-all duration-300 border border-accent/10 hover:border-accent/30 hover:-translate-y-2"
+              className="group relative flex flex-col items-center overflow-hidden rounded-2xl bg-white/95 backdrop-blur-sm p-6 pb-8 text-center shadow-[0_16px_40px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_24px_50px_rgba(15,23,42,0.12)]"
             >
-              {/* Top accent line */}
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              
               {/* Image with hover effect */}
               <div className="relative mb-6">
                 <div className="absolute -inset-2 bg-gradient-to-br from-accent/10 to-accent/5 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="relative h-48 w-48 overflow-hidden rounded-xl bg-stone-200 ring-2 ring-accent/10 group-hover:ring-accent/30 transition-all">
+                <div className="relative h-48 w-48 overflow-hidden rounded-xl bg-stone-200 shadow-md transition-all">
                   <Image
                     src={admin.image}
                     alt={getTranslatedName(admin.name)}

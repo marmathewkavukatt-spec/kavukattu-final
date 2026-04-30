@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Facebook, Instagram, Youtube } from "lucide-react";
 import { useLang } from "@/context/LangContext";
 import ContributionModal from "./ContributionModal";
-import AutoTranslate from "@/components/AutoTranslate";
 import { useAutoTranslate } from "@/components/AutoTranslate";
 
 const socialLinks = [
@@ -170,7 +169,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 prefetch={true}
-                className={`rounded-md px-2.5 py-1.5 text-sm font-semibold whitespace-nowrap transition-colors lg:px-3 lg:py-2 lg:text-base ${
+                className={`rounded-md px-2.5 py-1.5 text-sm font-semibold uppercase tracking-[0.14em] whitespace-nowrap transition-colors lg:px-3 lg:py-2 lg:text-base ${
                   pathname === link.href
                     ? "bg-accent/10 text-accent"
                     : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
@@ -194,7 +193,7 @@ export default function Navbar() {
                 onClick={() => setMediaOpenDesktop((v) => !v)}
                 aria-haspopup="menu"
                 aria-expanded={mediaOpenDesktop}
-                className={`inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-sm font-semibold whitespace-nowrap transition-colors lg:px-3 lg:py-2 lg:text-base ${
+                className={`inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-sm font-semibold uppercase tracking-[0.14em] whitespace-nowrap transition-colors lg:px-3 lg:py-2 lg:text-base ${
                   isMediaActive
                     ? "bg-accent/10 text-accent"
                     : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
@@ -219,7 +218,7 @@ export default function Navbar() {
                         href="/resources"
                         prefetch={true}
                         onClick={() => setMediaOpenDesktop(false)}
-                        className={`block rounded-lg px-3 py-2 text-base font-semibold transition-colors ${
+                        className={`block rounded-lg px-3 py-2 text-base font-semibold uppercase tracking-[0.12em] transition-colors ${
                           pathname.startsWith("/resources")
                             ? "bg-accent/10 text-accent"
                             : "text-stone-700 hover:bg-stone-50"
@@ -241,7 +240,7 @@ export default function Navbar() {
                             setArchivesOpenDesktop(false);
                           }}
                           onFocus={() => setArchivesOpenDesktop(true)}
-                          className={`flex items-center justify-between rounded-lg px-3 py-2 text-base font-semibold transition-colors ${
+                          className={`flex items-center justify-between rounded-lg px-3 py-2 text-base font-semibold uppercase tracking-[0.12em] transition-colors ${
                             pathname.startsWith("/archives")
                               ? "bg-accent/10 text-accent"
                               : "text-stone-700 hover:bg-stone-50"
@@ -270,7 +269,7 @@ export default function Navbar() {
                                   setMediaOpenDesktop(false);
                                   setArchivesOpenDesktop(false);
                                 }}
-                                className="block rounded-md px-3 py-2 text-base text-stone-700 hover:bg-white hover:text-stone-900"
+                                className="block rounded-md px-3 py-2 text-base uppercase tracking-[0.12em] text-stone-700 hover:bg-white hover:text-stone-900"
                                 role="menuitem"
                               >
                                 {pastoralLettersText}
@@ -282,7 +281,7 @@ export default function Navbar() {
                                   setMediaOpenDesktop(false);
                                   setArchivesOpenDesktop(false);
                                 }}
-                                className="block rounded-md px-3 py-2 text-base text-stone-700 hover:bg-white hover:text-stone-900"
+                                className="block rounded-md px-3 py-2 text-base uppercase tracking-[0.12em] text-stone-700 hover:bg-white hover:text-stone-900"
                                 role="menuitem"
                               >
                                 {circularsText}
@@ -294,7 +293,7 @@ export default function Navbar() {
                                   setMediaOpenDesktop(false);
                                   setArchivesOpenDesktop(false);
                                 }}
-                                className="block rounded-md px-3 py-2 text-base text-stone-700 hover:bg-white hover:text-stone-900"
+                                className="block rounded-md px-3 py-2 text-base uppercase tracking-[0.12em] text-stone-700 hover:bg-white hover:text-stone-900"
                                 role="menuitem"
                               >
                                 {othersText}
@@ -314,7 +313,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 prefetch={true}
-                className={`rounded-md px-2.5 py-1.5 text-sm font-semibold whitespace-nowrap transition-colors lg:px-3 lg:py-2 lg:text-base ${
+                className={`rounded-md px-2.5 py-1.5 text-sm font-semibold uppercase tracking-[0.14em] whitespace-nowrap transition-colors lg:px-3 lg:py-2 lg:text-base ${
                   pathname === link.href
                     ? "bg-accent/10 text-accent"
                     : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
@@ -325,14 +324,14 @@ export default function Navbar() {
             ))}
             <button
               onClick={() => setContributionModalOpen(true)}
-              className="rounded-md px-2.5 py-1.5 text-sm font-semibold whitespace-nowrap transition-colors text-stone-700 hover:bg-stone-100 hover:text-stone-900 lg:px-3 lg:py-2 lg:text-base"
+              className="rounded-md px-2.5 py-1.5 text-sm font-semibold uppercase tracking-[0.14em] whitespace-nowrap transition-colors text-stone-700 hover:bg-stone-100 hover:text-stone-900 lg:px-3 lg:py-2 lg:text-base"
             >
               {publicInterventionsText}
             </button>
             <Link
               href="/contacts"
               prefetch={true}
-              className={`rounded-md px-2.5 py-1.5 text-sm font-semibold whitespace-nowrap transition-colors lg:px-3 lg:py-2 lg:text-base ${
+              className={`rounded-md px-2.5 py-1.5 text-sm font-semibold uppercase tracking-[0.14em] whitespace-nowrap transition-colors lg:px-3 lg:py-2 lg:text-base ${
                 pathname === "/contacts"
                   ? "bg-accent/10 text-accent"
                   : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
@@ -352,12 +351,12 @@ export default function Navbar() {
               onClick={() => setOpen(false)} />
             <motion.div initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="fixed right-0 top-0 z-50 h-full w-72 max-w-[85vw] bg-white shadow-2xl lg:hidden">
+              className="fixed right-0 top-0 z-50 h-full w-72 max-w-[85vw] bg-[var(--accent-light)] text-white shadow-2xl lg:hidden">
               <div className="flex h-full flex-col">
-                <div className="flex items-center justify-between border-b border-stone-200 px-4 py-4">
-                  <span className="font-serif text-lg font-bold text-accent">{menuText}</span>
+                <div className="flex items-center justify-between border-b border-white/15 px-4 py-4">
+                  <span className="font-serif text-lg font-bold uppercase tracking-[0.18em] text-white">{menuText}</span>
                   <button type="button" onClick={() => setOpen(false)}
-                    className="rounded-md p-2 text-stone-600 hover:bg-stone-100" aria-label={closeMenuText}>
+                    className="rounded-md p-2 text-white transition-colors hover:bg-white/10 hover:text-white" aria-label={closeMenuText}>
                     <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -367,8 +366,8 @@ export default function Navbar() {
                   <div className="space-y-1">
                     {navLinksBeforeMedia.map((link) => (
                       <Link key={link.href} href={link.href} prefetch={true} onClick={() => setOpen(false)}
-                        className={`block rounded-md px-3 py-3 text-base font-medium transition-colors ${
-                          pathname === link.href ? "bg-accent/10 text-accent" : "text-stone-700 hover:bg-stone-100"
+                        className={`block rounded-md px-3 py-3 text-base font-medium uppercase tracking-[0.16em] transition-colors ${
+                          pathname === link.href ? "bg-white/14 text-white" : "text-white/92 hover:bg-white/10 hover:text-white"
                         }`}>
                         {link.label}
                       </Link>
@@ -378,16 +377,16 @@ export default function Navbar() {
                     <button
                       type="button"
                       onClick={() => setMediaOpenMobile((v) => !v)}
-                      className={`w-full flex items-center justify-between rounded-md px-3 py-3 text-base font-medium transition-colors ${
-                        isMediaActive ? "bg-accent/10 text-accent" : "text-stone-700 hover:bg-stone-100"
+                      className={`w-full flex items-center justify-between rounded-md px-3 py-3 text-base font-medium uppercase tracking-[0.16em] transition-colors ${
+                        isMediaActive ? "bg-white/14 text-white" : "text-white/92 hover:bg-white/10 hover:text-white"
                       }`}
                     >
                       <span>{mediaText}</span>
-                      <ChevronDown className={`h-4 w-4 transition-transform ${mediaOpenMobile ? "rotate-180" : ""}`} />
+                      <ChevronDown className={`h-4 w-4 shrink-0 text-white transition-transform ${mediaOpenMobile ? "rotate-180" : ""}`} />
                     </button>
 
                     {mediaOpenMobile && (
-                      <div className="ml-3 mt-1 space-y-1 border-l-2 border-stone-200 pl-3">
+                      <div className="ml-3 mt-1 space-y-1 border-l-2 border-white/20 pl-3">
                         <Link
                           href="/resources"
                           prefetch={true}
@@ -396,10 +395,10 @@ export default function Navbar() {
                             setMediaOpenMobile(false);
                             setArchivesOpenMobile(false);
                           }}
-                          className={`block rounded-md px-3 py-2 text-base transition-colors ${
+                          className={`block rounded-md px-3 py-2 text-base uppercase tracking-[0.14em] transition-colors ${
                             pathname.startsWith("/resources")
-                              ? "bg-accent/10 text-accent font-medium"
-                              : "text-stone-600 hover:bg-stone-100 hover:text-stone-900"
+                              ? "bg-white/14 text-white font-medium"
+                              : "text-white/80 hover:bg-white/10 hover:text-white"
                           }`}
                         >
                           {resourcesText}
@@ -408,18 +407,18 @@ export default function Navbar() {
                         <button
                           type="button"
                           onClick={() => setArchivesOpenMobile((v) => !v)}
-                          className={`w-full flex items-center justify-between rounded-md px-3 py-2 text-base transition-colors ${
+                          className={`w-full flex items-center justify-between rounded-md px-3 py-2 text-base uppercase tracking-[0.14em] transition-colors ${
                             pathname.startsWith("/archives")
-                              ? "bg-accent/10 text-accent font-medium"
-                              : "text-stone-600 hover:bg-stone-100 hover:text-stone-900"
+                              ? "bg-white/14 text-white font-medium"
+                              : "text-white/80 hover:bg-white/10 hover:text-white"
                           }`}
                         >
                           <span>{archivesDocumentsText}</span>
-                          <ChevronDown className={`h-4 w-4 transition-transform ${archivesOpenMobile ? "rotate-180" : ""}`} />
+                          <ChevronDown className={`h-4 w-4 shrink-0 text-white transition-transform ${archivesOpenMobile ? "rotate-180" : ""}`} />
                         </button>
 
                         {archivesOpenMobile && (
-                          <div className="ml-3 mt-1 space-y-1 border-l-2 border-stone-200 pl-3">
+                          <div className="ml-3 mt-1 space-y-1 border-l-2 border-white/20 pl-3">
                             <Link
                               href="/archives"
                               prefetch={true}
@@ -428,7 +427,7 @@ export default function Navbar() {
                                 setMediaOpenMobile(false);
                                 setArchivesOpenMobile(false);
                               }}
-                              className="block rounded-md px-3 py-2 text-base font-semibold text-stone-700 hover:bg-stone-100 hover:text-stone-900"
+                              className="block rounded-md px-3 py-2 text-base font-semibold uppercase tracking-[0.14em] text-white hover:bg-white/10 hover:text-white"
                             >
                               {allDocumentsText}
                             </Link>
@@ -440,7 +439,7 @@ export default function Navbar() {
                                 setMediaOpenMobile(false);
                                 setArchivesOpenMobile(false);
                               }}
-                              className="block rounded-md px-3 py-2 text-base text-stone-600 hover:bg-stone-100 hover:text-stone-900"
+                              className="block rounded-md px-3 py-2 text-base uppercase tracking-[0.14em] text-white/80 hover:bg-white/10 hover:text-white"
                             >
                               {pastoralLettersText}
                             </Link>
@@ -452,7 +451,7 @@ export default function Navbar() {
                                 setMediaOpenMobile(false);
                                 setArchivesOpenMobile(false);
                               }}
-                              className="block rounded-md px-3 py-2 text-base text-stone-600 hover:bg-stone-100 hover:text-stone-900"
+                              className="block rounded-md px-3 py-2 text-base uppercase tracking-[0.14em] text-white/80 hover:bg-white/10 hover:text-white"
                             >
                               {circularsText}
                             </Link>
@@ -464,7 +463,7 @@ export default function Navbar() {
                                 setMediaOpenMobile(false);
                                 setArchivesOpenMobile(false);
                               }}
-                              className="block rounded-md px-3 py-2 text-base text-stone-600 hover:bg-stone-100 hover:text-stone-900"
+                              className="block rounded-md px-3 py-2 text-base uppercase tracking-[0.14em] text-white/80 hover:bg-white/10 hover:text-white"
                             >
                               {othersText}
                             </Link>
@@ -479,8 +478,8 @@ export default function Navbar() {
                         href={link.href}
                         prefetch={true}
                         onClick={() => setOpen(false)}
-                        className={`block rounded-md px-3 py-3 text-base font-medium transition-colors ${
-                          pathname === link.href ? "bg-accent/10 text-accent" : "text-stone-700 hover:bg-stone-100"
+                        className={`block rounded-md px-3 py-3 text-base font-medium uppercase tracking-[0.16em] transition-colors ${
+                          pathname === link.href ? "bg-white/14 text-white" : "text-white/92 hover:bg-white/10 hover:text-white"
                         }`}
                       >
                         {link.label}
@@ -491,7 +490,7 @@ export default function Navbar() {
                         setOpen(false);
                         setContributionModalOpen(true);
                       }}
-                      className="w-full text-left block rounded-md px-3 py-3 text-base font-medium transition-colors text-stone-700 hover:bg-stone-100"
+                      className="block w-full rounded-md px-3 py-3 text-left text-base font-medium uppercase tracking-[0.16em] text-white/92 transition-colors hover:bg-white/10 hover:text-white"
                     >
                       {publicInterventionsText}
                     </button>
@@ -499,21 +498,21 @@ export default function Navbar() {
                       href="/contacts"
                       prefetch={true}
                       onClick={() => setOpen(false)}
-                      className={`block rounded-md px-3 py-3 text-base font-medium transition-colors ${
-                        pathname === "/contacts" ? "bg-accent/10 text-accent" : "text-stone-700 hover:bg-stone-100"
+                      className={`block rounded-md px-3 py-3 text-base font-medium uppercase tracking-[0.16em] transition-colors ${
+                        pathname === "/contacts" ? "bg-white/14 text-white" : "text-white/92 hover:bg-white/10 hover:text-white"
                       }`}
                     >
                       {contactsText}
                     </Link>
                   </div>
-                  <div className="mt-6 border-t border-stone-200 pt-4">
-                    <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wide text-stone-500">
+                  <div className="mt-6 border-t border-white/15 pt-4">
+                    <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/65">
                       {followUsText}
                     </p>
                     <div className="flex items-center gap-2 px-3">
                       {socialLinks.map(({ href, label, Icon }) => (
                         <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
-                          className="rounded-md p-2.5 text-stone-600 transition-colors hover:bg-stone-100 hover:text-accent">
+                          className="rounded-md p-2.5 text-white transition-colors hover:bg-white/10 hover:text-white">
                           <Icon className="h-6 w-6" />
                         </a>
                       ))}
