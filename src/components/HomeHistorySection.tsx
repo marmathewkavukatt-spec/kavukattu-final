@@ -5,7 +5,7 @@ import { t } from "@/lib/translations";
 
 const STATIC_HISTORY = {
   priestName: "Mar Mathew Kavukatt",
-  priestImage: "/uploads/ABOUT SECTION IMAGE.png",
+  priestImage: "/uploads/mar-mathew-kavukatt-first-archbishop-changanacherry.png",
   description: {
     en: `Mar Mathew Kavukatt (1904–1969) was a pioneering leader of the Syro-Malabar Church and the first Archbishop of Changanacherry. Born on 17 July 1904 in Pravithanam, near Palai, he was the son of Chummar and Tresa of the Kavukatt family from Anthinadu.
 

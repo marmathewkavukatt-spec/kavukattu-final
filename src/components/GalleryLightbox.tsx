@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import {
   cloudinaryLoader,
   getBrowserSafeImageUrl,
@@ -30,6 +30,7 @@ export default function GalleryLightbox({ items }: { items: GalleryItem[] }) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
   const [preloadedImages, setPreloadedImages] = useState<Set<number>>(new Set());
+  const [dragDirection, setDragDirection] = useState<number>(0);
   const translatedCaptions = useTranslate(items.map((item) => item.caption ?? null));
   const [closeText, previousImageText, nextImageText, galleryImageText] = useTranslate([
     "Close",
@@ -131,6 +132,22 @@ export default function GalleryLightbox({ items }: { items: GalleryItem[] }) {
     if (e.key === "ArrowRight") handleNext();
   };
 
+  // Handle swipe gestures for mobile
+  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    const swipeThreshold = 50; // minimum distance to trigger swipe
+    const swipeVelocity = 500; // minimum velocity to trigger swipe
+
+    if (Math.abs(info.offset.x) > swipeThreshold || Math.abs(info.velocity.x) > swipeVelocity) {
+      if (info.offset.x > 0) {
+        // Swiped right - go to previous
+        handlePrevious();
+      } else {
+        // Swiped left - go to next
+        handleNext();
+      }
+    }
+  };
+
   return (
     <>
       {useVirtualization ? (
@@ -225,12 +242,13 @@ export default function GalleryLightbox({ items }: { items: GalleryItem[] }) {
 
             {items.length > 1 && (
               <>
+                {/* Hide arrow buttons on mobile (md breakpoint and up shows them) */}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     handlePrevious();
                   }}
-                  className="absolute left-4 top-1/2 z-20 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur transition-all hover:scale-110 hover:bg-white/20"
+                  className="absolute left-4 top-1/2 z-20 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur transition-all hover:scale-110 hover:bg-white/20 hidden md:block"
                   aria-label={previousImageText}
                 >
                   <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -242,7 +260,7 @@ export default function GalleryLightbox({ items }: { items: GalleryItem[] }) {
                     e.stopPropagation();
                     handleNext();
                   }}
-                  className="absolute right-4 top-1/2 z-20 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur transition-all hover:scale-110 hover:bg-white/20"
+                  className="absolute right-4 top-1/2 z-20 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur transition-all hover:scale-110 hover:bg-white/20 hidden md:block"
                   aria-label={nextImageText}
                 >
                   <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -252,9 +270,13 @@ export default function GalleryLightbox({ items }: { items: GalleryItem[] }) {
               </>
             )}
 
-            <div
+            <motion.div
               className="relative h-[90vh] w-[90vw]"
               onClick={(e) => e.stopPropagation()}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.2}
+              onDragEnd={handleDragEnd}
             >
               <AnimatePresence mode="wait">
                 <motion.div
@@ -280,7 +302,7 @@ export default function GalleryLightbox({ items }: { items: GalleryItem[] }) {
                   />
                 </motion.div>
               </AnimatePresence>
-            </div>
+            </motion.div>
 
             {translatedCaptions[selectedIndex] && (
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-lg bg-black/50 px-4 py-2 text-white backdrop-blur">

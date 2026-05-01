@@ -93,7 +93,7 @@ export default function Navbar() {
             <Link href="/" className="flex items-center gap-2 shrink min-w-0 overflow-hidden" prefetch={true}>
               <div className="relative h-10 w-10 shrink-0 sm:h-12 sm:w-12 lg:h-14 lg:w-14">
                 <Image
-                  src="/uploads/logo.jpg"
+                  src="/uploads/mar-mathew-kavukatt-church-logo.jpg"
                   alt="Church Logo"
                   fill
                   sizes="(max-width: 640px) 40px, (max-width: 1024px) 48px, 56px"

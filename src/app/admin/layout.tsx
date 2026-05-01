@@ -7,6 +7,7 @@ import { memo, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AdminLogout from "@/components/AdminLogout";
 import { LangProvider } from "@/context/LangContext";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 type NavigationLink = {
   label: string;
@@ -75,7 +76,7 @@ const AdminHeader = memo(function AdminHeader({ onMenuClick }: { onMenuClick: ()
         <Link href="/admin/dashboard" prefetch={true} className="flex items-center">
           <div className="relative h-16 w-16 shrink-0 sm:h-20 sm:w-20">
             <Image
-              src="/uploads/logo.jpg"
+              src="/uploads/mar-mathew-kavukatt-church-logo.jpg"
               alt="Kavukatt Logo"
               fill
               sizes="(max-width: 640px) 64px, 80px"
@@ -277,17 +278,22 @@ export default function AdminLayout({
 
   return (
     <LangProvider>
-      {isLoginPage ? (
-        <>{children}</>
-      ) : (
-        <>
-          <div className="min-h-screen bg-stone-100">
-            <AdminHeader onMenuClick={() => setMobileMenuOpen(true)} />
-            <div className="mx-auto flex max-w-screen-2xl gap-8 px-4 py-6 sm:px-6 lg:px-8">
-              <AdminSidebar />
-              <div className="min-w-0 flex-1">{children}</div>
+      <ErrorBoundary>
+        {isLoginPage ? (
+          <>{children}</>
+        ) : (
+          <>
+            <div className="min-h-screen bg-stone-100">
+              <AdminHeader onMenuClick={() => setMobileMenuOpen(true)} />
+              <div className="mx-auto flex max-w-screen-2xl gap-8 px-4 py-6 sm:px-6 lg:px-8">
+                <AdminSidebar />
+                <div className="min-w-0 flex-1">
+                  <ErrorBoundary>
+                    {children}
+                  </ErrorBoundary>
+                </div>
+              </div>
             </div>
-          </div>
 
           {/* Mobile slide-in menu */}
           <AnimatePresence>
@@ -427,6 +433,7 @@ export default function AdminLayout({
           </AnimatePresence>
         </>
       )}
+      </ErrorBoundary>
     </LangProvider>
   );
 }

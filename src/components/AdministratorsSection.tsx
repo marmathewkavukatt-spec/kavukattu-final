@@ -10,31 +10,31 @@ const administrators = [
     id: 1,
     name: "Mar Thomas Tharayil",
     designation: "Metropolitan Archbishop",
-    image: "/uploads/admins/admin1.png",
+    image: "/uploads/admins/mar-thomas-tharayil-metropolitan-archbishop.png",
   },
   {
     id: 2,
     name: "Fr. Kanniyakonil Scaria",
     designation: "Syncellus",
-    image: "/uploads/admins/admin3.jpg",
+    image: "/uploads/admins/fr-kanniyakonil-scaria-syncellus.jpg",
   },
   {
     id: 3,
     name: "Fr. Maleckal Antony",
     designation: "Procurator",
-    image: "/uploads/admins/admin5.jpg",
+    image: "/uploads/admins/fr-maleckal-antony-procurator.jpg",
   },
   {
     id: 4,
     name: "Fr. Alencherry Joseph",
     designation: "Postulator",
-    image: "/uploads/admins/admin2.jpg",
+    image: "/uploads/admins/fr-alencherry-joseph-postulator.jpg",
   },
   {
     id: 5,
     name: "Fr. John Plathanam",
     designation: "Vice Postulator",
-    image: "/uploads/admins/admin4.jpg",
+    image: "/uploads/admins/fr-john-plathanam-vice-postulator.jpg",
   },
 ];
 
@@ -105,7 +105,7 @@ export default function AdministratorsSection() {
         <div className="absolute inset-0 bg-gradient-to-br from-white/80 via-white/60 to-white/40"></div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] opacity-[0.025]">
           <Image
-            src="/uploads/logo.jpg"
+            src="/uploads/mar-mathew-kavukatt-church-logo.jpg"
             alt="Background Logo"
             fill
             className="object-contain"

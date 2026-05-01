@@ -30,7 +30,7 @@ const timelineEvents: TimelineEvent[] = [
       en: "Born in Pravithanam, beginning a life dedicated to faith and service",
       ml: "വിശ്വാസത്തിനും സേവനത്തിനും സമർപ്പിതമായ ജീവിതം പ്രവിത്താനത്തിൽ ആരംഭിച്ചു"
     },
-    image: "/uploads/life journey/birth.png"
+    image: "/uploads/life journey/mar-mathew-kavukatt-birth-1904-pravithanam.png"
   },
   {
     year: "1935",
@@ -42,7 +42,7 @@ const timelineEvents: TimelineEvent[] = [
       en: "Ordained as a priest, embarking on a sacred journey of spiritual leadership",
       ml: "ആത്മീയ നേതൃത്വത്തിന്റെ വിശുദ്ധ യാത്ര ആരംഭിച്ച് പുരോഹിതനായി നിയമിക്കപ്പെട്ടു"
     },
-    image: "/uploads/life journey/ordination.png"
+    image: "/uploads/life journey/mar-mathew-kavukatt-priest-ordination-1935.png"
   },
   {
     year: "1950",
@@ -54,7 +54,7 @@ const timelineEvents: TimelineEvent[] = [
       en: "Elevated to Bishop, serving the Church with wisdom and devotion in Rome",
       ml: "ജ്ഞാനത്തോടും ഭക്തിയോടും കൂടി റോമിൽ സഭയെ സേവിച്ച് ബിഷപ്പായി ഉയർത്തപ്പെട്ടു"
     },
-    image: "/uploads/life journey/consecration.png"
+    image: "/uploads/life journey/mar-mathew-kavukatt-bishop-consecration-rome-1950.png"
   },
   {
     year: "1956",
@@ -66,7 +66,7 @@ const timelineEvents: TimelineEvent[] = [
       en: "Appointed as the first Archbishop, a historic milestone in Church history",
       ml: "സഭാചരിത്രത്തിലെ ചരിത്രപരമായ നാഴികക്കല്ല്, ആദ്യ മെത്രാപ്പോലീത്തയായി നിയമിക്കപ്പെട്ടു"
     },
-    image: "/uploads/life journey/first archbishop.png"
+    image: "/uploads/life journey/mar-mathew-kavukatt-first-archbishop-changanacherry-1956.png"
   },
   {
     year: "1969",
@@ -78,7 +78,7 @@ const timelineEvents: TimelineEvent[] = [
       en: "Departed to eternal rest, leaving behind a legacy of faith and compassion",
       ml: "വിശ്വാസത്തിന്റെയും കരുണയുടെയും പാരമ്പര്യം അവശേഷിപ്പിച്ച് നിത്യവിശ്രമത്തിലേക്ക് പോയി"
     },
-    image: "/uploads/life journey/eternal rest.png"
+    image: "/uploads/life journey/mar-mathew-kavukatt-eternal-rest-1969.png"
   },
   {
     year: "1994",
@@ -90,7 +90,7 @@ const timelineEvents: TimelineEvent[] = [
       en: "Recognized as Servant of God, honoring a life of extraordinary holiness",
       ml: "അസാധാരണമായ വിശുദ്ധിയുടെ ജീവിതത്തെ ആദരിച്ച് ദൈവദാസനായി അംഗീകരിക്കപ്പെട്ടു"
     },
-    image: "/uploads/life journey/servant of god.png"
+    image: "/uploads/life journey/mar-mathew-kavukatt-servant-of-god-declaration.png"
   },
 ];
 

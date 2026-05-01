@@ -7,7 +7,7 @@ export const metadata = generatePageMetadata({
   keywords: seoConfig.keywords.history,
   path: "/about",
   type: "article",
-  image: "/uploads/ABOUT SECTION IMAGE.png"
+  image: "/uploads/mar-mathew-kavukatt-first-archbishop-changanacherry.png"
 });
 
 export default function AboutPage() {

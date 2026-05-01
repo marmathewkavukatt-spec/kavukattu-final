@@ -22,7 +22,7 @@ export default function Preloader() {
   return (
     <div id="preloader" aria-hidden="true">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/uploads/logo.jpg" alt="" width={200} height={200} />
+      <img src="/uploads/mar-mathew-kavukatt-church-logo.jpg" alt="" width={200} height={200} />
     </div>
   );
 }

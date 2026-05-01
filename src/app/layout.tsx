@@ -43,17 +43,17 @@ export const metadata: Metadata = {
   referrer: "origin-when-cross-origin",
   icons: {
     icon: [
-      { url: "/uploads/logo.jpg", sizes: "32x32", type: "image/jpeg" },
-      { url: "/uploads/logo.jpg", sizes: "16x16", type: "image/jpeg" }
+      { url: "/uploads/mar-mathew-kavukatt-church-logo.jpg", sizes: "32x32", type: "image/jpeg" },
+      { url: "/uploads/mar-mathew-kavukatt-church-logo.jpg", sizes: "16x16", type: "image/jpeg" }
     ],
-    shortcut: "/uploads/logo.jpg",
+    shortcut: "/uploads/mar-mathew-kavukatt-church-logo.jpg",
     apple: [
-      { url: "/uploads/logo.jpg", sizes: "180x180", type: "image/jpeg" }
+      { url: "/uploads/mar-mathew-kavukatt-church-logo.jpg", sizes: "180x180", type: "image/jpeg" }
     ],
     other: [
       {
         rel: "apple-touch-icon-precomposed",
-        url: "/uploads/logo.jpg"
+        url: "/uploads/mar-mathew-kavukatt-church-logo.jpg"
       }
     ]
   },

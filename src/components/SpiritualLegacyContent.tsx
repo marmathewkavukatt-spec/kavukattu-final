@@ -189,7 +189,7 @@ function MottoSection() {
         {/* Logo Background with proper opacity for text visibility */}
         <div className="absolute inset-0">
           <Image
-            src="/uploads/logo.jpg"
+            src="/uploads/mar-mathew-kavukatt-church-logo.jpg"
             alt="Background"
             fill
             className="object-cover opacity-[0.16] saturate-0 contrast-125 brightness-110"
@@ -224,14 +224,14 @@ function MottoSection() {
           </motion.div>
 
           {/* 3-col: Servire | in | Caritate */}
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 lg:gap-6 max-w-5xl mx-auto mb-12 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 lg:gap-6 max-w-5xl mx-auto mb-12 items-stretch">
             <motion.div 
               variants={fadeInUp}
-              className="bg-white/10 rounded-xl p-8 lg:p-10 border border-white/30 hover:bg-white/20 transition-all duration-300"
+              className="bg-white/10 rounded-xl p-8 lg:p-10 border border-white/30 hover:bg-white/20 transition-all duration-300 flex flex-col"
             >
               <div className="w-10 h-1 bg-gold mb-5"></div>
               <h3 className="font-serif text-2xl lg:text-3xl font-bold text-white mb-4">{servireHeadingText}</h3>
-              <p className="text-white/95 leading-relaxed text-lg">
+              <p className="text-white/95 leading-relaxed text-lg flex-1">
                 {servireDescriptionText}
               </p>
             </motion.div>
@@ -250,11 +250,11 @@ function MottoSection() {
 
             <motion.div 
               variants={fadeInUp}
-              className="bg-white/10 rounded-xl p-8 lg:p-10 border border-white/30 hover:bg-white/20 transition-all duration-300"
+              className="bg-white/10 rounded-xl p-8 lg:p-10 border border-white/30 hover:bg-white/20 transition-all duration-300 flex flex-col"
             >
               <div className="w-10 h-1 bg-gold mb-5"></div>
               <h3 className="font-serif text-2xl lg:text-3xl font-bold text-white mb-4">{caritateHeadingText}</h3>
-              <p className="text-white/95 leading-relaxed text-lg">
+              <p className="text-white/95 leading-relaxed text-lg flex-1">
                 {caritateDescriptionText}
               </p>
             </motion.div>
