@@ -41,9 +41,7 @@ export async function GET() {
     
     return NextResponse.json(withUnderscoreIds(categories), {
       headers: {
-        'Cache-Control': session 
-          ? 'private, max-age=300' 
-          : 'public, s-maxage=300, stale-while-revalidate=600',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
       }
     });
   } catch (e) {
@@ -67,7 +65,6 @@ export async function POST(req: NextRequest) {
       },
     });
     
-    // Invalidate cache
     invalidateApiCache('/gallery');
     
     revalidatePath('/gallery');

@@ -10,7 +10,6 @@ interface Props {
 interface State {
   hasError: boolean;
   error: Error | null;
-  errorCount: number;
 }
 
 /**
@@ -25,7 +24,6 @@ export default class ProductionErrorBoundary extends Component<Props, State> {
     this.state = {
       hasError: false,
       error: null,
-      errorCount: 0,
     };
   }
 
@@ -40,17 +38,6 @@ export default class ProductionErrorBoundary extends Component<Props, State> {
     // Log error to console in development
     if (process.env.NODE_ENV === 'development') {
       console.error('Error caught by boundary:', error, errorInfo);
-    }
-
-    // Increment error count
-    this.setState((prev) => ({
-      errorCount: prev.errorCount + 1,
-    }));
-
-    // If too many errors, might be in error loop - reload page
-    if (this.state.errorCount >= 3) {
-      console.error('Too many errors detected. Reloading page...');
-      window.location.reload();
     }
   }
 

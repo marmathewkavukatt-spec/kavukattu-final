@@ -13,7 +13,7 @@ import {
 } from "@/lib/requestValidation";
 import { cachedQuery, invalidateApiCache } from "@/lib/api-optimizer";
 
-// OPTIMIZED: Added caching and pagination
+// Paginated announcement listing
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -22,10 +22,8 @@ export async function GET(req: NextRequest) {
     const category = searchParams.get("category");
     const skip = (page - 1) * limit;
 
-    // Build cache key
     const cacheKey = `announcements:${page}:${limit}:${category || 'all'}`;
 
-    // Use cached query
     const result = await cachedQuery(
       cacheKey,
       async () => {
@@ -68,12 +66,12 @@ export async function GET(req: NextRequest) {
           }
         };
       },
-      300 // Cache for 5 minutes
+      0
     );
 
     return NextResponse.json(result, {
       headers: {
-        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
       }
     });
   } catch (e) {

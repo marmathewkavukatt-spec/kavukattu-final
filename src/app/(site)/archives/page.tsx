@@ -5,7 +5,8 @@ import PaginatedArchiveDocuments from "@/components/PaginatedArchiveDocuments";
 import { getPublicArchiveDocuments, type ArchiveCategory } from "@/lib/site-data";
 
 export const metadata = { title: "Kavukattu", description: "Archives and documents" };
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 function slugToCategory(slug: string): ArchiveCategory | undefined {
   const normalized = slug.trim().toLowerCase();
@@ -45,4 +46,3 @@ export default async function ArchivesPage({ searchParams }: { searchParams?: { 
     </div>
   );
 }
-

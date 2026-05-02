@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import { getPublicResourceById } from "@/lib/site-data";
 import ResourceDetail from "@/components/ResourceDetail";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const resource = await getPublicResourceById(params.id);

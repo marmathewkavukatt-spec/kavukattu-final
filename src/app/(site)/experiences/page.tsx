@@ -8,7 +8,8 @@ export const metadata = {
   description: "Experiences from our community",
 };
 
-export const revalidate = 180;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function ExperiencesPage() {
   const testimonies = await getPublicTestimonies();
@@ -32,4 +33,3 @@ export default async function ExperiencesPage() {
     </div>
   );
 }
-

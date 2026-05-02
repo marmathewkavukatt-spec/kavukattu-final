@@ -1,28 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
-
 export default function GlobalError({
   error,
-  reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    console.error('Global error:', error);
-
-    // Auto-reload for chunk errors
-    const isChunkError = 
-      error.message.includes('Loading chunk') ||
-      error.message.includes('ChunkLoadError') ||
-      error.message.includes('Failed to fetch');
-
-    if (isChunkError && !sessionStorage.getItem('global-error-reloaded')) {
-      sessionStorage.setItem('global-error-reloaded', 'true');
-      setTimeout(() => window.location.reload(), 100);
-    }
-  }, [error]);
+  console.error('Global error:', error);
 
   return (
     <html>
@@ -62,10 +46,7 @@ export default function GlobalError({
             </p>
 
             <button
-              onClick={() => {
-                sessionStorage.removeItem('global-error-reloaded');
-                window.location.reload();
-              }}
+              onClick={() => window.location.reload()}
               style={{
                 width: '100%',
                 background: '#4f46e5',

@@ -78,15 +78,11 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ pat
     });
 
     const contentType = getContentTypeByExtension(absolutePath);
-    const cacheControl = requestedPath.match(/^\/*uploads\/\d{10,}-/)
-      ? "public, max-age=31536000, immutable"
-      : "public, max-age=3600";
-
     return new NextResponse(readable, {
       headers: {
         "Content-Type": contentType,
         "Content-Length": fileStat.size.toString(),
-        "Cache-Control": cacheControl,
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
       },
     });
   } catch {

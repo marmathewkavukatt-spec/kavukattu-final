@@ -3,7 +3,8 @@ import GalleryCategoryNav from "@/components/GalleryCategoryNav";
 import GalleryCategoryContent from "@/components/GalleryCategoryContent";
 import { getPublicGalleryCategoryWithItems, getPublicGalleryCategories } from "@/lib/site-data";
 
-export const revalidate = 120;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 interface Props {
   params: Promise<{ id: string }>;

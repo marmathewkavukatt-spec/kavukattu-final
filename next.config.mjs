@@ -17,7 +17,7 @@ const nextConfig = {
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 31536000, // 1 year cache for better performance
+    minimumCacheTTL: 0,
     dangerouslyAllowSVG: false,
     contentDispositionType: 'inline',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -50,73 +50,47 @@ const nextConfig = {
     ];
   },
 
-  // PRODUCTION-SAFE: Bulletproof caching strategy to prevent chunk errors
+  // Disable browser/proxy caching so deployed HTML never points at stale chunks.
   async headers() {
+    const noStoreHeaders = [
+      {
+        key: 'Cache-Control',
+        value: 'no-store, no-cache, must-revalidate, max-age=0',
+      },
+      {
+        key: 'Pragma',
+        value: 'no-cache',
+      },
+      {
+        key: 'Expires',
+        value: '0',
+      },
+      {
+        key: 'X-Content-Type-Options',
+        value: 'nosniff',
+      },
+    ];
+
     return [
       {
-        // HTML pages - never cache build-specific markup.
-        // Cached HTML can reference old hashed _next/static files after a deploy,
-        // which browsers report as JS/CSS MIME errors on refresh.
-        // Keep this first so more specific asset/API rules below can override it.
         source: '/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'private, no-cache, no-store, max-age=0, must-revalidate',
-          },
-        ],
+        headers: noStoreHeaders,
       },
       {
-        // Next.js static assets - immutable with long cache
         source: '/_next/static/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-        ],
+        headers: noStoreHeaders,
       },
       {
-        // Next.js build data - no cache to prevent stale references
         source: '/_next/data/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'private, no-cache, no-store, max-age=0, must-revalidate',
-          },
-        ],
+        headers: noStoreHeaders,
       },
       {
-        // Public uploads - long cache with revalidation
         source: '/uploads/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-        ],
+        headers: noStoreHeaders,
       },
       {
-        // API routes - short cache with stale-while-revalidate
         source: '/api/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'private, no-cache, no-store, max-age=0, must-revalidate',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-        ],
+        headers: noStoreHeaders,
       },
     ];
   },
@@ -140,12 +114,6 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production' ? {
       exclude: ['error', 'warn'],
     } : false,
-  },
-
-  // CRITICAL: Generate unique build IDs to prevent chunk loading issues
-  generateBuildId: async () => {
-    // Always use timestamp for unique builds to prevent cache conflicts
-    return `build-${Date.now()}`;
   },
 
   // CRITICAL: Ensure proper error handling for production
@@ -175,7 +143,7 @@ const nextConfig = {
   output: process.env.NEXT_STANDALONE === 'true' ? 'standalone' : undefined,
   
   // Disable x-powered-by header
-  generateEtags: true, // Enable ETags for better caching
+  generateEtags: false,
   
   // PERFORMANCE: Production optimizations
   productionBrowserSourceMaps: false, // Disable source maps in production

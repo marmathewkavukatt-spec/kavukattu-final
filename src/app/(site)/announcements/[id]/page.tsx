@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import BackButton from "@/components/BackButton";
 import { db, connectDB } from "@/lib/db";
 
-export const revalidate = 120;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 interface Props {
   params: Promise<{ id: string }>;

@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getSiteUrl } from '@/lib/site-url';
 import { getPublicAnnouncementCards } from '@/lib/site-data';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const baseUrl = getSiteUrl();
   
   try {
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
     return new NextResponse(rss, {
       headers: {
         'Content-Type': 'application/rss+xml; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
       },
     });
   } catch (error) {
@@ -65,4 +65,5 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export const revalidate = 3600; // Revalidate every hour
+export const dynamic = "force-dynamic";
+export const revalidate = 0;

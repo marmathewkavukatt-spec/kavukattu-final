@@ -4,7 +4,8 @@ import EmptyState from "@/components/EmptyState";
 import { getPublicResources } from "@/lib/site-data";
 
 export const metadata = { title: "Kavukattu", description: "Church resources and materials" };
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function ResourcesPage() {
   const resources = await getPublicResources();

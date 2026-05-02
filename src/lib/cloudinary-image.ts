@@ -40,8 +40,7 @@ export function getCloudinaryImageUrl(
     crop ? `c_${crop}` : "",
     width ? `w_${Math.round(width)}` : "",
     height ? `h_${Math.round(height)}` : "",
-    "fl_progressive", // Progressive JPEG loading
-    "fl_immutable_cache", // Better caching
+    "fl_progressive",
   ]
     .filter(Boolean)
     .join(",");

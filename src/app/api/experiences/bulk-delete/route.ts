@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
   return new NextResponse(stream.readable, {
     headers: {
       "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
       "Connection": "keep-alive",
     },
   });

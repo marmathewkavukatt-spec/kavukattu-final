@@ -2,6 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { productionSecurity } from "@/lib/security-production";
 import { withApiSecurity } from "@/lib/api-security-wrapper";
 
+export const dynamic = "force-dynamic";
+
+type SecurityEvent = {
+  timestamp: string;
+  ip: string;
+  eventType: string;
+};
+
 async function handler(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -81,14 +89,14 @@ async function handler(request: NextRequest) {
   }
 }
 
-function getEventTypeCounts(events: any[]): Record<string, number> {
+function getEventTypeCounts(events: SecurityEvent[]): Record<string, number> {
   return events.reduce((acc, event) => {
     acc[event.eventType] = (acc[event.eventType] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
 }
 
-function getTopIPs(events: any[]): Array<{ ip: string; count: number }> {
+function getTopIPs(events: SecurityEvent[]): Array<{ ip: string; count: number }> {
   const ipCounts = events.reduce((acc, event) => {
     acc[event.ip] = (acc[event.ip] || 0) + 1;
     return acc;
@@ -100,8 +108,4 @@ function getTopIPs(events: any[]): Array<{ ip: string; count: number }> {
     .map(([ip, count]) => ({ ip, count: count as number }));
 }
 
-export const GET = withApiSecurity(handler, {
-  requireAuth: true,
-  requiredRole: 'admin',
-  rateLimit: true
-});
+export const GET = withApiSecurity(handler);

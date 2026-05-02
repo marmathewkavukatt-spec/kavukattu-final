@@ -12,7 +12,8 @@ export const metadata = generatePageMetadata({
   type: "website"
 });
 
-export const revalidate = 120;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function AnnouncementsPage() {
   const announcements = await getPublicAnnouncementCards();

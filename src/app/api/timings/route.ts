@@ -33,7 +33,7 @@ export async function GET() {
     
     return NextResponse.json(withUnderscoreIds(items), {
       headers: {
-        'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=1200',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
       }
     });
   } catch (e) {

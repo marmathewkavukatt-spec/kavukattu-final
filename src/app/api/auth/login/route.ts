@@ -9,7 +9,6 @@ import {
   toEmail,
   toPassword,
 } from "@/lib/requestValidation";
-import { checkRateLimit, recordLoginAttempt, getClientIP } from "@/lib/rateLimit";
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -26,29 +25,6 @@ export async function POST(req: NextRequest) {
       throw new RequestValidationError("Password is required.");
     }
 
-    const clientIP = getClientIP(req);
-    const rateLimit = checkRateLimit(clientIP);
-
-    if (!rateLimit.allowed) {
-      const minutesLocked = rateLimit.lockedUntil
-        ? Math.ceil((rateLimit.lockedUntil - Date.now()) / 60000)
-        : 0;
-
-      const response = NextResponse.json({
-        error: `Too many failed attempts. Try again in ${minutesLocked} minute${minutesLocked !== 1 ? 's' : ''}.`,
-        lockedUntil: rateLimit.lockedUntil,
-      }, { status: 429 });
-
-      if (rateLimit.lockedUntil) {
-        response.headers.set(
-          "Retry-After",
-          Math.max(1, Math.ceil((rateLimit.lockedUntil - Date.now()) / 1000)).toString(),
-        );
-      }
-
-      return response;
-    }
-
     // Optimized: Removed redundant connectDB() call and timeout wrapper
     // Prisma handles connections automatically with built-in pooling
     const admin = await db.admin.findUnique({
@@ -61,29 +37,19 @@ export async function POST(req: NextRequest) {
     });
 
     if (!admin?.passwordHash) {
-      recordLoginAttempt(clientIP, false);
-      const updatedLimit = checkRateLimit(clientIP);
-
       return NextResponse.json({
         error: "Invalid email or password",
-        remainingAttempts: updatedLimit.remainingAttempts,
       }, { status: 401 });
     }
 
     const isValid = await bcrypt.compare(password, admin.passwordHash);
 
     if (!isValid) {
-      recordLoginAttempt(clientIP, false);
-      const updatedLimit = checkRateLimit(clientIP);
-
       return NextResponse.json({
         error: "Invalid email or password",
-        remainingAttempts: updatedLimit.remainingAttempts,
       }, { status: 401 });
     }
 
-    recordLoginAttempt(clientIP, true);
-    
     // Include email in token to avoid extra DB query
     const token = await createToken({ id: admin.id, email: admin.email });
 

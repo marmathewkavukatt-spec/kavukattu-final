@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
-
 export default function Error({
   error,
   reset,
@@ -9,33 +7,13 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    // Log error to console for debugging
-    console.error('Application error:', error);
-
-    // Check if it's a chunk loading error
-    const isChunkError = 
-      error.message.includes('Loading chunk') ||
-      error.message.includes('ChunkLoadError') ||
-      error.message.includes('Failed to fetch dynamically imported module');
-
-    if (isChunkError) {
-      // Automatically reload the page once to get fresh chunks
-      if (!sessionStorage.getItem('chunk-error-reloaded')) {
-        sessionStorage.setItem('chunk-error-reloaded', 'true');
-        window.location.reload();
-      }
-    }
-  }, [error]);
+  console.error('Application error:', error);
 
   const handleReset = () => {
-    // Clear the reload flag
-    sessionStorage.removeItem('chunk-error-reloaded');
     reset();
   };
 
   const handleReload = () => {
-    sessionStorage.removeItem('chunk-error-reloaded');
     window.location.reload();
   };
 
@@ -63,7 +41,7 @@ export default function Error({
         </h1>
         
         <p className="text-gray-600 mb-6">
-          We encountered an unexpected error. This might be due to a recent update.
+          We encountered an unexpected error while loading this page.
         </p>
 
         <div className="space-y-3">
@@ -83,7 +61,7 @@ export default function Error({
         </div>
 
         <p className="mt-6 text-sm text-gray-500">
-          If the problem persists, please clear your browser cache and try again.
+          If the problem persists, please try again later.
         </p>
       </div>
     </div>

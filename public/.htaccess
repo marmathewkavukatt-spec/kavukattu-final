@@ -24,8 +24,9 @@
 </IfModule>
 
 <IfModule mod_headers.c>
-  # Long cache for static assets
-  Header set Cache-Control "public, max-age=31536000, immutable"
+  Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+  Header set Pragma "no-cache"
+  Header set Expires "0"
   Header set X-Content-Type-Options "nosniff"
 </IfModule>
 
