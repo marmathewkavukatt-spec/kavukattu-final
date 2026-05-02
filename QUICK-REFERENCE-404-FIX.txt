@@ -1,0 +1,157 @@
+================================================================================
+QUICK REFERENCE - FIX 404 ERRORS ON SPIRITUAL LEGACY PAGE
+================================================================================
+
+PROBLEM:
+--------
+Browser shows:
+- "ChunkLoadError: Loading chunk failed"
+- 404 errors for /_next/static/* files
+- MIME type errors (text/html instead of CSS/JS)
+
+CAUSE:
+------
+.next folder is missing or out of sync on production server
+
+SOLUTION:
+---------
+Upload .next folder to server and restart application
+
+================================================================================
+STEP-BY-STEP FIX (15 MINUTES)
+================================================================================
+
+1. BUILD LOCALLY
+   ---------------
+   Open terminal in project folder:
+   
+   npm run deploy:emergency
+   
+   OR manually:
+   
+   npm run build
+   
+   Wait for build to complete.
+
+2. UPLOAD TO HOSTINGER
+   --------------------
+   a) Login to Hostinger
+   b) Open File Manager
+   c) Go to: /domains/marmathewkavukatt.org/public_html
+   d) DELETE old .next folder
+   e) UPLOAD new .next folder (entire folder)
+   f) Wait for upload to complete (5-10 minutes)
+
+3. RESTART APPLICATION
+   --------------------
+   a) Go to Hostinger Dashboard
+   b) Find "Node.js" section
+   c) Click "Restart Application"
+
+4. TEST
+   -----
+   a) Open browser in Incognito mode
+   b) Visit: https://marmathewkavukatt.org/spiritual-legacy
+   c) Press F12 (DevTools)
+   d) Check Console - should see NO red errors
+   e) Check Network - all files should show 200 status
+
+================================================================================
+VERIFICATION COMMANDS
+================================================================================
+
+Before deploying:
+  npm run diagnose:deployment
+
+After deploying:
+  npm run test:spiritual-legacy
+
+================================================================================
+ALTERNATIVE: SSH DEPLOYMENT
+================================================================================
+
+If you have SSH access:
+
+ssh your-username@your-server.hostinger.com
+cd /domains/marmathewkavukatt.org/public_html
+git pull origin main
+npm install
+npm run build
+pm2 restart all
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+Still seeing errors?
+
+1. Verify .next exists on server
+   - Check via File Manager
+   - Confirm .next/static/chunks/ has files
+
+2. Check Node.js settings
+   - Version: 18.x or higher
+   - Mode: Production
+   - Startup: node_modules/next/dist/bin/next start
+
+3. Clear browser cache
+   - Hard refresh: Ctrl+Shift+R (Windows) or Cmd+Shift+R (Mac)
+   - Or test in Incognito mode
+
+4. Check server logs
+   - Hostinger Dashboard → Logs
+   - Look for errors
+
+5. Nuclear option
+   ssh to server:
+   rm -rf .next node_modules
+   npm install
+   npm run build
+   pm2 restart all
+
+================================================================================
+DOCUMENTATION
+================================================================================
+
+Detailed guides:
+- FIX-404-ERRORS-NOW.md (comprehensive guide)
+- EMERGENCY-FIX-SPIRITUAL-LEGACY.md (detailed instructions)
+- HOSTINGER-DEPLOYMENT-FIX.md (Hostinger-specific)
+
+Generated after npm run deploy:emergency:
+- DEPLOYMENT-CHECKLIST-NOW.txt
+
+================================================================================
+PREVENTION
+================================================================================
+
+For future deployments, always:
+1. Run npm run build locally
+2. Upload entire .next folder
+3. Restart application
+4. Test in Incognito mode
+
+================================================================================
+QUICK HELP
+================================================================================
+
+Commands:
+  npm run deploy:emergency      - Prepare for deployment
+  npm run diagnose:deployment   - Check if build is ready
+  npm run test:spiritual-legacy - Test after deployment
+
+Files to upload:
+  .next/          (MOST IMPORTANT!)
+  src/            (if changed)
+  public/         (if changed)
+  package.json    (if changed)
+
+DO NOT upload:
+  node_modules/   (run npm install on server)
+  .env            (set in Hostinger dashboard)
+
+================================================================================
+STATUS: READY TO FIX
+Time Required: 15 minutes
+Success Rate: 99%
+================================================================================

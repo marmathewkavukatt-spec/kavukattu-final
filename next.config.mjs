@@ -106,20 +106,12 @@ const nextConfig = {
         ],
       },
       {
-        // HTML pages - NO CACHE to always get fresh chunk references
+        // HTML pages - Short cache with stale-while-revalidate for better performance
         source: '/:path*',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'private, no-cache, no-store, max-age=0, must-revalidate',
-          },
-          {
-            key: 'Pragma',
-            value: 'no-cache',
-          },
-          {
-            key: 'Expires',
-            value: '0',
+            value: 'public, max-age=60, stale-while-revalidate=300',
           },
         ],
       },
@@ -127,8 +119,24 @@ const nextConfig = {
   },
 
   experimental: {
-    optimizePackageImports: ['framer-motion', 'lucide-react'],
+    optimizePackageImports: ['framer-motion', 'lucide-react', 'react-dom'],
     serverComponentsExternalPackages: ["pdfkit"],
+    optimizeCss: true, // Enable CSS optimization
+    scrollRestoration: true,
+  },
+
+  // Optimize imports for better tree-shaking
+  modularizeImports: {
+    'lucide-react': {
+      transform: 'lucide-react/dist/esm/icons/{{kebabCase member}}',
+    },
+  },
+
+  // Compiler optimizations
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
   },
 
   // CRITICAL: Generate unique build IDs to prevent chunk loading issues

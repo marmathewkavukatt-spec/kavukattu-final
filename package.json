@@ -29,7 +29,11 @@
     "diagnose:build": "node scripts/diagnose-build.js",
     "verify:images": "node scripts/verify-images.js",
     "verify:deployment": "node scripts/post-deploy-verify.js",
-    "deploy:prepare": "node scripts/prepare-hostinger-deploy.js"
+    "deploy:prepare": "node scripts/prepare-hostinger-deploy.js",
+    "diagnose:deployment": "node scripts/diagnose-deployment.js",
+    "deploy:emergency": "node scripts/prepare-emergency-deploy.js",
+    "test:spiritual-legacy": "node scripts/test-spiritual-legacy.js",
+    "perf:optimize": "node scripts/optimize-performance.js"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

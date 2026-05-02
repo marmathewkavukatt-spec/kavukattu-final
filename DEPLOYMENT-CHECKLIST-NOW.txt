@@ -1,0 +1,56 @@
+
+DEPLOYMENT CHECKLIST - 2026-05-02T06:31:42.265Z
+============================================================
+
+✅ Build completed successfully
+✅ .next folder is ready for upload
+
+NEXT STEPS:
+
+1. UPLOAD TO SERVER:
+   - Go to Hostinger File Manager
+   - Navigate to: /domains/marmathewkavukatt.org/public_html
+   - DELETE the old .next folder
+   - UPLOAD the new .next folder (this folder: C:\Users\antoj\Downloads\kavukattu project\kavukattu project\.next)
+   - Wait for upload to complete (may take 5-10 minutes)
+
+2. RESTART APPLICATION:
+   - Go to Hostinger Dashboard
+   - Find "Node.js" section
+   - Click "Restart Application"
+
+3. TEST:
+   - Open https://marmathewkavukatt.org/spiritual-legacy in Incognito mode
+   - Check browser console (F12) - should see NO errors
+   - Check Network tab - all files should load with 200 status
+
+4. VERIFY:
+   - Test other pages (home, about, gallery, etc.)
+   - Verify no 404 errors in console
+   - Check that CSS and JS are loading properly
+
+============================================================
+
+FILES TO UPLOAD:
+- .next/ (ENTIRE FOLDER - MOST IMPORTANT!)
+- src/ (if changed)
+- public/ (if changed)
+- package.json (if changed)
+- next.config.mjs (if changed)
+
+DO NOT UPLOAD:
+- node_modules/ (run npm install on server instead)
+- .env (set environment variables in Hostinger dashboard)
+
+============================================================
+
+TROUBLESHOOTING:
+
+If still seeing 404 errors after deployment:
+1. Verify .next folder exists on server
+2. Check .next/static/chunks/ has files
+3. Restart application again
+4. Clear browser cache (Ctrl+Shift+R)
+5. Test in Incognito mode
+
+============================================================

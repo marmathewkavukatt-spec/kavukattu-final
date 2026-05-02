@@ -1,0 +1,61 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 🚀 Deploy to Hostinger
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOSTINGER_HOST }}
+        username: ${{ secrets.HOSTINGER_USERNAME }}
+        password: ${{ secrets.HOSTINGER_PASSWORD }}
+        port: ${{ secrets.HOSTINGER_PORT || 22 }}
+        script: |
+          echo "=========================================="
+          echo "🚀 Starting Hostinger Deployment"
+          echo "=========================================="
+          
+          # Navigate to project directory
+          cd /domains/marmathewkavukatt.org/public_html || cd ~/public_html || exit 1
+          
+          echo "📁 Current directory: $(pwd)"
+          
+          # Pull latest code
+          echo "📥 Pulling latest code from Git..."
+          git pull origin main || git pull origin master
+          
+          # Run deployment script
+          if [ -f ".hostinger-deploy.sh" ]; then
+            echo "🔧 Running deployment script..."
+            chmod +x .hostinger-deploy.sh
+            ./.hostinger-deploy.sh
+          else
+            echo "⚠️  Deployment script not found, running manual steps..."
+            
+            # Install dependencies
+            echo "📦 Installing dependencies..."
+            npm install
+            
+            # Generate Prisma client
+            echo "🔧 Generating Prisma client..."
+            npx prisma generate
+            
+            # Build
+            echo "🏗️  Building application..."
+            npm run build
+            
+            # Restart
+            echo "🔄 Restarting application..."
+            pm2 restart all || echo "⚠️  Please restart manually"
+          fi
+          
+          echo "=========================================="
+          echo "✅ Deployment Complete!"
+          echo "=========================================="
