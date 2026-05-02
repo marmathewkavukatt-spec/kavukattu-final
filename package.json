@@ -28,7 +28,8 @@
     "fix:chunks": "node scripts/fix-chunk-errors.js",
     "diagnose:build": "node scripts/diagnose-build.js",
     "verify:images": "node scripts/verify-images.js",
-    "verify:deployment": "node scripts/post-deploy-verify.js"
+    "verify:deployment": "node scripts/post-deploy-verify.js",
+    "deploy:prepare": "node scripts/prepare-hostinger-deploy.js"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

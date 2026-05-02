@@ -131,10 +131,10 @@ const nextConfig = {
     serverComponentsExternalPackages: ["pdfkit"],
   },
 
-  // CRITICAL: Generate stable build IDs to prevent chunk loading issues
+  // CRITICAL: Generate unique build IDs to prevent chunk loading issues
   generateBuildId: async () => {
-    // Use environment variable or timestamp for unique builds
-    return process.env.BUILD_ID || `build-${Date.now()}`;
+    // Always use timestamp for unique builds to prevent cache conflicts
+    return `build-${Date.now()}`;
   },
 
   // CRITICAL: Ensure proper error handling for production

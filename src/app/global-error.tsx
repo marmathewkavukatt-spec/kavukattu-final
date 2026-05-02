@@ -10,71 +10,76 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log error in development only
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Global error:', error);
+    console.error('Global error:', error);
+
+    // Auto-reload for chunk errors
+    const isChunkError = 
+      error.message.includes('Loading chunk') ||
+      error.message.includes('ChunkLoadError') ||
+      error.message.includes('Failed to fetch');
+
+    if (isChunkError && !sessionStorage.getItem('global-error-reloaded')) {
+      sessionStorage.setItem('global-error-reloaded', 'true');
+      setTimeout(() => window.location.reload(), 100);
     }
   }, [error]);
 
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Error - Mar Mathew Kavukatt</title>
-      </head>
-      <body className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
-        <div className="max-w-2xl w-full text-center">
-          {/* Error Icon */}
-          <div className="mb-8 flex justify-center">
-            <div className="w-24 h-24 rounded-full bg-red-100 flex items-center justify-center">
-              <svg 
-                className="w-12 h-12 text-red-600" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" 
-                />
-              </svg>
-            </div>
-          </div>
-
-          {/* Error Message */}
-          <h1 className="text-3xl md:text-4xl font-bold text-stone-900 mb-4">
-            Application Error
-          </h1>
-          
-          <p className="text-lg text-stone-600 mb-8">
-            We're sorry, but something went wrong. Please try refreshing the page.
-          </p>
-
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button
-              onClick={reset}
-              className="px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors duration-200 shadow-md hover:shadow-lg"
-            >
-              Try Again
-            </button>
+    <html>
+      <body>
+        <div style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'linear-gradient(to bottom right, #eff6ff, #e0e7ff)',
+          padding: '1rem',
+          fontFamily: 'system-ui, -apple-system, sans-serif'
+        }}>
+          <div style={{
+            maxWidth: '28rem',
+            width: '100%',
+            background: 'white',
+            borderRadius: '0.5rem',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+            padding: '2rem',
+            textAlign: 'center'
+          }}>
+            <h1 style={{
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              color: '#111827',
+              marginBottom: '1rem'
+            }}>
+              Application Error
+            </h1>
             
-            <a
-              href="/"
-              className="px-6 py-3 bg-white text-red-600 border-2 border-red-600 rounded-lg font-semibold hover:bg-red-600 hover:text-white transition-colors duration-200 shadow-md hover:shadow-lg"
-            >
-              Return Home
-            </a>
-          </div>
-
-          {/* Additional Help */}
-          <div className="mt-12 pt-8 border-t border-stone-200">
-            <p className="text-sm text-stone-500">
-              If this problem persists, please refresh your browser or try again later.
+            <p style={{
+              color: '#6b7280',
+              marginBottom: '1.5rem'
+            }}>
+              The application encountered an error. Please reload the page.
             </p>
+
+            <button
+              onClick={() => {
+                sessionStorage.removeItem('global-error-reloaded');
+                window.location.reload();
+              }}
+              style={{
+                width: '100%',
+                background: '#4f46e5',
+                color: 'white',
+                fontWeight: '600',
+                padding: '0.75rem 1.5rem',
+                borderRadius: '0.5rem',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '1rem'
+              }}
+            >
+              Reload Page
+            </button>
           </div>
         </div>
       </body>

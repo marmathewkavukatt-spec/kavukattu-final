@@ -3,53 +3,56 @@
 /**
  * Fix Chunk Loading Errors Script
  * 
- * This script helps diagnose and fix common chunk loading errors in Next.js:
- * - Clears .next build directory
- * - Clears node_modules/.cache
- * - Provides instructions for clearing browser cache
+ * This script helps fix chunk loading errors by:
+ * 1. Clearing the .next build directory
+ * 2. Rebuilding the application
+ * 3. Providing deployment instructions
  */
 
+const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
 console.log('🔧 Fixing Chunk Loading Errors...\n');
 
-// Function to remove directory recursively
-function removeDir(dirPath) {
-  if (fs.existsSync(dirPath)) {
-    fs.rmSync(dirPath, { recursive: true, force: true });
-    console.log(`✅ Removed: ${dirPath}`);
-    return true;
-  }
-  console.log(`⚠️  Not found: ${dirPath}`);
-  return false;
+// Step 1: Remove .next directory
+console.log('📁 Step 1: Removing .next build directory...');
+const nextDir = path.join(process.cwd(), '.next');
+if (fs.existsSync(nextDir)) {
+  fs.rmSync(nextDir, { recursive: true, force: true });
+  console.log('✅ .next directory removed\n');
+} else {
+  console.log('ℹ️  .next directory does not exist\n');
 }
 
-// 1. Clear .next directory
-console.log('1️⃣  Clearing .next build directory...');
-removeDir(path.join(process.cwd(), '.next'));
+// Step 2: Rebuild
+console.log('🔨 Step 2: Rebuilding application...');
+try {
+  execSync('npm run build', { stdio: 'inherit' });
+  console.log('✅ Build completed successfully\n');
+} catch (error) {
+  console.error('❌ Build failed:', error.message);
+  process.exit(1);
+}
 
-// 2. Clear node_modules cache
-console.log('\n2️⃣  Clearing node_modules cache...');
-removeDir(path.join(process.cwd(), 'node_modules', '.cache'));
+// Step 3: Provide deployment instructions
+console.log('📋 Step 3: Deployment Instructions\n');
+console.log('After deploying, users may still see errors due to browser cache.');
+console.log('The application includes automatic recovery mechanisms:\n');
+console.log('1. ChunkErrorHandler - Auto-reloads page on chunk errors');
+console.log('2. ServiceWorkerManager - Clears old service workers and caches');
+console.log('3. Error boundaries - Provides user-friendly error pages\n');
 
-// 3. Instructions for browser cache
-console.log('\n3️⃣  Browser Cache Instructions:');
-console.log('   📱 Mobile (Chrome/Safari):');
-console.log('      - Open browser settings');
-console.log('      - Clear browsing data');
-console.log('      - Select "Cached images and files"');
-console.log('      - Clear data\n');
-console.log('   💻 Desktop:');
-console.log('      - Chrome: Ctrl+Shift+Delete (Cmd+Shift+Delete on Mac)');
-console.log('      - Firefox: Ctrl+Shift+Delete (Cmd+Shift+Delete on Mac)');
-console.log('      - Safari: Cmd+Option+E\n');
+console.log('🎯 Additional Steps for Users:\n');
+console.log('If users still experience issues, ask them to:');
+console.log('1. Hard refresh: Ctrl+Shift+R (Windows/Linux) or Cmd+Shift+R (Mac)');
+console.log('2. Clear browser cache and cookies');
+console.log('3. Close and reopen the browser\n');
 
-// 4. Next steps
-console.log('4️⃣  Next Steps:');
-console.log('   1. Run: npm run build');
-console.log('   2. Run: npm start');
-console.log('   3. Clear browser cache on mobile');
-console.log('   4. Hard refresh the page (Ctrl+Shift+R or Cmd+Shift+R)\n');
+console.log('🚀 Deployment Tips:\n');
+console.log('1. Upload the entire .next directory to your server');
+console.log('2. Ensure all static files in .next/static are accessible');
+console.log('3. Restart your Node.js server after deployment');
+console.log('4. Verify the deployment by checking browser console for errors\n');
 
-console.log('✨ Done! Follow the steps above to complete the fix.\n');
+console.log('✨ Done! Your application is ready for deployment.');
