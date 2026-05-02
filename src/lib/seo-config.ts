@@ -6,7 +6,7 @@ export const seoConfig = {
   siteName: "Mar Mathew Kavukatt",
   siteDescription: "Official website of Mar Mathew Kavukatt - First Archbishop of Changanacherry, Servant of God. Learn about his life, legacy, canonization process, and spiritual teachings.",
   siteUrl: getSiteUrl(),
-  defaultImage: "/uploads/logo.jpg",
+  defaultImage: "/uploads/mar-mathew-kavukatt-church-logo.jpg",
   twitterHandle: "@MarMathewKavukatt", // Update with actual handle
   facebookPage: "https://facebook.com/MarMathewKavukatt", // Update with actual page
   instagramHandle: "@marmathewkavukatt", // Update with actual handle

@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
     <category>Spirituality</category>
     <ttl>60</ttl>
     <image>
-      <url>${baseUrl}/uploads/logo.jpg</url>
+      <url>${baseUrl}/uploads/mar-mathew-kavukatt-church-logo.jpg</url>
       <title>Mar Mathew Kavukatt</title>
       <link>${baseUrl}</link>
       <width>144</width>
