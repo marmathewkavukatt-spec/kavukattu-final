@@ -121,7 +121,7 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['framer-motion', 'lucide-react', 'react-dom'],
     serverComponentsExternalPackages: ["pdfkit"],
-    optimizeCss: true, // Enable CSS optimization
+    // optimizeCss: true, // Disabled - requires critters package
     scrollRestoration: true,
   },
 
