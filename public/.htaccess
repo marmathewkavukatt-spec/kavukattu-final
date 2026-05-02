@@ -1,0 +1,38 @@
+# Public Directory Configuration
+# Ensure proper MIME types for static assets
+
+<IfModule mod_mime.c>
+  # Images
+  AddType image/webp .webp
+  AddType image/avif .avif
+  AddType image/svg+xml .svg
+  AddType image/png .png
+  AddType image/jpeg .jpg .jpeg
+  AddType image/gif .gif
+  
+  # Documents
+  AddType application/pdf .pdf
+  AddType application/json .json
+  AddType text/xml .xml
+  AddType text/plain .txt
+  
+  # Fonts
+  AddType font/woff2 .woff2
+  AddType font/woff .woff
+  AddType font/ttf .ttf
+  AddType font/otf .otf
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Long cache for static assets
+  Header set Cache-Control "public, max-age=31536000, immutable"
+  Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
+# Enable compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE image/svg+xml application/json text/xml text/plain
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes

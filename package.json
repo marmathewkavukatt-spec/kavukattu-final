@@ -33,7 +33,9 @@
     "diagnose:deployment": "node scripts/diagnose-deployment.js",
     "deploy:emergency": "node scripts/prepare-emergency-deploy.js",
     "test:spiritual-legacy": "node scripts/test-spiritual-legacy.js",
-    "perf:optimize": "node scripts/optimize-performance.js"
+    "perf:optimize": "node scripts/optimize-performance.js",
+    "verify:hostinger": "node scripts/verify-hostinger-deployment.js",
+    "test:mime": "bash scripts/test-mime-types.sh"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

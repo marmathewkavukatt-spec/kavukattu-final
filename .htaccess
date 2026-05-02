@@ -1,0 +1,122 @@
+# Hostinger Next.js Configuration
+# Fix MIME types and routing for Next.js application
+
+# Enable RewriteEngine
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+</IfModule>
+
+# ============================================
+# MIME Type Fixes (CRITICAL for Next.js)
+# ============================================
+<IfModule mod_mime.c>
+  # JavaScript
+  AddType application/javascript .js .mjs
+  AddType application/json .json
+  
+  # CSS
+  AddType text/css .css
+  
+  # Images
+  AddType image/webp .webp
+  AddType image/avif .avif
+  AddType image/svg+xml .svg
+  AddType image/png .png
+  AddType image/jpeg .jpg .jpeg
+  AddType image/gif .gif
+  
+  # Fonts
+  AddType font/woff2 .woff2
+  AddType font/woff .woff
+  AddType font/ttf .ttf
+  AddType font/otf .otf
+  
+  # Other
+  AddType application/xml .xml
+  AddType text/plain .txt
+</IfModule>
+
+# ============================================
+# Security Headers
+# ============================================
+<IfModule mod_headers.c>
+  # Prevent MIME type sniffing
+  Header set X-Content-Type-Options "nosniff"
+  
+  # Enable XSS protection
+  Header set X-XSS-Protection "1; mode=block"
+  
+  # Prevent clickjacking
+  Header set X-Frame-Options "SAMEORIGIN"
+  
+  # Referrer policy
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  
+  # Content Security Policy (adjust as needed)
+  Header set Content-Security-Policy "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: blob:; font-src 'self' data: https:; connect-src 'self' https:; media-src 'self' https:; object-src 'none'; frame-ancestors 'self';"
+</IfModule>
+
+# ============================================
+# Caching Strategy (matches next.config.mjs)
+# ============================================
+<IfModule mod_headers.c>
+  # Next.js static assets - immutable with long cache
+  <FilesMatch "\.(js|css|woff2?|ttf|otf|eot|svg|png|jpg|jpeg|gif|webp|avif|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  
+  # HTML files - short cache with revalidation
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "public, max-age=60, stale-while-revalidate=300"
+  </FilesMatch>
+  
+  # JSON and XML - no cache
+  <FilesMatch "\.(json|xml)$">
+    Header set Cache-Control "private, no-cache, no-store, max-age=0, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# ============================================
+# Compression (if not already enabled by Hostinger)
+# ============================================
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json application/xml image/svg+xml
+</IfModule>
+
+# ============================================
+# Next.js Routing
+# ============================================
+<IfModule mod_rewrite.c>
+  # Don't rewrite files that exist
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  
+  # Don't rewrite Next.js static files
+  RewriteRule ^_next/.* - [L]
+  RewriteRule ^api/.* - [L]
+  RewriteRule ^uploads/.* - [L]
+  
+  # Proxy all other requests to Next.js (if using Node.js hosting)
+  # RewriteRule ^(.*)$ http://localhost:3000/$1 [P,L]
+</IfModule>
+
+# ============================================
+# Error Pages
+# ============================================
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html
+
+# ============================================
+# Disable Directory Browsing
+# ============================================
+Options -Indexes
+
+# ============================================
+# Protect Sensitive Files
+# ============================================
+<FilesMatch "^\.env|^\.git|package\.json|package-lock\.json|tsconfig\.json|next\.config\.(js|mjs)|\.md$">
+  Order allow,deny
+  Deny from all
+</FilesMatch>

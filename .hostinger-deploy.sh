@@ -41,6 +41,21 @@ if [ -d ".next" ]; then
   echo ""
 fi
 
+# Verify .htaccess files exist
+echo "🔍 Checking .htaccess files..."
+if [ ! -f ".htaccess" ]; then
+  echo "⚠️  Warning: .htaccess file not found in root"
+else
+  echo "✅ Root .htaccess found"
+fi
+
+if [ ! -f "public/.htaccess" ]; then
+  echo "⚠️  Warning: .htaccess file not found in public/"
+else
+  echo "✅ Public .htaccess found"
+fi
+echo ""
+
 # Build Next.js application
 echo "🏗️  Building Next.js application..."
 echo "⏳ This may take a few minutes..."
