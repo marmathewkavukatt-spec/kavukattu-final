@@ -33,11 +33,16 @@ npx prisma generate
 echo "✅ Prisma client generated"
 echo ""
 
-# Remove old build
-if [ -d ".next" ]; then
-  echo "🗑️  Removing old build..."
-  rm -rf .next
-  echo "✅ Old build removed"
+# Preserve old static assets before rebuilding.
+# Browsers can keep HTML that points at the previous build for a short time; keeping
+# old hashed chunks available prevents refreshes from receiving HTML for JS/CSS.
+STATIC_BACKUP=".next-static-backup"
+rm -rf "$STATIC_BACKUP"
+if [ -d ".next/static" ]; then
+  echo "💾 Backing up existing static assets..."
+  mkdir -p "$STATIC_BACKUP"
+  cp -a .next/static/. "$STATIC_BACKUP"/
+  echo "✅ Existing static assets backed up"
   echo ""
 fi
 
@@ -60,6 +65,17 @@ echo ""
 echo "🏗️  Building Next.js application..."
 echo "⏳ This may take a few minutes..."
 npm run build
+
+# Restore previous hashed static assets alongside the new build.
+# Do not overwrite new files; this only fills in old chunk/css URLs that a browser
+# may still request immediately after deployment.
+if [ -d "$STATIC_BACKUP" ] && [ -d ".next/static" ]; then
+  echo ""
+  echo "🔁 Restoring previous static assets for refresh compatibility..."
+  cp -an "$STATIC_BACKUP"/. .next/static/ 2>/dev/null || true
+  rm -rf "$STATIC_BACKUP"
+  echo "✅ Previous static assets retained"
+fi
 
 # Verify build succeeded
 if [ -d ".next" ]; then

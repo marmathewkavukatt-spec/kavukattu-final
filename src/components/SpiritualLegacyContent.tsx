@@ -31,19 +31,23 @@ export default function SpiritualLegacyContent() {
   const tr = t[lang];
   
   const [
+    foundationLabel,
     charityTitle,
     charityDescription,
     humilityTitle,
     humilityDescription,
     serviceTitle,
     serviceDescription,
+    ministryQuoteText,
   ] = useTranslate([
+    "Foundation",
     "Charity",
     "A shepherd who saw Christ in the suffering and the poor",
     "Humility",
     "A leader who carried authority with simplicity and gentleness",
     "Service",
     "A life poured out for the Church and its people, without seeking recognition",
+    "His ministry was not about position, but about presence — especially among those forgotten by society.",
   ]);
 
   return (
@@ -69,7 +73,7 @@ export default function SpiritualLegacyContent() {
           >
             <motion.div variants={fadeInUp} className="text-center mb-12 md:mb-16">
               <div className="inline-block mb-4">
-                <span className="text-gold text-sm font-semibold tracking-wider uppercase">Foundation</span>
+                <span className="text-gold text-sm font-semibold tracking-wider uppercase">{foundationLabel}</span>
               </div>
               <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-accent mb-6">
                 {tr.coreValues}
@@ -139,7 +143,7 @@ export default function SpiritualLegacyContent() {
             >
               <div className="bg-accent/5 border-l-4 border-gold rounded-r-xl p-6 lg:p-8">
                 <p className="text-stone-700 leading-relaxed text-lg lg:text-xl italic">
-                  His ministry was not about position, but about presence — especially among those forgotten by society.
+                  {ministryQuoteText}
                 </p>
               </div>
             </motion.div>
@@ -165,6 +169,7 @@ export default function SpiritualLegacyContent() {
 // Motto Section Component with Logo Background
 function MottoSection() {
   const [
+    mottoTitleText,
     toServeWithLoveText,
     mottoDescriptionText,
     servireHeadingText,
@@ -174,6 +179,7 @@ function MottoSection() {
     caritateDescriptionText,
     mottoConclusionText,
   ] = useTranslate([
+    "Servire in Caritate",
     "\"To Serve with Love\"",
     "This was not merely a motto, but the guiding force of his entire life.",
     "Servire (To Serve)",
@@ -211,7 +217,7 @@ function MottoSection() {
             </div>
             
             <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)]">
-              Servire in Caritate
+              {mottoTitleText}
             </h2>
              
             <p className="text-xl md:text-2xl mb-6 text-white font-light italic drop-shadow-[0_1px_10px_rgba(0,0,0,0.30)]">
@@ -279,6 +285,7 @@ function MottoSection() {
 // Pastoral Vision Section Component
 function PastoralVisionSection() {
   const [
+    visionLabel,
     pastoralVisionTitle,
     pastoralVisionSubtitle,
     aChurchText,
@@ -291,6 +298,7 @@ function PastoralVisionSection() {
     whereFaithLeadsText,
     faithBeyondWordsText,
   ] = useTranslate([
+    "Vision",
     "Pastoral Vision",
     "His vision of the Church was clear and deeply human:",
     "A Church",
@@ -315,7 +323,7 @@ function PastoralVisionSection() {
         >
           <motion.div variants={fadeInUp} className="text-center mb-12 md:mb-16">
             <div className="inline-block mb-4">
-              <span className="text-gold text-sm font-semibold tracking-wider uppercase">Vision</span>
+              <span className="text-gold text-sm font-semibold tracking-wider uppercase">{visionLabel}</span>
             </div>
             <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-accent mb-6">
               {pastoralVisionTitle}
@@ -382,6 +390,7 @@ function PastoralVisionSection() {
 // Heart for the Poor Section Component — Dark accent background with quote focal point
 function HeartForPoorSection() {
   const [
+    compassionLabel,
     heartForPoorTitle,
     heartForPoorSubtitle,
     lazarusQuoteText,
@@ -394,6 +403,7 @@ function HeartForPoorSection() {
     actionDescription,
     heartForPoorConclusion,
   ] = useTranslate([
+    "Compassion",
     "Heart for the Poor",
     "One of the most powerful expressions of his spirituality was his concern for the marginalized.",
     "\"Let there be no Lazarus at our doorstep whom we fail to notice.\"",
@@ -430,7 +440,7 @@ function HeartForPoorSection() {
           {/* Header */}
           <motion.div variants={fadeInUp} className="text-center mb-12">
             <div className="inline-block mb-4">
-              <span className="text-gold text-sm font-semibold tracking-wider uppercase">Compassion</span>
+              <span className="text-gold text-sm font-semibold tracking-wider uppercase">{compassionLabel}</span>
             </div>
             <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
               {heartForPoorTitle}
@@ -511,6 +521,7 @@ function HeartForPoorSection() {
 // Living Inspiration Section Component — Split layout with large numbered items
 function LivingInspirationSection() {
   const [
+    legacyLabel,
     livingInspirationTitle,
     livingInspirationSubtitle,
     leadersText,
@@ -521,6 +532,7 @@ function LivingInspirationSection() {
     communitiesRestText,
     livingInspirationConclusion,
   ] = useTranslate([
+    "Legacy",
     "Living Inspiration",
     "Even today, his life continues to inspire:",
     "Leaders",
@@ -571,7 +583,7 @@ function LivingInspirationSection() {
           {/* Header */}
           <motion.div variants={fadeInUp} className="text-center mb-12">
             <div className="inline-block mb-4">
-              <span className="text-gold text-sm font-semibold tracking-wider uppercase">Legacy</span>
+              <span className="text-gold text-sm font-semibold tracking-wider uppercase">{legacyLabel}</span>
             </div>
             <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-accent mb-4">
               {livingInspirationTitle}

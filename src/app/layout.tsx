@@ -8,6 +8,7 @@ import Preloader from "@/components/Preloader";
 import ChunkErrorHandler from "@/components/ChunkErrorHandler";
 import ServiceWorkerManager from "@/components/ServiceWorkerManager";
 import ProductionErrorBoundary from "@/components/ProductionErrorBoundary";
+import Script from "next/script";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -88,6 +89,38 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${cormorant.variable} ${dmSans.variable} ${manjari.variable}`}>
       <head>
+        <Script
+          id="next-static-recovery"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+(function () {
+  var key = "next-static-recovery";
+  function recover() {
+    try {
+      if (sessionStorage.getItem(key) === "1") return;
+      sessionStorage.setItem(key, "1");
+    } catch (error) {
+      return;
+    }
+    var url = new URL(window.location.href);
+    url.searchParams.set("__reload", Date.now().toString());
+    window.location.replace(url.toString());
+  }
+  window.addEventListener("load", function () {
+    try { sessionStorage.removeItem(key); } catch (error) {}
+  });
+  window.addEventListener("error", function (event) {
+    var target = event.target;
+    if (!target || target === window) return;
+    var url = target.src || target.href || "";
+    if (typeof url === "string" && url.indexOf("/_next/static/") !== -1) {
+      recover();
+    }
+  }, true);
+})();`,
+          }}
+        />
         {/* Structured Data */}
         <StructuredData type="organization" />
         <StructuredData type="person" />

@@ -54,7 +54,20 @@ const nextConfig = {
   async headers() {
     return [
       {
-        // Next.js static assets - immutable with long cache (must be first)
+        // HTML pages - never cache build-specific markup.
+        // Cached HTML can reference old hashed _next/static files after a deploy,
+        // which browsers report as JS/CSS MIME errors on refresh.
+        // Keep this first so more specific asset/API rules below can override it.
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'private, no-cache, no-store, max-age=0, must-revalidate',
+          },
+        ],
+      },
+      {
+        // Next.js static assets - immutable with long cache
         source: '/_next/static/:path*',
         headers: [
           {
@@ -102,16 +115,6 @@ const nextConfig = {
           {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
-          },
-        ],
-      },
-      {
-        // HTML pages - Short cache with stale-while-revalidate for better performance
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=60, stale-while-revalidate=300',
           },
         ],
       },
