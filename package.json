@@ -22,9 +22,13 @@
     "seo:audit": "node scripts/seo-audit.js",
     "seo:check": "node scripts/seo-audit.js",
     "server:info": "node scripts/show-server-info.js",
-    "build:production": "npm run seo:audit && npm run security:audit && npm run optimize:gallery && npm run build",
+    "build:production": "node scripts/production-deploy.js",
     "perf:analyze": "node scripts/apply-performance-optimizations.js",
-    "perf:test": "echo 'Run: autocannon -c 100 -d 30 https://marmathewkavukatt.org'"
+    "perf:test": "echo 'Run: autocannon -c 100 -d 30 https://marmathewkavukatt.org'",
+    "fix:chunks": "node scripts/fix-chunk-errors.js",
+    "diagnose:build": "node scripts/diagnose-build.js",
+    "verify:images": "node scripts/verify-images.js",
+    "verify:deployment": "node scripts/post-deploy-verify.js"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

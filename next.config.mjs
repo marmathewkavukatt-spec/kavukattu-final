@@ -50,7 +50,7 @@ const nextConfig = {
     ];
   },
 
-  // OPTIMIZED: Aggressive caching for static assets, CDN-friendly headers
+  // PRODUCTION-SAFE: Bulletproof caching strategy to prevent chunk errors
   async headers() {
     return [
       {
@@ -61,15 +61,33 @@ const nextConfig = {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
           },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
         ],
       },
       {
-        // Public uploads - long cache
+        // Next.js build data - no cache to prevent stale references
+        source: '/_next/data/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'private, no-cache, no-store, max-age=0, must-revalidate',
+          },
+        ],
+      },
+      {
+        // Public uploads - long cache with revalidation
         source: '/uploads/:path*',
         headers: [
           {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
           },
         ],
       },
@@ -79,7 +97,29 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, s-maxage=60, stale-while-revalidate=300',
+            value: 'private, no-cache, no-store, max-age=0, must-revalidate',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+        ],
+      },
+      {
+        // HTML pages - NO CACHE to always get fresh chunk references
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'private, no-cache, no-store, max-age=0, must-revalidate',
+          },
+          {
+            key: 'Pragma',
+            value: 'no-cache',
+          },
+          {
+            key: 'Expires',
+            value: '0',
           },
         ],
       },
@@ -89,6 +129,19 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['framer-motion', 'lucide-react'],
     serverComponentsExternalPackages: ["pdfkit"],
+  },
+
+  // CRITICAL: Generate stable build IDs to prevent chunk loading issues
+  generateBuildId: async () => {
+    // Use environment variable or timestamp for unique builds
+    return process.env.BUILD_ID || `build-${Date.now()}`;
+  },
+
+  // CRITICAL: Ensure proper error handling for production
+  onDemandEntries: {
+    // Keep pages in memory longer to prevent premature unloading
+    maxInactiveAge: 60 * 1000,
+    pagesBufferLength: 5,
   },
 
   // Webpack configuration for additional security and performance

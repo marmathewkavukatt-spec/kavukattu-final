@@ -5,6 +5,9 @@ import { getSiteMetadataBase } from "@/lib/site-url";
 import { seoConfig, generatePageMetadata } from "@/lib/seo-config";
 import StructuredData from "@/components/StructuredData";
 import Preloader from "@/components/Preloader";
+import ChunkErrorHandler from "@/components/ChunkErrorHandler";
+import ServiceWorkerManager from "@/components/ServiceWorkerManager";
+import ProductionErrorBoundary from "@/components/ProductionErrorBoundary";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -113,9 +116,15 @@ export default function RootLayout({
         <link rel="author" href="/humans.txt" />
       </head>
       <body className="min-h-screen antialiased">
-        {/* Preloader — shows before React hydrates */}
-        <Preloader />
-        {children}
+        <ProductionErrorBoundary>
+          {/* Service Worker Manager - clears old caches */}
+          <ServiceWorkerManager />
+          {/* Chunk Error Handler - automatically reloads on chunk errors */}
+          <ChunkErrorHandler />
+          {/* Preloader — shows before React hydrates */}
+          <Preloader />
+          {children}
+        </ProductionErrorBoundary>
       </body>
     </html>
   );
