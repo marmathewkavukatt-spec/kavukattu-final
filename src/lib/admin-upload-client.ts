@@ -13,7 +13,9 @@ function getHttpStatusFallbackMessage(status: number) {
 }
 
 async function getResponseErrorMessage(response: Response) {
-  const data = await response.clone().json().catch(() => null);
+  // Try to parse as JSON first
+  const clonedResponse = response.clone();
+  const data = await clonedResponse.json().catch(() => null);
 
   if (data && typeof data === "object") {
     const candidate = "error" in data ? (data as { error?: unknown }).error : undefined;
@@ -32,8 +34,10 @@ async function getResponseErrorMessage(response: Response) {
     }
   }
 
-  const text = await response.text().catch(() => "");
-  return text.trim() || getHttpStatusFallbackMessage(response.status);
+  // If JSON parsing failed or didn't contain error info, try reading as text
+  // Use the cloned response to avoid "body already used" error
+  const text = await response.clone().text().catch(() => "");
+  return text.trim() || getHttpStatusFallbackMessage(response.status) || "An error occurred. Please try again.";
 }
 
 export async function uploadAdminFile(file: File, options: { storage?: "auto" | "local" } = {}) {

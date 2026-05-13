@@ -8,12 +8,13 @@ export const metadata = { title: "Kavukattu", description: "Archives and documen
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-function slugToCategory(slug: string): ArchiveCategory | undefined {
+function slugToCategory(slug: string): string | undefined {
   const normalized = slug.trim().toLowerCase();
   if (normalized === "pastoral-letters") return "PASTORAL_LETTERS";
   if (normalized === "circulars") return "CIRCULARS";
   if (normalized === "others") return "OTHERS";
-  return undefined;
+  // Return the slug as-is for custom categories
+  return slug.trim() || undefined;
 }
 
 function getActiveSlug(slug: string | undefined): ArchiveCategorySlug {

@@ -26,12 +26,15 @@ export default function AddCategoryPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        setMessage({ text: data.error || "Save failed. Please try again.", type: "error" });
+        const data = await response.json().catch(() => ({}));
+        const errorMessage = data.error || "Save failed. Please try again.";
+        setMessage({ text: errorMessage, type: "error" });
         return;
       }
+
+      const data = await response.json().catch(() => ({}));
 
       setMessage({ text: "Category added successfully!", type: "success" });
       
@@ -91,10 +94,11 @@ export default function AddCategoryPage() {
 
       if (shouldDeleteFromServer) {
         const response = await deleteUploadedFile(form.coverImage);
-        const data = await response.json().catch(() => ({}));
-
+        
         if (!response.ok) {
-          setMessage({ text: data.error || "Failed to remove cover image.", type: "error" });
+          const data = await response.json().catch(() => ({}));
+          const errorMessage = data.error || "Failed to remove cover image. Please try again.";
+          setMessage({ text: errorMessage, type: "error" });
           return;
         }
       }

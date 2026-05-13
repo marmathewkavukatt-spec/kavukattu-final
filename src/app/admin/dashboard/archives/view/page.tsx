@@ -5,11 +5,9 @@ import { useEffect, useMemo, useState } from "react";
 import BackButton from "@/components/BackButton";
 import AdminMessage from "@/components/AdminMessage";
 
-type ArchiveCategory = "PASTORAL_LETTERS" | "CIRCULARS" | "OTHERS";
-
 interface ArchiveDocument {
   _id: string;
-  category: ArchiveCategory;
+  category: string;
   title?: string | null;
   subtitle?: string | null;
   description?: string | null;
@@ -20,17 +18,12 @@ interface ArchiveDocument {
   createdAt: string;
 }
 
-const CATEGORY_TABS: Array<{ key: "ALL" | ArchiveCategory; label: string }> = [
-  { key: "ALL", label: "All" },
-  { key: "PASTORAL_LETTERS", label: "Pastoral letters" },
-  { key: "CIRCULARS", label: "Circulars" },
-  { key: "OTHERS", label: "Others" },
-];
-
-function formatCategory(category: ArchiveCategory) {
+function formatCategory(category: string) {
   if (category === "PASTORAL_LETTERS") return "Pastoral letters";
   if (category === "CIRCULARS") return "Circulars";
-  return "Others";
+  if (category === "OTHERS") return "Others";
+  // Return custom categories as-is
+  return category;
 }
 
 function getDisplayTitle(item: ArchiveDocument) {
@@ -44,7 +37,7 @@ export default function ViewArchivesPage() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [bulkDeleting, setBulkDeleting] = useState(false);
   const [deleteProgress, setDeleteProgress] = useState<{ deleted: number; total: number } | null>(null);
-  const [activeTab, setActiveTab] = useState<(typeof CATEGORY_TABS)[number]["key"]>("ALL");
+  const [activeTab, setActiveTab] = useState<string>("ALL");
 
   async function load() {
     setLoading(true);
@@ -59,6 +52,36 @@ export default function ViewArchivesPage() {
     load();
   }, []);
 
+  // Generate dynamic category tabs from actual data
+  const categoryTabs = useMemo(() => {
+    const tabs: Array<{ key: string; label: string }> = [{ key: "ALL", label: "All" }];
+    const uniqueCategories = new Set<string>();
+    
+    items.forEach((item) => {
+      uniqueCategories.add(item.category);
+    });
+
+    // Add predefined categories first
+    if (uniqueCategories.has("PASTORAL_LETTERS")) {
+      tabs.push({ key: "PASTORAL_LETTERS", label: "Pastoral letters" });
+    }
+    if (uniqueCategories.has("CIRCULARS")) {
+      tabs.push({ key: "CIRCULARS", label: "Circulars" });
+    }
+    if (uniqueCategories.has("OTHERS")) {
+      tabs.push({ key: "OTHERS", label: "Others" });
+    }
+
+    // Add custom categories
+    uniqueCategories.forEach((category) => {
+      if (!["PASTORAL_LETTERS", "CIRCULARS", "OTHERS"].includes(category)) {
+        tabs.push({ key: category, label: formatCategory(category) });
+      }
+    });
+
+    return tabs;
+  }, [items]);
+
   const filteredItems = useMemo(() => {
     if (activeTab === "ALL") return items;
     return items.filter((item) => item.category === activeTab);
@@ -69,17 +92,18 @@ export default function ViewArchivesPage() {
     for (const item of items) {
       next[item.category] = (next[item.category] ?? 0) + 1;
     }
-    return next as Record<"ALL" | ArchiveCategory, number>;
+    return next;
   }, [items]);
 
   async function handleDelete(id: string) {
     if (!confirm("Delete this document?")) return;
 
     const response = await fetch(`/api/archives/${id}`, { method: "DELETE" });
-    const data = await response.json().catch(() => ({}));
-
+    
     if (!response.ok) {
-      setMessage({ text: data.error || "Delete failed. Please try again.", type: "error" });
+      const data = await response.json().catch(() => ({}));
+      const errorMessage = data.error || "Delete failed. Please try again.";
+      setMessage({ text: errorMessage, type: "error" });
       return;
     }
 
@@ -251,7 +275,7 @@ export default function ViewArchivesPage() {
       )}
 
       <div className="mt-6 flex flex-wrap gap-2">
-        {CATEGORY_TABS.map((tab) => (
+        {categoryTabs.map((tab) => (
           <button
             key={tab.key}
             type="button"

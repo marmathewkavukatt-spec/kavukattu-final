@@ -121,10 +121,11 @@ export default function EditExperiencePage() {
 
       if (shouldDeleteFromServer) {
         const response = await deleteUploadedFile(form.authorImage);
-        const data = await response.json().catch(() => ({}));
-
+        
         if (!response.ok) {
-          setMessage({ text: data.error || "Failed to remove uploaded image.", type: "error" });
+          const data = await response.json().catch(() => ({}));
+          const errorMessage = data.error || "Failed to remove uploaded image. Please try again.";
+          setMessage({ text: errorMessage, type: "error" });
           return;
         }
       }

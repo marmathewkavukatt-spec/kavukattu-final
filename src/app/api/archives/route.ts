@@ -7,22 +7,12 @@ import {
   getSafeJsonBody,
   toAssetUrl,
   toOptionalString,
+  toRequiredString,
 } from "@/lib/requestValidation";
 
-const ARCHIVE_CATEGORIES = ["PASTORAL_LETTERS", "CIRCULARS", "OTHERS"] as const;
-type ArchiveCategory = (typeof ARCHIVE_CATEGORIES)[number];
-
 function toArchiveCategory(value: unknown) {
-  if (typeof value !== "string") {
-    throw new RequestValidationError("category is required.");
-  }
-
-  const normalized = value.trim().toUpperCase();
-  if (!(ARCHIVE_CATEGORIES as readonly string[]).includes(normalized)) {
-    throw new RequestValidationError("Invalid category.");
-  }
-
-  return normalized as ArchiveCategory;
+  const category = toRequiredString(value, "category", { minLength: 1, maxLength: 100 });
+  return category;
 }
 
 function toOptionalBytes(value: unknown, fieldName: string) {

@@ -24,11 +24,11 @@ export interface PublicResource {
   order: number;
 }
 
-export type ArchiveCategory = "PASTORAL_LETTERS" | "CIRCULARS" | "OTHERS";
+export type ArchiveCategory = "PASTORAL_LETTERS" | "CIRCULARS" | "OTHERS" | string;
 
 export interface PublicArchiveDocument {
   _id: string;
-  category: ArchiveCategory;
+  category: string;
   title?: string;
   subtitle?: string;
   description?: string;
@@ -172,10 +172,10 @@ function isArchiveCategory(value: unknown): value is ArchiveCategory {
   return typeof value === "string" && (ARCHIVE_CATEGORIES as readonly string[]).includes(value);
 }
 
-export async function getPublicArchiveDocuments(category?: ArchiveCategory): Promise<PublicArchiveDocument[]> {
+export async function getPublicArchiveDocuments(category?: string): Promise<PublicArchiveDocument[]> {
   try {
     const items = await db.archiveDocument.findMany({
-      where: category && isArchiveCategory(category) ? { category } : undefined,
+      where: category ? { category } : undefined,
       orderBy: { createdAt: "desc" },
       select: {
         id: true,
@@ -193,7 +193,7 @@ export async function getPublicArchiveDocuments(category?: ArchiveCategory): Pro
 
     return items.map((item) => ({
       _id: item.id,
-      category: item.category as ArchiveCategory,
+      category: item.category,
       title: nullToUndefined(item.title),
       subtitle: nullToUndefined(item.subtitle),
       description: nullToUndefined(item.description),
@@ -230,7 +230,7 @@ export async function getPublicArchiveDocumentById(id: string): Promise<PublicAr
 
     return {
       _id: item.id,
-      category: item.category as ArchiveCategory,
+      category: item.category,
       title: nullToUndefined(item.title),
       subtitle: nullToUndefined(item.subtitle),
       description: nullToUndefined(item.description),

@@ -10,19 +10,18 @@ import { uploadAdminFile } from "@/lib/admin-upload-client";
 const TITLE_MAX_LENGTH = 180;
 const SUBTITLE_MAX_LENGTH = 300;
 const DESCRIPTION_MAX_LENGTH = 5000;
+const CATEGORY_MAX_LENGTH = 100;
 
-const CATEGORY_OPTIONS = [
-  { value: "PASTORAL_LETTERS", label: "Pastoral letters" },
-  { value: "CIRCULARS", label: "Circulars" },
-  { value: "OTHERS", label: "Others" },
-] as const;
-
-type ArchiveCategoryValue = (typeof CATEGORY_OPTIONS)[number]["value"];
+const PREDEFINED_CATEGORIES = [
+  "Pastoral letters",
+  "Circulars",
+  "Others",
+];
 
 export default function AddArchiveDocumentPage() {
   const router = useRouter();
   const [form, setForm] = useState<{
-    category: ArchiveCategoryValue;
+    category: string;
     title: string;
     subtitle: string;
     description: string;
@@ -31,7 +30,7 @@ export default function AddArchiveDocumentPage() {
     fileType: string;
     fileSize: number;
   }>({
-    category: CATEGORY_OPTIONS[0].value,
+    category: PREDEFINED_CATEGORIES[0],
     title: "",
     subtitle: "",
     description: "",
@@ -40,6 +39,8 @@ export default function AddArchiveDocumentPage() {
     fileType: "",
     fileSize: 0,
   });
+  const [customCategory, setCustomCategory] = useState("");
+  const [showCustomInput, setShowCustomInput] = useState(false);
   const [uploadedSessionFileUrl, setUploadedSessionFileUrl] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -60,8 +61,15 @@ export default function AddArchiveDocumentPage() {
     e.preventDefault();
     setMessage(null);
 
-    if (!form.category) {
-      setMessage({ text: "Please choose a category.", type: "error" });
+    const finalCategory = showCustomInput ? customCategory.trim() : form.category;
+
+    if (!finalCategory) {
+      setMessage({ text: "Please enter or select a category.", type: "error" });
+      return;
+    }
+
+    if (finalCategory.length > CATEGORY_MAX_LENGTH) {
+      setMessage({ text: `Category is too long. Maximum ${CATEGORY_MAX_LENGTH} characters.`, type: "error" });
       return;
     }
 
@@ -73,7 +81,7 @@ export default function AddArchiveDocumentPage() {
     setSaving(true);
     try {
       const body = {
-        category: form.category,
+        category: finalCategory,
         title: form.title || undefined,
         subtitle: form.subtitle || undefined,
         description: form.description || undefined,
@@ -88,17 +96,20 @@ export default function AddArchiveDocumentPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        setMessage({ text: data.error || "Document save failed. Please try again.", type: "error" });
+        const data = await response.json().catch(() => ({}));
+        const errorMessage = data.error || "Document save failed. Please try again.";
+        setMessage({ text: errorMessage, type: "error" });
         return;
       }
+
+      const data = await response.json().catch(() => ({}));
 
       setMessage({ text: "Document added successfully.", type: "success" });
       setUploadedSessionFileUrl(null);
       setForm({
-        category: CATEGORY_OPTIONS[0].value,
+        category: PREDEFINED_CATEGORIES[0],
         title: "",
         subtitle: "",
         description: "",
@@ -107,6 +118,8 @@ export default function AddArchiveDocumentPage() {
         fileType: "",
         fileSize: 0,
       });
+      setCustomCategory("");
+      setShowCustomInput(false);
       resetFileInput();
 
       setTimeout(() => {
@@ -165,10 +178,11 @@ export default function AddArchiveDocumentPage() {
 
       if (shouldDeleteFromServer) {
         const response = await deleteUploadedFile(form.fileUrl);
-        const data = await response.json().catch(() => ({}));
-
+        
         if (!response.ok) {
-          setMessage({ text: data.error || "Failed to remove uploaded file.", type: "error" });
+          const data = await response.json().catch(() => ({}));
+          const errorMessage = data.error || "Failed to remove uploaded file. Please try again.";
+          setMessage({ text: errorMessage, type: "error" });
           return;
         }
       }
@@ -180,8 +194,9 @@ export default function AddArchiveDocumentPage() {
         text: shouldDeleteFromServer ? "Uploaded file removed." : "File cleared from the form.",
         type: "success",
       });
-    } catch {
-      setMessage({ text: "Failed to remove uploaded file.", type: "error" });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to remove uploaded file. Please try again.";
+      setMessage({ text: errorMessage, type: "error" });
     } finally {
       setUploading(false);
     }
@@ -206,17 +221,57 @@ export default function AddArchiveDocumentPage() {
       <form onSubmit={handleSubmit} className="mt-8 space-y-6 rounded-2xl border border-stone-200 bg-white p-8 shadow-lg">
         <div className="space-y-2">
           <label className="block text-sm font-semibold text-stone-700">Category *</label>
-          <select
-            value={form.category}
-            onChange={(e) => setForm((f) => ({ ...f, category: e.target.value as ArchiveCategoryValue }))}
-            className="w-full rounded-xl border-2 border-stone-200 bg-white px-4 py-3 text-stone-900 shadow-sm transition-all focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/10 hover:border-stone-300"
-          >
-            {CATEGORY_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+          
+          {!showCustomInput ? (
+            <div className="space-y-2">
+              <select
+                value={form.category}
+                onChange={(e) => {
+                  if (e.target.value === "__custom__") {
+                    setShowCustomInput(true);
+                    setCustomCategory("");
+                  } else {
+                    setForm((f) => ({ ...f, category: e.target.value }));
+                  }
+                }}
+                className="w-full rounded-xl border-2 border-stone-200 bg-white px-4 py-3 text-stone-900 shadow-sm transition-all focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/10 hover:border-stone-300"
+              >
+                {PREDEFINED_CATEGORIES.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+                <option value="__custom__">+ Add Custom Category</option>
+              </select>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={customCategory}
+                  onChange={(e) => setCustomCategory(e.target.value)}
+                  maxLength={CATEGORY_MAX_LENGTH}
+                  placeholder="Enter custom category name"
+                  className="flex-1 rounded-xl border-2 border-stone-200 bg-white px-4 py-3 text-stone-900 shadow-sm transition-all placeholder:text-stone-400 focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/10 hover:border-stone-300"
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowCustomInput(false);
+                    setCustomCategory("");
+                  }}
+                  className="rounded-xl border-2 border-stone-200 bg-white px-4 py-3 text-sm font-semibold text-stone-700 transition-all hover:border-stone-300 hover:bg-stone-50"
+                >
+                  Cancel
+                </button>
+              </div>
+              <p className="text-xs text-stone-500">
+                {customCategory.length}/{CATEGORY_MAX_LENGTH}
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="space-y-2">

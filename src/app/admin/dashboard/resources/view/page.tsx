@@ -37,10 +37,11 @@ export default function ViewResourcesPage() {
   async function handleDelete(id: string) {
     if (!confirm("Delete this resource?")) return;
     const response = await fetch(`/api/resources/${id}`, { method: "DELETE" });
-    const data = await response.json().catch(() => ({}));
-
+    
     if (!response.ok) {
-      setMessage({ text: data.error || "Resource delete failed. Please try again.", type: "error" });
+      const data = await response.json().catch(() => ({}));
+      const errorMessage = data.error || "Resource delete failed. Please try again.";
+      setMessage({ text: errorMessage, type: "error" });
       return;
     }
 

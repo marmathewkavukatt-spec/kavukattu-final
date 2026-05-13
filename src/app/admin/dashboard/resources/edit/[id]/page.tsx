@@ -81,12 +81,15 @@ export default function EditResourcePage({ params }: { params: { id: string } })
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        setMessage({ text: data.error || "Resource update failed. Please try again.", type: "error" });
+        const data = await response.json().catch(() => ({}));
+        const errorMessage = data.error || "Resource update failed. Please try again.";
+        setMessage({ text: errorMessage, type: "error" });
         return;
       }
+
+      const data = await response.json().catch(() => ({}));
 
       setMessage({ text: "Resource updated successfully.", type: "success" });
       setUploadedSessionFileUrl(null);
@@ -140,10 +143,11 @@ export default function EditResourcePage({ params }: { params: { id: string } })
 
       if (shouldDeleteFromServer) {
         const response = await deleteUploadedFile(form.fileUrl);
-        const data = await response.json().catch(() => ({}));
-
+        
         if (!response.ok) {
-          setMessage({ text: data.error || "Failed to remove uploaded file.", type: "error" });
+          const data = await response.json().catch(() => ({}));
+          const errorMessage = data.error || "Failed to remove uploaded file. Please try again.";
+          setMessage({ text: errorMessage, type: "error" });
           return;
         }
       }

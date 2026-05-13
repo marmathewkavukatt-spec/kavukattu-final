@@ -8,12 +8,6 @@ datasource db {
   relationMode = "prisma"
 }
 
-enum ArchiveCategory {
-  PASTORAL_LETTERS
-  CIRCULARS
-  OTHERS
-}
-
 model Admin {
   id           String   @id @default(cuid()) @db.VarChar(32)
   email        String   @unique @db.VarChar(254)
@@ -102,17 +96,17 @@ model Resource {
 }
 
 model ArchiveDocument {
-  id          String          @id @default(cuid()) @db.VarChar(32)
-  category    ArchiveCategory
-  title       String?         @db.VarChar(180)
-  subtitle    String?         @db.VarChar(300)
-  description String?         @db.Text
-  fileUrl     String          @db.VarChar(2048)
-  fileName    String?         @db.VarChar(255)
-  fileType    String?         @db.VarChar(120)
+  id          String   @id @default(cuid()) @db.VarChar(32)
+  category    String   @db.VarChar(100)
+  title       String?  @db.VarChar(180)
+  subtitle    String?  @db.VarChar(300)
+  description String?  @db.Text
+  fileUrl     String   @db.VarChar(2048)
+  fileName    String?  @db.VarChar(255)
+  fileType    String?  @db.VarChar(120)
   fileSize    Int?
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([category, createdAt])
   @@index([category, updatedAt])
