@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
     // Invalidate cache
     invalidateApiCache('/testimonies');
     
-    revalidatePath("/experiences");
+    revalidatePath("/favours-recieved");
     revalidatePath("/testimony");
     return NextResponse.json(withUnderscoreId(item));
   } catch (error) {

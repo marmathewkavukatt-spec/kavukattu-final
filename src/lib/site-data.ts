@@ -84,7 +84,7 @@ export interface PublicGalleryCategoryItem {
   order: number;
 }
 
-export interface PublicTestimony {
+export interface PublicFavourRecieved {
   _id: string;
   authorName: string;
   content: string;
@@ -386,14 +386,14 @@ export async function getPublicGalleryCategoryWithItems(categoryId: string): Pro
   }
 }
 
-export async function getPublicTestimonies(): Promise<PublicTestimony[]> {
-  try {    const items = await db.testimony.findMany({
+export async function getPublicFavoursRecieved(): Promise<PublicFavourRecieved[]> {
+  try {    const items = await db.favourReceived.findMany({
       where: { active: true },
       orderBy: { order: "asc" },
       select: { id: true, authorName: true, content: true, authorImage: true, order: true },
     });
 
-    const plain: PublicTestimony[] = items.map((item) => ({
+    const plain: PublicFavourRecieved[] = items.map((item) => ({
       _id: item.id,
       authorName: item.authorName,
       content: item.content,
@@ -430,7 +430,7 @@ export async function getPublicTestimonies(): Promise<PublicTestimony[]> {
       };
     });
   } catch {
-    // console.error("[site-data] Failed to load testimonies:", error);
+    // console.error("[site-data] Failed to load favours recieved:", error);
     return [];
   }
 }

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { cloudinaryLoader, isCloudinaryUrl } from "@/lib/cloudinary-image";
-import type { PublicTestimony } from "@/lib/site-data";
+import type { PublicFavourRecieved } from "@/lib/site-data";
 import PaginationControls from "./PaginationControls";
 import { useTranslate } from "@/hooks/useTranslate";
 
@@ -23,7 +23,7 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
-function TestimonyItem({ item, priority }: { item: PublicTestimony; priority: boolean }) {
+function FavourRecievedItem({ item, priority }: { item: PublicFavourRecieved; priority: boolean }) {
   const authorImageSrc = item.authorImage;
   const authorImageIsCloudinary = Boolean(authorImageSrc && isCloudinaryUrl(authorImageSrc));
   const authorImageIsUnoptimized = authorImageSrc
@@ -72,7 +72,7 @@ function TestimonyItem({ item, priority }: { item: PublicTestimony; priority: bo
   );
 }
 
-export default function PaginatedTestimonies({ items }: { items: PublicTestimony[] }) {
+export default function PaginatedTestimonies({ items }: { items: PublicFavourRecieved[] }) {
   const [page, setPage] = useState(0);
   const pageCount = Math.ceil(items.length / PAGE_SIZE);
   const visibleItems = items.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
@@ -86,7 +86,7 @@ export default function PaginatedTestimonies({ items }: { items: PublicTestimony
         className="mt-12 space-y-8"
       >
         {visibleItems.map((item, i) => (
-          <TestimonyItem key={item._id} item={item} priority={page === 0 && i === 0} />
+          <FavourRecievedItem key={item._id} item={item} priority={page === 0 && i === 0} />
         ))}
       </motion.div>
       <div className="mt-12">

@@ -60,7 +60,7 @@ export const cacheKeys = {
   galleryCategory: (id: string) => `gallery:category:${id}`,
   resources: () => 'resources:all',
   timeline: () => 'timeline:active',
-  experiences: () => 'experiences:active',
+  favoursRecieved: () => 'favours-recieved:active',
 };
 
 export const invalidateCache = {
@@ -73,6 +73,6 @@ export const invalidateCache = {
   gallery: () => {},
   resources: () => {},
   timeline: () => {},
-  experiences: () => {},
+  favoursRecieved: () => {},
   all: () => {},
 };

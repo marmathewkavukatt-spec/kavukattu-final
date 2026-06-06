@@ -407,7 +407,7 @@ export const dbSchemas = {
     description: 'description'
   },
   
-  experience: {
+  favourReceived: {
     authorName: 'name',
     content: 'content',
     authorImage: 'url',

@@ -28,7 +28,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         active: toBoolean(payload.active, true),
       },
     });
-    revalidatePath("/experiences");
+    revalidatePath("/favours-recieved");
     revalidatePath("/testimony");
     return NextResponse.json(withUnderscoreId(item));
   } catch (error) {
@@ -50,7 +50,7 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   if (auth) return auth;
   try {    const { id } = await params;
     await db.testimony.delete({ where: { id: ensureRecordId(id) } });
-    revalidatePath("/experiences");
+    revalidatePath("/favours-recieved");
     revalidatePath("/testimony");
     return NextResponse.json({ deleted: true });
   } catch (error) {

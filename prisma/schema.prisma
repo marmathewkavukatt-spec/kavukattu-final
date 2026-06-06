@@ -199,7 +199,7 @@ model Contribution {
   @@map("contribution")
 }
 
-model Experience {
+model FavourReceived {
   id          String   @id @default(cuid()) @db.VarChar(32)
   authorName  String   @db.VarChar(120)
   content     String   @db.Text
@@ -210,5 +210,5 @@ model Experience {
   updatedAt   DateTime @updatedAt
 
   @@index([active, order])
-  @@map("experience")
+  @@map("favourreceived")
 }

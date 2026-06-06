@@ -1,21 +1,5 @@
-"use client";
+import { permanentRedirect } from "next/navigation";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-
-export default function TestimoniesManagePage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace("/admin/dashboard/testimonies/view");
-  }, [router]);
-
-  return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="text-center">
-        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-accent border-r-transparent"></div>
-        <p className="mt-4 text-stone-600">Redirecting...</p>
-      </div>
-    </div>
-  );
+export default function TestimoniesRedirectPage() {
+  permanentRedirect("/admin/dashboard/favours-recieved/view");
 }

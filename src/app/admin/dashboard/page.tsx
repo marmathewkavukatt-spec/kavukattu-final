@@ -3,7 +3,7 @@ import Link from "next/link";
 const sections = [
   { href: "/admin/dashboard/slider", label: "Home Slider", desc: "Manage hero slides on the home page" },
   { href: "/admin/dashboard/resources/view", label: "Syriac Studies", desc: "Syriac studies and links" },
-  { href: "/admin/dashboard/experiences", label: "Experiences", desc: "Manage experiences" },
+  { href: "/admin/dashboard/favours-recieved", label: "Favours Recieved", desc: "Manage favours recieved" },
   { href: "/admin/dashboard/announcements", label: "Announcements", desc: "Manage announcements" },
   { href: "/admin/dashboard/gallery", label: "Gallery", desc: "Photo gallery" },
   { href: "/admin/dashboard/contributions", label: "Public Interventions", desc: "Testimonials, prayer requests, and intentions" },

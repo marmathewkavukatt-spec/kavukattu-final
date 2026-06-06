@@ -31,10 +31,10 @@ const links: NavigationLink[] = [
     ]
   },
   { 
-    label: "Experiences",
+    label: "Favours Recieved",
     subitems: [
-      { href: "/admin/dashboard/experiences/add", label: "Add Experience" },
-      { href: "/admin/dashboard/experiences/view", label: "View Experiences" },
+      { href: "/admin/dashboard/favours-recieved/add", label: "Add Favour Recieved" },
+      { href: "/admin/dashboard/favours-recieved/view", label: "View Favours Recieved" },
     ]
   },
   { 

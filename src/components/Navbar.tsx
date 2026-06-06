@@ -33,21 +33,26 @@ export default function Navbar() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [contributionModalOpen, setContributionModalOpen] = useState(false);
+  const [aboutOpenDesktop, setAboutOpenDesktop] = useState(false);
   const [mediaOpenDesktop, setMediaOpenDesktop] = useState(false);
   const [archivesOpenDesktop, setArchivesOpenDesktop] = useState(false);
+  const [getInvolvedOpenDesktop, setGetInvolvedOpenDesktop] = useState(false);
+  const [aboutOpenMobile, setAboutOpenMobile] = useState(false);
   const [mediaOpenMobile, setMediaOpenMobile] = useState(false);
   const [archivesOpenMobile, setArchivesOpenMobile] = useState(false);
+  const [getInvolvedOpenMobile, setGetInvolvedOpenMobile] = useState(false);
   const { lang, setLang } = useLang();
 
   // Real-time translations for navigation
   const siteTitle = useAutoTranslate("MAR MATHEW KAVUKATT");
   const homeText = useAutoTranslate("Home");
+  const aboutText = useAutoTranslate("About");
   const historyText = useAutoTranslate("History");
   const spiritualLegacyText = useAutoTranslate("Spiritual Legacy");
   const mediaText = useAutoTranslate("Media");
   const resourcesText = useAutoTranslate("Syriac Studies");
   const archivesDocumentsText = useAutoTranslate("Archives & Documents");
-  const experiencesText = useAutoTranslate("Experiences");
+  const favoursRecievedText = useAutoTranslate("Favours Recieved");
   const galleryText = useAutoTranslate("Gallery");
   const visitText = useAutoTranslate("Visit");
   const publicInterventionsText = useAutoTranslate("Public Interventions");
@@ -60,27 +65,39 @@ export default function Navbar() {
   const circularsText = useAutoTranslate("Circulars");
   const othersText = useAutoTranslate("Others");
   const allDocumentsText = useAutoTranslate("All Documents");
+  const getInvolvedText = useAutoTranslate("Get Involved");
 
-  const navLinksBeforeMedia = [
+  // Organized navigation structure - compact for desktop
+  const navLinksMain = [
     { href: "/", label: homeText },
-    { href: "/about", label: historyText },
-    { href: "/spiritual-legacy", label: spiritualLegacyText },
   ];
 
-  const navLinksAfterMedia = [
-    { href: "/experiences", label: experiencesText },
+  const navLinksAfterAbout = [
     { href: "/gallery", label: galleryText },
     { href: "/visit", label: visitText },
   ];
 
-  const desktopLinksAfterMedia = navLinksAfterMedia;
+  const navLinksEnd = [
+    { href: "/contacts", label: contactsText },
+  ];
   const isAdmin = pathname.startsWith("/admin");
+  const isAboutActive = pathname.startsWith("/about") || pathname.startsWith("/spiritual-legacy");
   const isMediaActive = pathname.startsWith("/resources") || pathname.startsWith("/archives");
+  const isGetInvolvedActive = pathname.startsWith("/favours-recieved");
 
   useEffect(() => {
-    [...navLinksBeforeMedia, ...navLinksAfterMedia, { href: "/resources", label: resourcesText }, { href: "/archives", label: archivesDocumentsText }]
-      .forEach((link) => router.prefetch(link.href));
-  }, [router, navLinksBeforeMedia, navLinksAfterMedia, resourcesText, archivesDocumentsText]);
+    [
+      { href: "/", label: homeText },
+      { href: "/about", label: aboutText },
+      { href: "/spiritual-legacy", label: spiritualLegacyText },
+      { href: "/resources", label: resourcesText },
+      { href: "/archives", label: archivesDocumentsText },
+      { href: "/gallery", label: galleryText },
+      { href: "/visit", label: visitText },
+      { href: "/favours-recieved", label: favoursRecievedText },
+      { href: "/contacts", label: contactsText },
+    ].forEach((link) => router.prefetch(link.href));
+  }, [router, homeText, aboutText, spiritualLegacyText, resourcesText, archivesDocumentsText, galleryText, visitText, favoursRecievedText, contactsText]);
 
   if (isAdmin) return null;
 
@@ -162,9 +179,10 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Second Line: Navigation Links */}
+        {/* Second Line: Navigation Links - Compact Design */}
         <nav className="mx-auto hidden max-w-screen-2xl flex-wrap items-center justify-center gap-x-0.5 gap-y-1 px-4 py-2 sm:px-6 lg:flex lg:px-8">
-            {navLinksBeforeMedia.map((link) => (
+            {/* Home */}
+            {navLinksMain.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -178,6 +196,70 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
+
+            {/* About dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setAboutOpenDesktop(true)}
+              onMouseLeave={() => setAboutOpenDesktop(false)}
+            >
+              <button
+                type="button"
+                onClick={() => setAboutOpenDesktop((v) => !v)}
+                aria-haspopup="menu"
+                aria-expanded={aboutOpenDesktop}
+                className={`inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-sm font-semibold uppercase tracking-[0.14em] whitespace-nowrap transition-colors lg:px-3 lg:py-2 lg:text-base ${
+                  isAboutActive
+                    ? "bg-accent/10 text-accent"
+                    : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
+                }`}
+              >
+                {aboutText}
+                <ChevronDown className={`h-3.5 w-3.5 lg:h-4 lg:w-4 transition-transform ${aboutOpenDesktop ? "rotate-180" : ""}`} />
+              </button>
+
+              <AnimatePresence>
+                {aboutOpenDesktop && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute left-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-xl border border-stone-200 bg-white shadow-xl"
+                    role="menu"
+                  >
+                    <div className="p-2">
+                      <Link
+                        href="/about"
+                        prefetch={true}
+                        onClick={() => setAboutOpenDesktop(false)}
+                        className={`block rounded-lg px-3 py-2 text-base font-semibold uppercase tracking-[0.12em] transition-colors ${
+                          pathname === "/about"
+                            ? "bg-accent/10 text-accent"
+                            : "text-stone-700 hover:bg-stone-50"
+                        }`}
+                        role="menuitem"
+                      >
+                        {historyText}
+                      </Link>
+                      <Link
+                        href="/spiritual-legacy"
+                        prefetch={true}
+                        onClick={() => setAboutOpenDesktop(false)}
+                        className={`block rounded-lg px-3 py-2 text-base font-semibold uppercase tracking-[0.12em] transition-colors ${
+                          pathname === "/spiritual-legacy"
+                            ? "bg-accent/10 text-accent"
+                            : "text-stone-700 hover:bg-stone-50"
+                        }`}
+                        role="menuitem"
+                      >
+                        {spiritualLegacyText}
+                      </Link>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* Media dropdown */}
             <div
@@ -308,7 +390,8 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
 
-            {desktopLinksAfterMedia.map((link) => (
+            {/* Gallery & Visit */}
+            {navLinksAfterAbout.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -322,24 +405,84 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <button
-              onClick={() => setContributionModalOpen(true)}
-              className="rounded-md px-2.5 py-1.5 text-sm font-semibold uppercase tracking-[0.14em] whitespace-nowrap transition-colors text-stone-700 hover:bg-stone-100 hover:text-stone-900 lg:px-3 lg:py-2 lg:text-base"
+
+            {/* Get Involved dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setGetInvolvedOpenDesktop(true)}
+              onMouseLeave={() => setGetInvolvedOpenDesktop(false)}
             >
-              {publicInterventionsText}
-            </button>
-            <Link
-              href="/contacts"
-              prefetch={true}
-              className={`rounded-md px-2.5 py-1.5 text-sm font-semibold uppercase tracking-[0.14em] whitespace-nowrap transition-colors lg:px-3 lg:py-2 lg:text-base ${
-                pathname === "/contacts"
-                  ? "bg-accent/10 text-accent"
-                  : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
-              }`}
-            >
-              {contactsText}
-            </Link>
-          </nav>
+              <button
+                type="button"
+                onClick={() => setGetInvolvedOpenDesktop((v) => !v)}
+                aria-haspopup="menu"
+                aria-expanded={getInvolvedOpenDesktop}
+                className={`inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-sm font-semibold uppercase tracking-[0.14em] whitespace-nowrap transition-colors lg:px-3 lg:py-2 lg:text-base ${
+                  isGetInvolvedActive
+                    ? "bg-accent/10 text-accent"
+                    : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
+                }`}
+              >
+                {getInvolvedText}
+                <ChevronDown className={`h-3.5 w-3.5 lg:h-4 lg:w-4 transition-transform ${getInvolvedOpenDesktop ? "rotate-180" : ""}`} />
+              </button>
+
+              <AnimatePresence>
+                {getInvolvedOpenDesktop && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute left-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-xl border border-stone-200 bg-white shadow-xl"
+                    role="menu"
+                  >
+                    <div className="p-2">
+                      <Link
+                        href="/favours-recieved"
+                        prefetch={true}
+                        onClick={() => setGetInvolvedOpenDesktop(false)}
+                        className={`block rounded-lg px-3 py-2 text-base font-semibold uppercase tracking-[0.12em] transition-colors ${
+                          pathname === "/favours-recieved"
+                            ? "bg-accent/10 text-accent"
+                            : "text-stone-700 hover:bg-stone-50"
+                        }`}
+                        role="menuitem"
+                      >
+                        {favoursRecievedText}
+                      </Link>
+                      <button
+                        onClick={() => {
+                          setGetInvolvedOpenDesktop(false);
+                          setContributionModalOpen(true);
+                        }}
+                        className="w-full text-left block rounded-lg px-3 py-2 text-base font-semibold uppercase tracking-[0.12em] transition-colors text-stone-700 hover:bg-stone-50"
+                        role="menuitem"
+                      >
+                        {publicInterventionsText}
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Contact Us */}
+            {navLinksEnd.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                prefetch={true}
+                className={`rounded-md px-2.5 py-1.5 text-sm font-semibold uppercase tracking-[0.14em] whitespace-nowrap transition-colors lg:px-3 lg:py-2 lg:text-base ${
+                  pathname === link.href
+                    ? "bg-accent/10 text-accent"
+                    : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+        </nav>
       </header>
 
       <AnimatePresence>
@@ -364,7 +507,8 @@ export default function Navbar() {
                 </div>
                 <nav className="flex-1 overflow-y-auto px-4 py-4">
                   <div className="space-y-1">
-                    {navLinksBeforeMedia.map((link) => (
+                    {/* Home */}
+                    {navLinksMain.map((link) => (
                       <Link key={link.href} href={link.href} prefetch={true} onClick={() => setOpen(false)}
                         className={`block rounded-md px-3 py-3 text-base font-medium uppercase tracking-[0.16em] transition-colors ${
                           pathname === link.href ? "bg-white/14 text-white" : "text-white/92 hover:bg-white/10 hover:text-white"
@@ -372,6 +516,53 @@ export default function Navbar() {
                         {link.label}
                       </Link>
                     ))}
+
+                    {/* About - mobile */}
+                    <button
+                      type="button"
+                      onClick={() => setAboutOpenMobile((v) => !v)}
+                      className={`w-full flex items-center justify-between rounded-md px-3 py-3 text-base font-medium uppercase tracking-[0.16em] transition-colors ${
+                        isAboutActive ? "bg-white/14 text-white" : "text-white/92 hover:bg-white/10 hover:text-white"
+                      }`}
+                    >
+                      <span>{aboutText}</span>
+                      <ChevronDown className={`h-4 w-4 shrink-0 text-white transition-transform ${aboutOpenMobile ? "rotate-180" : ""}`} />
+                    </button>
+
+                    {aboutOpenMobile && (
+                      <div className="ml-3 mt-1 space-y-1 border-l-2 border-white/20 pl-3">
+                        <Link
+                          href="/about"
+                          prefetch={true}
+                          onClick={() => {
+                            setOpen(false);
+                            setAboutOpenMobile(false);
+                          }}
+                          className={`block rounded-md px-3 py-2 text-base uppercase tracking-[0.14em] transition-colors ${
+                            pathname === "/about"
+                              ? "bg-white/14 text-white font-medium"
+                              : "text-white/80 hover:bg-white/10 hover:text-white"
+                          }`}
+                        >
+                          {historyText}
+                        </Link>
+                        <Link
+                          href="/spiritual-legacy"
+                          prefetch={true}
+                          onClick={() => {
+                            setOpen(false);
+                            setAboutOpenMobile(false);
+                          }}
+                          className={`block rounded-md px-3 py-2 text-base uppercase tracking-[0.14em] transition-colors ${
+                            pathname === "/spiritual-legacy"
+                              ? "bg-white/14 text-white font-medium"
+                              : "text-white/80 hover:bg-white/10 hover:text-white"
+                          }`}
+                        >
+                          {spiritualLegacyText}
+                        </Link>
+                      </div>
+                    )}
 
                     {/* Media - mobile */}
                     <button
@@ -472,7 +663,8 @@ export default function Navbar() {
                       </div>
                     )}
 
-                    {navLinksAfterMedia.map((link) => (
+                    {/* Gallery & Visit */}
+                    {navLinksAfterAbout.map((link) => (
                       <Link
                         key={link.href}
                         href={link.href}
@@ -485,26 +677,65 @@ export default function Navbar() {
                         {link.label}
                       </Link>
                     ))}
+
+                    {/* Get Involved - mobile */}
                     <button
-                      onClick={() => {
-                        setOpen(false);
-                        setContributionModalOpen(true);
-                      }}
-                      className="block w-full rounded-md px-3 py-3 text-left text-base font-medium uppercase tracking-[0.16em] text-white/92 transition-colors hover:bg-white/10 hover:text-white"
+                      type="button"
+                      onClick={() => setGetInvolvedOpenMobile((v) => !v)}
+                      className={`w-full flex items-center justify-between rounded-md px-3 py-3 text-base font-medium uppercase tracking-[0.16em] transition-colors ${
+                        isGetInvolvedActive ? "bg-white/14 text-white" : "text-white/92 hover:bg-white/10 hover:text-white"
+                      }`}
                     >
-                      {publicInterventionsText}
+                      <span>{getInvolvedText}</span>
+                      <ChevronDown className={`h-4 w-4 shrink-0 text-white transition-transform ${getInvolvedOpenMobile ? "rotate-180" : ""}`} />
                     </button>
+
+                    {getInvolvedOpenMobile && (
+                      <div className="ml-3 mt-1 space-y-1 border-l-2 border-white/20 pl-3">
+                        <Link
+                          href="/favours-recieved"
+                          prefetch={true}
+                          onClick={() => {
+                            setOpen(false);
+                            setGetInvolvedOpenMobile(false);
+                          }}
+                          className={`block rounded-md px-3 py-2 text-base uppercase tracking-[0.14em] transition-colors ${
+                            pathname === "/favours-recieved"
+                              ? "bg-white/14 text-white font-medium"
+                              : "text-white/80 hover:bg-white/10 hover:text-white"
+                          }`}
+                        >
+                          {favoursRecievedText}
+                        </Link>
+                        <button
+                          onClick={() => {
+                            setOpen(false);
+                            setGetInvolvedOpenMobile(false);
+                            setContributionModalOpen(true);
+                          }}
+                          className="w-full text-left block rounded-md px-3 py-2 text-base uppercase tracking-[0.14em] text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+                        >
+                          {publicInterventionsText}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Contact Us */}
+                  {navLinksEnd.map((link) => (
                     <Link
-                      href="/contacts"
+                      key={link.href}
+                      href={link.href}
                       prefetch={true}
                       onClick={() => setOpen(false)}
                       className={`block rounded-md px-3 py-3 text-base font-medium uppercase tracking-[0.16em] transition-colors ${
-                        pathname === "/contacts" ? "bg-white/14 text-white" : "text-white/92 hover:bg-white/10 hover:text-white"
+                        pathname === link.href ? "bg-white/14 text-white" : "text-white/92 hover:bg-white/10 hover:text-white"
                       }`}
                     >
-                      {contactsText}
+                      {link.label}
                     </Link>
-                  </div>
+                  ))}
+
                   <div className="mt-6 border-t border-white/15 pt-4">
                     <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/65">
                       {followUsText}

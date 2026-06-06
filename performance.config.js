@@ -25,7 +25,7 @@ module.exports = {
       '/api/timings': 600,            // 10 minutes
       '/api/resources': 600,          // 10 minutes
       '/api/timeline': 600,           // 10 minutes
-      '/api/experiences': 600,        // 10 minutes
+      '/api/favours-recieved': 600,   // 10 minutes
       '/api/archives': 300,           // 5 minutes
     }
   },

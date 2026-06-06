@@ -44,9 +44,9 @@
     <priority>0.7</priority>
   </url>
 
-  <!-- Experiences/Testimonies -->
+  <!-- Favours Recieved -->
   <url>
-    <loc>https://marmathewkavukatt.org/experiences</loc>
+    <loc>https://marmathewkavukatt.org/favours-recieved</loc>
     <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

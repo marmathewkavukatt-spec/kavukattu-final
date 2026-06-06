@@ -35,7 +35,7 @@ const timelineEvents: TimelineEvent[] = [
   {
     year: "1935",
     title: {
-      en: "Ordination",
+      en: "Priestly Ordination",
       ml: "പൗരോഹിത്യ സ്വീകരണം",
     },
     description: {
@@ -47,7 +47,7 @@ const timelineEvents: TimelineEvent[] = [
   {
     year: "1950",
     title: {
-      en: "Consecration In Rome",
+      en: "Episcopal Consecration",
       ml: "റോമിൽ ബിഷപ്പ്",
     },
     description: {
@@ -59,7 +59,7 @@ const timelineEvents: TimelineEvent[] = [
   {
     year: "1956",
     title: {
-      en: "First Archbishop",
+      en: "Enthronement as Archibishop",
       ml: "ആദ്യ മെത്രാപ്പോലീത്ത",
     },
     description: {
@@ -83,7 +83,7 @@ const timelineEvents: TimelineEvent[] = [
   {
     year: "1994",
     title: {
-      en: "Declared Servant Of God",
+      en: "Declaration as Servent of God",
       ml: "ദൈവദാസനായി പ്രഖ്യാപിച്ചു",
     },
     description: {

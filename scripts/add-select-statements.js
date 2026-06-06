@@ -16,7 +16,7 @@ const routesToCheck = [
   'src/app/api/resources/route.ts',
   'src/app/api/timings/route.ts',
   'src/app/api/timeline/route.ts',
-  'src/app/api/experiences/route.ts',
+  'src/app/api/favours-recieved/route.ts',
 ];
 
 let optimized = 0;
